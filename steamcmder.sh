@@ -32,15 +32,25 @@ game_validate() {
         +app_update "$1" -validate +quit
 }
 
+steamcmd_check() {
+    if ! [ -e "$steamcmd" ]; then
+        steamcmd_install
+    fi
+}
+
 steamcmd_install() {
+    wget -N http://media.steampowered.com/installer/steamcmd_linux.tar.gz
+    tar xvzf steamcmd_linux.tar.gz -C "$rootdir"
+}
+
+steamcmd_setup() {
     if [ -e "$steamcmd" ]; then
         echo "SteamCMD is already installed. Would you like to reinstall it? (y/n)"
 
         read answer
         case "$answer" in
             Y|y)
-                wget -N http://media.steampowered.com/installer/steamcmd_linux.tar.gz
-                tar xvzf steamcmd_linux.tar.gz -C "$rootdir"
+                steamcmd_install
                 ;;
             N|n)
                 exit
@@ -48,8 +58,9 @@ steamcmd_install() {
             *)
                 echo "$answer Didn't match anything"
         esac
+    else
+        steamcmd_install
     fi
-
 }
 
 case "$1" in
@@ -64,27 +75,27 @@ case "$1" in
         do_all game_backup
         ;;
     setup)
-        steamcmd_install
+        steamcmd_setup
         ;;
     update)
         for i in "$@"; do
             if [[ $i =~ $number ]]; then
-                game_update $i
+                steamcmd_check && game_update $i
             fi
         done
         ;;
     update-all)
-        do_all game_update
+        steamcmd_check && do_all game_update
         ;;
     validate)
         for i in "$@"; do
             if [[ $i =~ $number ]]; then
-                game_validate $i
+                steamcmd_check && game_validate $i
             fi
         done
         ;;
     validate-all)
-        do_all game_validate
+        steamcmd_check && do_all game_validate
         ;;
     *)
         echo "\"$1\" is not a valid option"
