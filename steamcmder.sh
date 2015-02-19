@@ -33,12 +33,23 @@ game_validate() {
 }
 
 steamcmd_install() {
-    if [ -e "steamcmd_linux.tar.gz" ]; then
-        rm steamcmd_linux.tar.gz
+    if [ -e "$steamcmd" ]; then
+        echo "SteamCMD is already installed. Would you like to reinstall it? (y/n)"
+
+        read answer
+        case "$answer" in
+            Y|y)
+                wget -N http://media.steampowered.com/installer/steamcmd_linux.tar.gz
+                tar xvzf steamcmd_linux.tar.gz -C "$rootdir"
+                ;;
+            N|n)
+                exit
+                ;;
+            *)
+                echo "$answer Didn't match anything"
+        esac
     fi
 
-    wget http://media.steampowered.com/installer/steamcmd_linux.tar.gz
-    tar xvzf steamcmd_linux.tar.gz -C "$rootdir"
 }
 
 case "$1" in
@@ -50,7 +61,7 @@ case "$1" in
         done
         ;;
     backup-all)
-        do_all backup
+        do_all game_backup
         ;;
     setup)
         steamcmd_install
