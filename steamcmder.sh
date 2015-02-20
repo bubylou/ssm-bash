@@ -2,11 +2,26 @@
 
 username="anonymous"
 password=""
-number="^[0-9]+([.][0-9]+)?$"
 rootdir="$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd )"
 gamedir="$rootdir/games"
 backupdir="$rootdir/backup"
 steamcmd="$rootdir/steamcmd.sh"
+
+appid_check() {
+    number="^[0-9]+([.][0-9]+)?$"
+
+    if ! [[ $1 =~ $number ]]; then
+        echo "Invalid App ID"
+        exit
+    fi
+}
+
+argument_check() {
+    if [ -z "$1" ]; then
+        echo "Please specify at least one App ID"
+        exit
+    fi
+}
 
 do_all() {
     for i in $gamedir/*; do
@@ -65,10 +80,10 @@ steamcmd_setup() {
 
 case "$1" in
     backup)
-        for i in "$@"; do
-            if [[ $i =~ $number ]]; then
-                game_backup $i
-            fi
+        argument_check $2
+        for i in "${@:2}"; do
+            appid_check $1
+            game_backup $i
         done
         ;;
     backup-all)
@@ -78,25 +93,25 @@ case "$1" in
         steamcmd_setup
         ;;
     update)
-        for i in "$@"; do
-            if [[ $i =~ $number ]]; then
-                steamcmd_check && game_update $i
-            fi
+        argument_check $2
+        for i in "${@:2}"; do
+            appid_check $1
+            steamcmd_check && game_update $i
         done
         ;;
     update-all)
         steamcmd_check && do_all game_update
         ;;
     validate)
-        for i in "$@"; do
-            if [[ $i =~ $number ]]; then
-                steamcmd_check && game_validate $i
-            fi
+        argument_check $2
+        for i in "${@:2}"; do
+            appid_check $1
+            steamcmd_check && game_validate $i
         done
         ;;
     validate-all)
         steamcmd_check && do_all game_validate
         ;;
     *)
-        echo "\"$1\" is not a valid option"
+        echo "\"$1\" is not a valid command"
 esac
