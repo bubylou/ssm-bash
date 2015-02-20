@@ -82,7 +82,7 @@ case "$1" in
     backup)
         argument_check $2
         for i in "${@:2}"; do
-            appid_check $1
+            appid_check $2
             game_backup $i
         done
         ;;
@@ -95,7 +95,7 @@ case "$1" in
     update)
         argument_check $2
         for i in "${@:2}"; do
-            appid_check $1
+            appid_check $2
             steamcmd_check && game_update $i
         done
         ;;
@@ -105,7 +105,7 @@ case "$1" in
     validate)
         argument_check $2
         for i in "${@:2}"; do
-            appid_check $1
+            appid_check $2
             steamcmd_check && game_validate $i
         done
         ;;
