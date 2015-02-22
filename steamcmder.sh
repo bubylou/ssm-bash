@@ -11,7 +11,7 @@ appid_check() {
     number="^[0-9]+([.][0-9]+)?$"
 
     if ! [[ $1 =~ $number ]]; then
-        echo "Invalid App ID"
+        echo "$1 Invalid App ID"
         exit
     fi
 }
@@ -24,15 +24,23 @@ argument_check() {
 }
 
 do_all() {
-    for i in $gamedir/*; do
-        $1 $(basename $i)
+    for appid in $gamedir/*; do
+        $1 $(basename $appid)
     done
 }
 
 game_backup() {
     mkdir -p "$backupdir/$1"
-    tar cvzf "$backupdir/$1/$(date +%Y-%m-%d-%H%M%S).tar.gz" \
+    tar cvJf "$backupdir/$1/$(date +%Y-%m-%d-%H%M%S).tar.xz" \
         --exclude "$backupdir" -C "$gamedir" $1
+}
+
+game_remove() {
+    rm -rv "$gamedir/$1"
+}
+
+game_restore() {
+    tar vxf "$backupdir/$1/$(ls -t "$backupdir/$1/" | head -1)" -C "$gamedir"
 }
 
 game_update() {
@@ -81,22 +89,48 @@ steamcmd_setup() {
 case "$1" in
     backup)
         argument_check $2
-        for i in "${@:2}"; do
-            appid_check $i
-            game_backup $i
+        for appid in "${@:2}"; do
+            appid_check $appid
+            game_backup $appid
         done
         ;;
     backup-all)
         do_all game_backup
+        ;;
+    games)
+        for appid in $(ls $gamedir); do
+            appid_check $appid
+            echo "$appid Installed"
+        done
+        ;;
+    remove)
+        argument_check $2
+        for appid in "${@:2}"; do
+            appid_check $appid
+            game_remove $appid
+        done
+        ;;
+    remove-all)
+        do_all game_remove
+        ;;
+    restore)
+        argument_check $2
+        for appid in "${@:2}"; do
+            appid_check $appid
+            game_restore $appid
+        done
+        ;;
+    restore-all)
+        do_all game_restore
         ;;
     setup)
         steamcmd_setup
         ;;
     update)
         argument_check $2
-        for i in "${@:2}"; do
-            appid_check $i
-            steamcmd_check && game_update $i
+        for appid in "${@:2}"; do
+            appid_check $appid
+            steamcmd_check && game_update $appid
         done
         ;;
     update-all)
@@ -104,9 +138,9 @@ case "$1" in
         ;;
     validate)
         argument_check $2
-        for i in "${@:2}"; do
-            appid_check $i
-            steamcmd_check && game_validate $i
+        for appid in "${@:2}"; do
+            appid_check $appid
+            steamcmd_check && game_validate $appid
         done
         ;;
     validate-all)

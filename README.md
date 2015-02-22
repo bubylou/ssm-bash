@@ -10,11 +10,27 @@ A simple Bash script to make managing your SteamCMD easier.
 
 `backup <app_id>...`
 
-- Backup the chosen application directories.
+- Backup the chosen application.
 
 `backup-all`
 
-- Backup all the applications in your gamedir.
+- Backup all the installed applications.
+
+`remove <app_id>...`
+
+- Deletes the files for the selected application.
+
+`remove-all`
+
+- Deletes the files for all your installed applications.
+
+`restore <app_id>...`
+
+- Restore the selected application from the newest backup.
+
+`restore-all`
+
+- Restores all your applications from there newest backups.
 
 `setup`
 
@@ -26,12 +42,12 @@ A simple Bash script to make managing your SteamCMD easier.
 
 `update-all`
 
-- Update all applications in the gamedir.
+- Update all the installed applications.
 
 `validate <app_id>...`
 
-- Validate the chosen applications.
+- Validate the chosen application.
 
 `validate-all`
 
-- Validate all the applications in your gamedir.
+- Validate all the installed applications.
