@@ -43,6 +43,29 @@ game_restore() {
     tar vxf "$backupdir/$1/$(ls -t "$backupdir/$1/" | head -1)" -C "$gamedir"
 }
 
+game_start() {
+    if [ $(screen_check $1) ]; then
+        echo "$1 Already Running"
+    elif ! [ $(ls "$gamedir" | grep "^$1$") ]; then
+        echo "$1 not installed"
+    else
+        screen -dmS "$1"  sh "$gamedir/$1/srcds_run" -game garrysmod \
+            +maxplayers 8 +map gm_construct +gamemode sandbox
+        echo "$1 Started"
+    fi
+}
+
+game_stop() {
+    if [ $(screen_check $1) ]; then
+        screen -S "$1" -X "quit"
+        echo "$1 Stopped"
+    elif ! [ $(ls "$gamedir" | grep "^$1$") ]; then
+        echo "$1 not installed"
+    else
+        echo "$1 Not Running"
+    fi
+}
+
 game_update() {
     mkdir -p "$gamedir/$1"
     bash $steamcmd +login "$username" "$password" +force_install_dir "$gamedir/$1" \
@@ -53,6 +76,10 @@ game_update() {
 game_validate() {
     bash $steamcmd +login "$username" "$password" +force_install_dir "$gamedir/$1" \
         +app_update "$1" -validate +quit
+}
+
+screen_check() {
+    ls -aR /var/run/screen | cut -d "." -f 2 | grep "^$1$"
 }
 
 steamcmd_check() {
@@ -103,6 +130,13 @@ case "$1" in
             echo "$appid Installed"
         done
         ;;
+    list)
+        for appid in $(ls "$gamedir"); do
+            if [ $(screen_check $appid) ]; then
+                echo $(screen_check $appid)
+            fi
+        done
+        ;;
     remove)
         argument_check $2
         for appid in "${@:2}"; do
@@ -112,6 +146,17 @@ case "$1" in
         ;;
     remove-all)
         do_all game_remove
+        ;;
+    restart)
+        argument_check $2
+        for appid in "${@:2}"; do
+            appid_check $appid
+            game_stop $appid && game_start $appid
+        done
+        ;;
+    restart-all)
+        do_all game_stop
+        do_all game_start
         ;;
     restore)
         argument_check $2
@@ -125,6 +170,26 @@ case "$1" in
         ;;
     setup)
         steamcmd_setup
+        ;;
+    start)
+        argument_check $2
+        for appid in "${@:2}"; do
+            appid_check $appid
+            game_start $appid
+        done
+        ;;
+    start-all)
+        do_all game_start
+        ;;
+    stop)
+        argument_check $2
+        for appid in "${@:2}"; do
+            appid_check $appid
+            game_stop $appid
+        done
+        ;;
+    stop-all)
+        do_all game_stop
         ;;
     update)
         argument_check $2
