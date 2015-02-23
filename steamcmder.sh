@@ -47,25 +47,27 @@ game_restore() {
 }
 
 game_start() {
+    appid_check $1
     if [ $(screen_check $1) ]; then
-        echo "$1 Already Running"
+        echo "$1 - Already Running"
     elif ! [ $(ls "$gamedir" | grep "^$1$") ]; then
-        echo "$1 not installed"
+        echo "$1 - Not installed"
     else
         screen -dmS "$1"  sh "$gamedir/$1/srcds_run" -game garrysmod \
             +maxplayers 8 +map gm_construct +gamemode sandbox
-        echo "$1 Started"
+        echo "$1 - Started"
     fi
 }
 
 game_stop() {
+    appid_check $1
     if [ $(screen_check $1) ]; then
         screen -S "$1" -X "quit"
-        echo "$1 Stopped"
+        echo "$1 - Stopped"
     elif ! [ $(ls "$gamedir" | grep "^$1$") ]; then
-        echo "$1 not installed"
+        echo "$1 - Not installed"
     else
-        echo "$1 Not Running"
+        echo "$1 - Not Running"
     fi
 }
 
@@ -156,7 +158,6 @@ case "$1" in
     restart)
         argument_check $2
         for appid in "${@:2}"; do
-            appid_check $appid
             game_stop $appid && game_start $appid
         done
         ;;
@@ -179,7 +180,6 @@ case "$1" in
     start)
         argument_check $2
         for appid in "${@:2}"; do
-            appid_check $appid
             game_start $appid
         done
         ;;
@@ -189,7 +189,6 @@ case "$1" in
     stop)
         argument_check $2
         for appid in "${@:2}"; do
-            appid_check $appid
             game_stop $appid
         done
         ;;
