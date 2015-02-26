@@ -1,0 +1,190 @@
+{
+    "options_90" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_205" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_310" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_740" : [
+        { "exec" : "srcds_run" },
+        { "-game" : "csgo" },
+        { "+maxplayers" : "16" },
+        { "+gametype" : "0" },
+        { "+gamemode" : "0" },
+        { "+mapgroup" : "random_classic" },
+        { "+map" : "de_dust2" },
+        { "+host_workshop_collection" : "" },
+        { "-authkey" : "" },
+        { "+hostname" : "" },
+        { "-ip" : "0.0.0.0" },
+        { "+clientport" : "27015" },
+        { "-port" : "27015" },
+        { "+tv_port" : "27020" },
+        { "+sv_lan" : "0" },
+        { "-tickrate" : "64" }
+    ],
+
+    "options_2403" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_4020" : [
+        { "exec" : "srcds_run" },
+        { "-game" : "garrysmod" },
+        { "+maxplayers" : "16" },
+        { "+gamemode" : "sandbox" },
+        { "+map" : "gm_construct" },
+        { "+host_workshop_collection" : "" },
+        { "-authkey" : "" },
+        { "+hostname" : "" },
+        { "-ip" : "0.0.0.0" },
+        { "+clientport" : "27015" },
+        { "-port" : "27015" },
+        { "+tv_port" : "27020" },
+        { "+sv_lan" : "0" },
+        { "-tickrate" : "64" }
+    ],
+
+    "options_4940" : [
+    { "exec" : "srcds_run" }
+    ],
+
+    "options_17505" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_17575" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_17705" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_41080" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_108600" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_211820" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_215360" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_222840" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_222860" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_223250" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_228780" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_232250" : [
+        { "exec" : "srcds_run" },
+        { "-game" : "tf" },
+        { "+maxplayers" : "16" },
+        { "+map" : "ctf_2fort" },
+        { "+sv_pure" : "1" },
+        { "+host_workshop_collection" : "" },
+        { "-authkey" : "" },
+        { "+hostname" : "" },
+        { "-ip" : "0.0.0.0" },
+        { "+clientport" : "27015" },
+        { "-port" : "27015" },
+        { "+tv_port" : "27020" },
+        { "+sv_lan" : "0" },
+        { "-tickrate" : "64" }
+    ],
+
+    "options_232290" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_232330" : [
+        { "exec" : "srcds_run" },
+        { "-game" : "cstrike" },
+        { "+maxplayers" : "16" },
+        { "+map" : "de_dust2" },
+        { "+host_workshop_collection" : "" },
+        { "-authkey" : "" },
+        { "+hostname" : "" },
+        { "-ip" : "0.0.0.0" },
+        { "+clientport" : "27015" },
+        { "-port" : "27015" },
+        { "+tv_port" : "27020" },
+        { "+sv_lan" : "0" },
+        { "-tickrate" : "64" }
+    ],
+
+    "options_232370" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_233780" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_237410" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_244310" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_255470" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_258550" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_261140" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_294420" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_295230" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_312070" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_313900" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_317670" : [
+        { "exec" : "srcds_run" }
+    ],
+
+    "options_332850" : [
+        { "exec" : "srcds_run" }
+    ]
+}

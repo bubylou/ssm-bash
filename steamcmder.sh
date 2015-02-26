@@ -6,6 +6,7 @@ rootdir="$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd )"
 gamedir="$rootdir/games"
 backupdir="$rootdir/backup"
 steamcmd="$rootdir/steamcmd.sh"
+startcfg="$rootdir/startcfg.json"
 
 appid_check() {
     number="^[0-9]+([.][0-9]+)?$"
@@ -53,8 +54,15 @@ game_start() {
     elif ! [ $(ls "$gamedir" | grep "^$1$") ]; then
         echo "$1 - Not installed"
     else
-        screen -dmS "$1"  sh "$gamedir/$1/srcds_run" -game garrysmod \
-            +maxplayers 8 +map gm_construct +gamemode sandbox
+        exec=$(jq ".options_$1[0].exec" $startcfg  | tr -d '"')
+        length=$(jq ".options_$1 | length" $startcfg)
+        for i in $(seq 1 $length); do
+            name=$(jq ".options_$1[$i]" $startcfg | grep : | cut -d '"' -f 2)
+            value=$(jq ".options_$1[$i]" $startcfg | grep : | cut -d '"' -f 4)
+            gameoptions+=" $name $value"
+        done
+
+        screen -dmS "$1"  sh "$gamedir/$1/$exec" $gameoptions
         echo "$1 - Started"
     fi
 }
