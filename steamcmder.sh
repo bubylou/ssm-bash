@@ -18,24 +18,31 @@ argument_check()
 
 do_all()
 {
-    if [[ "$1" == "game_start" || "$1" == "game_stop" || "$1" == "game_status" ]]; then
-        local servers=$(jq ".[]" $startcfg | grep '\[' | cut -d '"' -f 2)
-        for i in ${servers}; do
-            $1 $i
-        done
-    else
-        for j in $(ls $gamedir); do
+    for j in $(ls $gamedir); do
+        if [[ "$1" == "game_start" || "$1" == "game_stop" || "$1" == "game_status" ]]; then
+            game_config $j
+            game_check
+            local servers=$(jq ".[$index]" $startcfg | grep '\[' | grep -o '".*"')
+            for k in ${servers}; do
+                server="$k"
+                $1 $k
+            done
+        else
+            game_config $j
+            game_check $j
             $1 $j
-        done
-    fi
+        fi
+    done
 }
 
 game_check()
 {
     if [ -z "$(ls "$gamedir" | grep "^$name$")" ]; then
         status=2
-    elif [ -n  "$(screen_check "$1")" ]; then
+    elif [ -n "$(screen_check)" ]; then
         status=1
+    else
+        status=0
     fi
 }
 
@@ -47,11 +54,11 @@ game_config()
     for i in $(seq 0 $length); do
         if [ "$1" == "$(jq -r ".[$i].name" $startcfg)" ]; then
             index=$i
-            if [ "null" != "$(jq -r ".[$i].$1[0]" $startcfg)" ]; then
+            if [ "null" != "$(jq -r ".[$i].$1" $startcfg)" ]; then
                 server=$1
             fi
             break
-        elif [ "null" != "$(jq -r ".[$i].$1[0]" $startcfg)" ]; then
+        elif [ "null" != "$(jq -r ".[$i].$1" $startcfg)" ]; then
             index=$i
             server=$1
             break
@@ -70,10 +77,15 @@ game_config()
 
 message()
 {
-    printf '[ '
-    printf '%-6s' "$1"
-    printf " ] - $2"
-    printf '\n'
+    if [ -n "$1" ]; then
+        printf '[ '
+        printf '%-6s' "$1"
+        printf " ]"
+        if [ -n "$2" ]; then
+            printf " - $2"
+        fi
+        printf '\n'
+    fi
 }
 
 info()
@@ -89,9 +101,9 @@ info()
     fi
 
     if [ $status == 2 ]; then
-        message "Status" "Installed"
-    else
         message "Status" "Not Installed"
+    else
+        message "Status" "Installed"
     fi
 
     if [ $status == 1 ]; then
@@ -101,13 +113,13 @@ info()
     fi
 
     message "$1" "$2"
-    echo "[ ------ ]"
+    message "------"
 }
 
 server_check()
 {
     if [ -z $server ]; then
-        message "Server" "$1"
+        message "Name" "$1"
         message "Error" "Invalid Server Name"
         exit
     fi
@@ -115,26 +127,30 @@ server_check()
 
 screen_check()
 {
-    screen -ls | grep '(' | grep "$1"
+    if [ -z $server ]; then
+        session="$appid"
+    else
+        session="$server"
+    fi
+
+    screen -ls | grep '(' | grep -o "$session"
 }
 
 steamcmd_check()
 {
     if [ ! -e $steamcmd ]; then
+        message "Error" "SteamCMD not installed"
         steamcmd_install
     fi
 }
 
 game_backup()
 {
-    game_config $1
-    game_check $1
-
     if [ $status == 2 ]; then
-        info "Error" "Not Installed"
+        info "Error" "App is not installed"
         error+=" $name"
     elif [ $status == 1 ]; then
-        info "Error" "Running"
+        info "Error" "Stop server before backup"
         error+=" $name"
     else
         info "Status" "Backing Up"
@@ -146,14 +162,11 @@ game_backup()
 
 game_remove()
 {
-    game_config $1
-    game_check $1
-
     if [ $status == 2 ]; then
-        info "Error" "Not Installed"
+        info "Error" "App is not installed"
         error+=" $name"
     elif [ $status == 1 ]; then
-        info "Error" "Running"
+        info "Error" "Stop server before removing"
         error+=" $name"
     else
         info "Status" "Removing"
@@ -163,14 +176,11 @@ game_remove()
 
 game_restore()
 {
-    game_config $1
-    game_check $1
-
     if [ $status == 2 ]; then
-        info "Error" "Not Installed"
+        info "Error" "App is not installed"
         error+=" $name"
     elif [ $status == 1 ]; then
-        info "Error" "Running"
+        info "Error" "Stop server before restoring"
         error+=" $name"
     else
         info "Status" "Restoring"
@@ -181,15 +191,13 @@ game_restore()
 
 game_start()
 {
-    game_config $1
     server_check $1
-    game_check $1
 
     if [ $status == 2 ]; then
-        info "Error" "Not Installed"
+        info "Error" "App is not Installed"
         error+=" $name"
     elif [ $status == 1 ]; then
-        info "Error" "Already Running"
+        info "Error" "Server is already running"
         error+=" $server"
     else
         info "Status" "Starting"
@@ -208,26 +216,29 @@ game_start()
 
 game_status()
 {
-    game_config $1
     server_check $1
-    game_check $1
-    info
+
+    if [ $status == 2 ]; then
+        continue
+    elif [ $status == 1 ]; then
+        info
+    else
+        info
+    fi
 }
 
 game_stop()
 {
-    game_config $1
     server_check $1
-    game_check $1
 
     if [ $status == 2 ]; then
-        info "Error" "Not Installed"
+        info "Error" "App is not Installed"
         error+=" $name"
     elif [ $status == 1 ]; then
         info "Status" "Stopping"
         screen -S "$server-$appid" -X "quit"
     else
-        info "Error" "Not Running"
+        info "Error" "Server is not Running"
         error+=" $server"
     fi
 }
@@ -235,8 +246,6 @@ game_stop()
 game_update()
 {
     steamcmd_check
-    game_config $1
-    game_check $1
 
     if [ $status == 2 ]; then
         info "Status" "Installing"
@@ -256,11 +265,9 @@ game_update()
 game_validate()
 {
     steamcmd_check
-    game_config $1
-    game_check $1
 
     if [ $status == 2 ]; then
-        info "Error" "Not Installed"
+        info "Error" "App is not installed"
         error+=" $name"
     elif [ $status == 1 ]; then
         info "Error" "Stop server before validating"
@@ -273,24 +280,23 @@ game_validate()
 }
 screen_attach()
 {
-    game_config $1
     server_check $1
-    game_check $1
 
     if [ $status == 2 ]; then
-        info $server "Not Installed"
+        info $server "App is not installed"
         error+=" $name"
     elif [ $status == 1 ]; then
         info $server "Attaching"
         screen -r "$server-$appid"
     else
-        info $server "Not Running"
+        info $server "Server is not running"
         error+=" $server"
     fi
 }
 
 steamcmd_install()
 {
+    message "Status" "Installing SteamCMD"
     wget -N http://media.steampowered.com/installer/steamcmd_linux.tar.gz
     tar xvf steamcmd_linux.tar.gz -C "$rootdir"
 }
@@ -298,8 +304,8 @@ steamcmd_install()
 steamcmd_setup()
 {
     if [ -e "$steamcmd" ]; then
-        echo "SteamCMD is already installed"
-        echo "Would you like to reinstall it? (y/n)"
+        message "Error" "SteamCMD is already installed"
+        message "Status" "Would you like to reinstall it? (y/n)"
         while true; do
             read answer
             case "$answer" in
@@ -308,10 +314,10 @@ steamcmd_setup()
                     break
                     ;;
                 N|n)
-                    exit
+                    break
                     ;;
                 *)
-                    echo "Invalid answer. Try again."
+                    message "Error" "Invalid answer. Try again."
             esac
         done
     else
@@ -328,6 +334,8 @@ case "$1" in
     backup)
         argument_check $2
         for arg in ${@:2}; do
+            game_config $arg
+            game_check
             game_backup $arg
         done
         ;;
@@ -336,18 +344,23 @@ case "$1" in
         ;;
     console)
         argument_check $2
+        game_config $2
+        game_check
         screen_attach $2
         ;;
     list)
         for arg in $(ls $gamedir); do
             game_config $arg
+            game_check
             info | head -2
-            echo "[ ------ ]"
+            message "------"
         done
         ;;
     remove)
         argument_check $2
         for arg in ${@:2}; do
+            game_config $arg
+            game_check
             game_remove $arg
         done
         ;;
@@ -355,8 +368,11 @@ case "$1" in
         do_all game_remove
         ;;
     restart)
-        argument_check $2
+        game_config $1
+
         for arg in ${@:2}; do
+            game_config $arg
+            game_check
             game_stop $arg
             game_start $arg
         done
@@ -367,7 +383,10 @@ case "$1" in
         ;;
     restore)
         argument_check $2
+
         for arg in ${@:2}; do
+            game_config $arg
+            game_check
             game_restore $arg
         done
         ;;
@@ -379,7 +398,10 @@ case "$1" in
         ;;
     start)
         argument_check $2
+
         for arg in ${@:2}; do
+            game_config $arg
+            game_check
             game_start $arg
         done
         ;;
@@ -391,6 +413,8 @@ case "$1" in
             do_all game_status
         else
             for arg in ${@:2}; do
+                game_config $arg
+                game_check
                 game_status $arg
             done
         fi
@@ -398,6 +422,8 @@ case "$1" in
     stop)
         argument_check $2
         for arg in ${@:2}; do
+            game_config $arg
+            game_check
             game_stop $arg
         done
         ;;
@@ -407,6 +433,8 @@ case "$1" in
     update)
         argument_check $2
         for arg in ${@:2}; do
+            game_config $arg
+            game_check
             game_update $arg
         done
         ;;
@@ -416,6 +444,8 @@ case "$1" in
     validate)
         argument_check $2
         for arg in ${@:2}; do
+            game_config $arg
+            game_check
             game_validate $arg
         done
         ;;
@@ -423,11 +453,11 @@ case "$1" in
         do_all game_validate
         ;;
     *)
-        echo "\"$1\" is not a valid command"
+        message "Error" "Invalid Command"
 esac
 
 if [ -n "$error" ]; then
     echo "[ Errors ] -$error"
 else
-    echo "[ Done   ]"
+    message "Done"
 fi

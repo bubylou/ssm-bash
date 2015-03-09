@@ -1,5 +1,31 @@
 [
     {
+        "name" : "example",
+        "appid" : "90",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "205",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "310",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+    {
         "name" : "csgo",
         "appid" : "740",
         "exec" : "srcds_run",
@@ -20,6 +46,15 @@
             "+tv_port 27020",
             "+sv_lan 0",
             "-tickrate 64"
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "2403",
+        "exec" : "example",
+
+        "example" : [
         ]
     },
 
@@ -62,6 +97,115 @@
     },
 
     {
+        "name" : "example",
+        "appid" : "4940",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "17505",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "17575",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "17705",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "41080",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "108600",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "211820",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "215360",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "222840",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "222860",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "223250",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "228780",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+
+    {
         "name" : "tf2",
         "appid" : "232250",
         "exec" : "srcds_run",
@@ -80,6 +224,141 @@
             "+tv_port 27020",
             "+sv_lan 0",
             "-tickrate 64"
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "232290",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "232330",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "232370",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "233780",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "237410",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "244310",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "255470",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "258550",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "261140",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "294420",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "295230",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "312070",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "313900",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "317670",
+        "exec" : "example",
+
+        "example" : [
+        ]
+    },
+
+    {
+        "name" : "example",
+        "appid" : "332850",
+        "exec" : "example",
+
+        "example" : [
         ]
     }
 ]
