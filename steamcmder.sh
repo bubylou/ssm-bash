@@ -8,116 +8,261 @@ backupdir="$rootdir/backup"
 steamcmd="$rootdir/steamcmd.sh"
 startcfg="$rootdir/startcfg.json"
 
-appid_check() {
-    number="^[0-9]+([.][0-9]+)?$"
-
-    if ! [[ $1 =~ $number ]]; then
-        echo "$1 - Invalid App ID"
-        exit
-    fi
-}
-
-argument_check() {
+argument_check()
+{
     if [ -z "$1" ]; then
-        echo "You must specify at least one App ID"
+        echo "You must specify at least one App Name"
         exit
     fi
 }
 
-do_all() {
-    for appid in $(basename "$(ls $gamedir)"); do
-        $1 $appid
-    done
-}
-
-game_backup() {
-    appid_check $1
-    mkdir -p "$backupdir/$1"
-    tar cvJf "$backupdir/$1/$(date +%Y-%m-%d-%H%M%S).tar.xz" \
-        --exclude "$backupdir" -C "$gamedir" $1
-}
-
-game_remove() {
-    appid_check $1
-    rm -rv "$gamedir/$1"
-}
-
-game_restore() {
-    appid_check $1
-    tar vxf "$backupdir/$1/$(ls -t "$backupdir/$1/" | head -1)" -C "$gamedir"
-}
-
-game_start() {
-    appid_check $1
-    if [ $(screen_check $1) ]; then
-        echo "$1 - Already Running"
-    elif ! [ $(ls "$gamedir" | grep "^$1$") ]; then
-        echo "$1 - Not installed"
-    else
-        exec=$(jq ".options_$1[0].exec" $startcfg  | tr -d '"')
-        length=$(jq ".options_$1 | length" $startcfg)
-        for i in $(seq 1 $length); do
-            name=$(jq ".options_$1[$i]" $startcfg | grep : | cut -d '"' -f 2)
-            value=$(jq ".options_$1[$i]" $startcfg | grep : | cut -d '"' -f 4)
-            gameoptions+=" $name $value"
+do_all()
+{
+    if [[ "$1" == "game_start" || "$1" == "game_stop" || "$1" == "game_status" ]]; then
+        local servers=$(jq ".[]" $startcfg | grep '\[' | cut -d '"' -f 2)
+        for i in ${servers}; do
+            $1 $i
         done
-
-        screen -dmS "$1"  sh "$gamedir/$1/$exec" $gameoptions
-        echo "$1 - Started"
-    fi
-}
-
-game_stop() {
-    appid_check $1
-    if [ $(screen_check $1) ]; then
-        screen -S "$1" -X "quit"
-        echo "$1 - Stopped"
-    elif ! [ $(ls "$gamedir" | grep "^$1$") ]; then
-        echo "$1 - Not installed"
     else
-        echo "$1 - Not Running"
+        for j in $(ls $gamedir); do
+            $1 $j
+        done
     fi
 }
 
-game_update() {
-    steamcmd_check
-    appid_check $1
-    mkdir -p "$gamedir/$1"
-    bash $steamcmd +login "$username" "$password" +force_install_dir "$gamedir/$1" \
-        +app_update "$1" +quit
+game_config()
+{
+    unset index name appid server
+    local length=$(jq ". | length" $startcfg)
 
+    for i in $(seq 0 $length); do
+        if [ "$1" == "$(jq -r ".[$i].name" $startcfg)" ]; then
+            index=$i
+            if [ "null" != "$(jq -r ".[$i].$1[0]" $startcfg)" ]; then
+                server=$1
+            fi
+            break
+        elif [ "null" != "$(jq -r ".[$i].$1[0]" $startcfg)" ]; then
+            index=$i
+            server=$1
+            break
+        fi
+    done
+
+    if [ -n "$index" ]; then
+        name=$(jq -r ".[$index].name" $startcfg)
+        appid=$(jq -r ".[$index].appid" $startcfg)
+    else
+        message $1 "Invalid App Name"
+        exit
+    fi
 }
 
-game_validate() {
-    steamcmd_check
-    appid_check $1
-    bash $steamcmd +login "$username" "$password" +force_install_dir "$gamedir/$1" \
-        +app_update "$1" -validate +quit
+message()
+{
+    printf "[ "
+    printf '%-6s' "$1"
+    printf " ] - $2"
+    printf '\n'
 }
 
-screen_check() {
-    ls -aR /var/run/screen | cut -d "." -f 2 | grep "^$1$"
+server_check()
+{
+    if [ -z $server ]; then
+        message $1 "Invalid Server Name"
+        exit
+    fi
 }
 
-steamcmd_check() {
-    if ! [ -e "$steamcmd" ]; then
+screen_check()
+{
+    ls -aR /var/run/screen | cut -d "." -f 2 | grep "$1$"
+}
+
+steamcmd_check()
+{
+    if [ ! -e $steamcmd ]; then
         steamcmd_install
     fi
 }
 
-steamcmd_install() {
-    wget -N http://media.steampowered.com/installer/steamcmd_linux.tar.gz
-    tar xvzf steamcmd_linux.tar.gz -C "$rootdir"
+game_backup()
+{
+    game_config $1
+
+    if [ -z "$(ls "$gamedir" | grep "^$name$")" ]; then
+        message $name "Not Installed"
+        error+=" $name"
+    elif [ -n  "$(screen_check "$appid")" ]; then
+        message $name "Running"
+        error+=" $name"
+    else
+        message $name "Backing Up"
+        mkdir -p "$backupdir/$name"
+        tar cvJf "$backupdir/$name/$(date +%Y-%m-%d-%H%M%S).tar.xz" \
+            --exclude "$backupdir" -C "$gamedir" $name
+    fi
 }
 
-steamcmd_setup() {
+game_remove()
+{
+    game_config $1
+
+    if [ -z "$(ls "$gamedir" | grep "^$name$")" ]; then
+        message $name "Not Installed"
+        error+=" $name"
+    elif [ -n  "$(screen_check "$appid")" ]; then
+        message $name "Running"
+        error+=" $name"
+    else
+        message $name "Removing"
+        rm -r "$gamedir/$name"
+    fi
+}
+
+game_restore()
+{
+    game_config $1
+
+    if [ -z "$(ls "$gamedir" | grep "^$name$")" ]; then
+        message $name "Not Installed"
+        error+=" $name"
+    elif [ -n  "$(screen_check "$appid")" ]; then
+        message $name "Running"
+        error+=" $name"
+    else
+        message $name "Restoring"
+        tar vxf "$backupdir/$name/$(ls -t "$backupdir/$name/" | head -1)" \
+            -C "$gamedir"
+    fi
+}
+
+game_start()
+{
+    game_config $1
+    server_check $1
+
+    if [ -z "$(ls "$gamedir" | grep "^$name$")" ]; then
+        message $server "Not Installed"
+        error+=" $server"
+    elif [ -n  "$(screen_check "$server-$appid")" ]; then
+        message $server "Already Running"
+        error+=" $server"
+    else
+        message $server "Starting"
+
+        local exec=$(jq -r ".[$index].exec" $startcfg)
+        local length=$(jq ".[$index].$server | length" $startcfg)
+
+        for i in $(seq 0 $length); do
+            local tmp=$(jq -r ".[$index].$server[$i]" $startcfg)
+            gameoptions+=" $tmp"
+        done
+
+        screen -dmS "$server-$appid" sh "$gamedir/$name/$exec" $gameoptions
+    fi
+}
+
+game_status()
+{
+    game_config $1
+    server_check $1
+
+    if [ -n  "$(screen_check "$server-$appid")" ]; then
+        message $server "Running"
+    else
+        message $server "Not Running"
+    fi
+}
+
+game_stop()
+{
+    game_config $1
+    server_check $1
+
+    if [ -z "$(ls "$gamedir" | grep "^$name$")" ]; then
+        message $server "Not Installed"
+        error+=" $1"
+    elif [ -n  "$(screen_check "$server-$appid")" ]; then
+        message $server "Stopping"
+        screen -S "$server-$appid" -X "quit"
+    else
+        message $server "Not Running"
+        error+=" $1"
+    fi
+}
+
+game_update()
+{
+    steamcmd_check
+    game_config $1
+
+    if [ -z "$(ls "$gamedir" | grep "^$name$")" ]; then
+        message $name "Installing"
+        mkdir -p "$gamedir/$name"
+        bash $steamcmd +login "$username" "$password" +force_install_dir \
+            "$gamedir/$name" +app_update "$appid" +quit
+    elif [ -n  "$(screen_check "$appid")" ]; then
+        message $name "Running"
+        error+=" $server"
+    else
+        message $name "Updating"
+        bash $steamcmd +login "$username" "$password" +force_install_dir \
+            "$gamedir/$name" +app_update "$appid" +quit
+    fi
+}
+
+game_validate()
+{
+    steamcmd_check
+    game_config $1
+
+    if [ -z "$(ls "$gamedir" | grep "^$name$")" ]; then
+        message $name "Not Installed"
+        error+=" $name"
+    elif [ -n  "$(screen_check "$appid")" ]; then
+        message $name "Running"
+        error+=" $server"
+    else
+        message $name "Validating"
+        bash $steamcmd +login "$username" "$password" +force_install_dir \
+            "$gamedir/$name" +app_update "$appid" -validate +quit
+    fi
+}
+screen_attach()
+{
+    game_config $1
+    server_check $1
+
+    if [ -z "$(ls "$gamedir" | grep "^$name$")" ]; then
+        message $server "Not Installed"
+        error+=" $name"
+    elif [ -n  "$(screen_check "$server-$appid")" ]; then
+        message $server "Attaching"
+        screen -r "$server-$appid"
+    else
+        message $server "Not Running"
+        error+=" $server"
+    fi
+}
+
+steamcmd_install()
+{
+    wget -N http://media.steampowered.com/installer/steamcmd_linux.tar.gz
+    tar xvf steamcmd_linux.tar.gz -C "$rootdir"
+}
+
+steamcmd_setup()
+{
     if [ -e "$steamcmd" ]; then
-        echo "SteamCMD is already installed. Would you like to reinstall it? (y/n)"
+        echo "SteamCMD is already installed"
+        echo "Would you like to reinstall it? (y/n)"
         while true; do
             read answer
             case "$answer" in
                 Y|y)
                     steamcmd_install
+                    break
                     ;;
                 N|n)
                     exit
@@ -131,33 +276,34 @@ steamcmd_setup() {
     fi
 }
 
+if [ "$(whoami)" == "root" ]; then
+    message "Errors" "Do not run as root"
+    exit
+fi
+
 case "$1" in
     backup)
         argument_check $2
-        for appid in "${@:2}"; do
-            game_backup $appid
+        for arg in ${@:2}; do
+            game_backup $arg
         done
         ;;
     backup-all)
         do_all game_backup
         ;;
-    games)
-        for appid in $(ls $gamedir); do
-            appid_check $appid
-            echo "$appid - Installed"
-        done
+    console)
+        argument_check $2
+        screen_attach $2
         ;;
     list)
-        for appid in $(ls "$gamedir"); do
-            if [ $(screen_check $appid) ]; then
-                echo $(screen_check $appid)
-            fi
+        for arg in $(ls $gamedir); do
+            message $arg "Installed"
         done
         ;;
     remove)
         argument_check $2
-        for appid in "${@:2}"; do
-            game_remove $appid
+        for arg in ${@:2}; do
+            game_remove $arg
         done
         ;;
     remove-all)
@@ -165,8 +311,9 @@ case "$1" in
         ;;
     restart)
         argument_check $2
-        for appid in "${@:2}"; do
-            game_stop $appid && game_start $appid
+        for arg in ${@:2}; do
+            game_stop $arg
+            game_start $arg
         done
         ;;
     restart-all)
@@ -175,8 +322,8 @@ case "$1" in
         ;;
     restore)
         argument_check $2
-        for appid in "${@:2}"; do
-            game_restore $appid
+        for arg in ${@:2}; do
+            game_restore $arg
         done
         ;;
     restore-all)
@@ -187,17 +334,26 @@ case "$1" in
         ;;
     start)
         argument_check $2
-        for appid in "${@:2}"; do
-            game_start $appid
+        for arg in ${@:2}; do
+            game_start $arg
         done
         ;;
     start-all)
         do_all game_start
         ;;
+    status)
+        if [ -z "$2" ]; then
+            do_all game_status
+        else
+            for arg in ${@:2}; do
+                game_status $arg
+            done
+        fi
+        ;;
     stop)
         argument_check $2
-        for appid in "${@:2}"; do
-            game_stop $appid
+        for arg in ${@:2}; do
+            game_stop $arg
         done
         ;;
     stop-all)
@@ -205,8 +361,8 @@ case "$1" in
         ;;
     update)
         argument_check $2
-        for appid in "${@:2}"; do
-            game_update $appid
+        for arg in ${@:2}; do
+            game_update $arg
         done
         ;;
     update-all)
@@ -214,8 +370,8 @@ case "$1" in
         ;;
     validate)
         argument_check $2
-        for appid in "${@:2}"; do
-            game_validate $appid
+        for arg in ${@:2}; do
+            game_validate $arg
         done
         ;;
     validate-all)
@@ -224,3 +380,9 @@ case "$1" in
     *)
         echo "\"$1\" is not a valid command"
 esac
+
+if [ -n "$error" ]; then
+    echo "[ Errors ] -$error"
+else
+    echo "[ Done   ]"
+fi
