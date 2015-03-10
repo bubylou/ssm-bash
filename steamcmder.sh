@@ -19,17 +19,16 @@ argument_check()
 do_all()
 {
     for j in $(ls $gamedir); do
-        if [[ "$1" == "game_start" || "$1" == "game_stop" || "$1" == "game_status" ]]; then
-            game_config $j
-            game_check
-            local servers=$(jq ".[$index]" $startcfg | grep '\[' | grep -o '".*"')
+        game_config $j
+        game_check
+
+        if [[ $1 =~ ^server_.* ]]; then
+            servers=$(jq ".[$index]" $startcfg | grep '\[' | grep -o '".*"')
             for k in ${servers}; do
                 server="$k"
                 $1 $k
             done
         else
-            game_config $j
-            game_check $j
             $1 $j
         fi
     done
@@ -49,19 +48,27 @@ game_check()
 game_config()
 {
     unset index name appid server
+    number="^[0-9]+([.][0-9]+)?$"
     local length=$(jq ". | length" $startcfg)
 
     for i in $(seq 0 $length); do
-        if [ "$1" == "$(jq -r ".[$i].name" $startcfg)" ]; then
-            index=$i
-            if [ "null" != "$(jq -r ".[$i].$1" $startcfg)" ]; then
-                server=$1
+        if [[ $1 =~ $number ]]; then
+            if [ "$1" == "$(jq -r ".[$i].appid" $startcfg)" ]; then
+                index=$i
+                break
             fi
-            break
-        elif [ "null" != "$(jq -r ".[$i].$1" $startcfg)" ]; then
-            index=$i
-            server=$1
-            break
+        else
+            if [ "$1" == "$(jq -r ".[$i].name" $startcfg)" ]; then
+                index=$i
+                if [ "null" != "$(jq -r ".[$i].$1" $startcfg)" ]; then
+                    server=$1
+                fi
+                break
+            elif [ "null" != "$(jq -r ".[$i].$1" $startcfg)" ]; then
+                index=$i
+                server=$1
+                break
+            fi
         fi
     done
 
@@ -128,9 +135,9 @@ server_check()
 screen_check()
 {
     if [ -z $server ]; then
-        session="$appid"
+        local session="$appid"
     else
-        session="$server"
+        local session="$server"
     fi
 
     screen -ls | grep '(' | grep -o "$session"
@@ -189,60 +196,6 @@ game_restore()
     fi
 }
 
-game_start()
-{
-    server_check $1
-
-    if [ $status == 2 ]; then
-        info "Error" "App is not Installed"
-        error+=" $name"
-    elif [ $status == 1 ]; then
-        info "Error" "Server is already running"
-        error+=" $server"
-    else
-        info "Status" "Starting"
-
-        local exec=$(jq -r ".[$index].exec" $startcfg)
-        local length=$(jq ".[$index].$server | length" $startcfg)
-
-        for i in $(seq 0 $length); do
-            local tmp=$(jq -r ".[$index].$server[$i]" $startcfg)
-            gameoptions+=" $tmp"
-        done
-
-        screen -dmS "$server-$appid" sh "$gamedir/$name/$exec" $gameoptions
-    fi
-}
-
-game_status()
-{
-    server_check $1
-
-    if [ $status == 2 ]; then
-        continue
-    elif [ $status == 1 ]; then
-        info
-    else
-        info
-    fi
-}
-
-game_stop()
-{
-    server_check $1
-
-    if [ $status == 2 ]; then
-        info "Error" "App is not Installed"
-        error+=" $name"
-    elif [ $status == 1 ]; then
-        info "Status" "Stopping"
-        screen -S "$server-$appid" -X "quit"
-    else
-        info "Error" "Server is not Running"
-        error+=" $server"
-    fi
-}
-
 game_update()
 {
     steamcmd_check
@@ -290,6 +243,60 @@ screen_attach()
         screen -r "$server-$appid"
     else
         info $server "Server is not running"
+        error+=" $server"
+    fi
+}
+
+server_start()
+{
+    server_check $1
+
+    if [ $status == 2 ]; then
+        info "Error" "App is not Installed"
+        error+=" $name"
+    elif [ $status == 1 ]; then
+        info "Error" "Server is already running"
+        error+=" $server"
+    else
+        info "Status" "Starting"
+
+        local exec=$(jq -r ".[$index].exec" $startcfg)
+        local length=$(jq ".[$index].$server | length" $startcfg)
+
+        for i in $(seq 0 $length); do
+            local tmp=$(jq -r ".[$index].$server[$i]" $startcfg)
+            gameoptions+=" $tmp"
+        done
+
+        screen -dmS "$server-$appid" sh "$gamedir/$name/$exec" $gameoptions
+    fi
+}
+
+server_status()
+{
+    server_check $1
+
+    if [ $status == 2 ]; then
+        continue
+    elif [ $status == 1 ]; then
+        info
+    else
+        info
+    fi
+}
+
+server_stop()
+{
+    server_check $1
+
+    if [ $status == 2 ]; then
+        info "Error" "App is not Installed"
+        error+=" $name"
+    elif [ $status == 1 ]; then
+        info "Status" "Stopping"
+        screen -S "$server-$appid" -X "quit"
+    else
+        info "Error" "Server is not Running"
         error+=" $server"
     fi
 }
@@ -373,13 +380,13 @@ case "$1" in
         for arg in ${@:2}; do
             game_config $arg
             game_check
-            game_stop $arg
-            game_start $arg
+            server_stop $arg
+            server_start $arg
         done
         ;;
     restart-all)
-        do_all game_stop
-        do_all game_start
+        do_all server_stop
+        do_all server_start
         ;;
     restore)
         argument_check $2
@@ -402,20 +409,20 @@ case "$1" in
         for arg in ${@:2}; do
             game_config $arg
             game_check
-            game_start $arg
+            server_start $arg
         done
         ;;
     start-all)
-        do_all game_start
+        do_all server_start
         ;;
     status)
         if [ -z "$2" ]; then
-            do_all game_status
+            do_all server_status
         else
             for arg in ${@:2}; do
                 game_config $arg
                 game_check
-                game_status $arg
+                server_status $arg
             done
         fi
         ;;
@@ -424,11 +431,11 @@ case "$1" in
         for arg in ${@:2}; do
             game_config $arg
             game_check
-            game_stop $arg
+            server_stop $arg
         done
         ;;
     stop-all)
-        do_all game_stop
+        do_all server_stop
         ;;
     update)
         argument_check $2
