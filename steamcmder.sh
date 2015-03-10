@@ -18,18 +18,22 @@ argument_check()
 
 do_all()
 {
-    for j in $(ls $gamedir); do
-        game_config $j
+    for i in $(ls $gamedir); do
+        game_config $i
         game_check
 
         if [[ $1 =~ ^server_.* ]]; then
             servers=$(jq ".[$index]" $startcfg | grep '\[' | grep -o '".*"')
-            for k in ${servers}; do
-                server="$k"
-                $1 $k
+            for j in ${servers}; do
+                for k in ${@}; do
+                    server="$j"
+                    $k $j
+                done
             done
         else
-            $1 $j
+            for k in ${@}; do
+                $k $i
+            done
         fi
     done
 }
@@ -38,7 +42,7 @@ game_check()
 {
     if [ -z "$(ls "$gamedir" | grep "^$name$")" ]; then
         status=2
-    elif [ -n "$(screen_check)" ]; then
+    elif [ -n "$(session_check)" ]; then
         status=1
     else
         status=0
@@ -132,7 +136,7 @@ server_check()
     fi
 }
 
-screen_check()
+session_check()
 {
     if [ -z $server ]; then
         local session="$appid"
@@ -231,7 +235,8 @@ game_validate()
             "$gamedir/$name" +app_update "$appid" -validate +quit
     fi
 }
-screen_attach()
+
+session_attach()
 {
     server_check $1
 
@@ -353,7 +358,7 @@ case "$1" in
         argument_check $2
         game_config $2
         game_check
-        screen_attach $2
+        session_attach $2
         ;;
     list)
         for arg in $(ls $gamedir); do
@@ -385,8 +390,7 @@ case "$1" in
         done
         ;;
     restart-all)
-        do_all server_stop
-        do_all server_start
+        do_all server_stop server_start
         ;;
     restore)
         argument_check $2
