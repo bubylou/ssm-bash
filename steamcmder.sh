@@ -23,8 +23,8 @@ do_all()
         game_check
 
         if [[ $1 =~ ^server_.* ]]; then
-            servers=$(jq ".[$index]" $startcfg | grep '\[' | grep -o '".*"')
-            for j in ${servers}; do
+            servers=$(jq ".[$index]" $startcfg | grep '\[' | grep -o '\".*\"')
+            for j in $(echo $servers | tr -d '"'); do
                 for k in ${@}; do
                     server="$j"
                     $k $j
