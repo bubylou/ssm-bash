@@ -24,6 +24,10 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - List the installed applications.
 
+`list-all`
+
+- List all the installable applications.
+
 `remove <app_id>...`
 
 - Deletes the files for the selected application.
