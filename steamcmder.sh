@@ -2,7 +2,7 @@
 
 username="anonymous"
 password=""
-rootdir="$( cd "$(dirname ${BASH_SOURCE[0]} )" && pwd )"
+rootdir="$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )"
 gamedir="$rootdir/games"
 backupdir="$rootdir/backup"
 steamcmd="$rootdir/steamcmd.sh"
@@ -22,6 +22,7 @@ do_all()
 {
     for i in $( ls $gamedir ); do
         game_check $i
+        servers=$( jq ".[$index]" $startcfg | grep '\[' | awk -F\" '{print $2}' )
         for server in $servers; do
             for k in ${@}; do
                 $k $j
@@ -40,22 +41,24 @@ game_check()
     for i in $( seq 0 $length ); do
         name=$( jq -r ".[$i].name" $startcfg )
         appid=$( jq -r ".[$i].appid" $startcfg )
-        servers=$( jq ".[$i]" $startcfg | grep '\[' | awk -F\" '{print $2}' )
 
-        if [ "$1" == "$name" ]; then
-            index=$i
-            if [ "null" != "$(jq -r ".[$i].$1" $startcfg)" ]; then
-                server=$1
+        if [[ $1 =~ $number ]]; then
+            if [ "$1" == "$appid" ]; then
+                index=$i
+                break
             fi
-            break
         else
-            for j in $servers; do
-                if [ "$1" == $j ]; then
-                    server=$j
-                    index=$i
-                    break 2
+            if [ "$1" == "$name" ]; then
+                index=$i
+                if [ "null" != "$( jq -r ".[$i].$1" $startcfg )" ]; then
+                    server=$1
                 fi
-            done
+                break
+            elif [ "null" != "$( jq -r ".[$i].$1" $startcfg )" ]; then
+                index=$i
+                server=$1
+                break
+            fi
         fi
     done
 
@@ -64,7 +67,7 @@ game_check()
         exit
     fi
 
-    if [ -z "$( ls "$gamedir" | grep "^$name$" )" ]; then
+    if [ ! -d "$gamedir/$name" ]; then
         status=2
     elif [ -n "$( session_check )" ]; then
         status=1
@@ -192,6 +195,13 @@ server_stop()
 {
     message "Status" "Stopping"
     screen -S "$server-$appid" -X "quit"
+
+    while [ -n "$( session_check )" ]; do
+        message "Status" "Stopping"
+        sleep 2
+    done
+
+    message "Status" "Stopped"
 }
 
 steamcmd_install()
@@ -281,9 +291,7 @@ command_start()
 
 command_status()
 {
-    if [ $status == 2 ]; then
-        continue
-    else
+    if [ $status != 2 ]; then
         info
         message "------"
     fi
@@ -395,8 +403,9 @@ case "$1" in
         length=$( jq ". | length - 1" $startcfg )
         for i in $( seq 0 $length ); do
             name=$( jq -r ".[$i].name" $startcfg )
-            game_check $name
-            info
+            appid=$( jq -r ".[$i].appid" $startcfg )
+            status=0
+            info | head -2
             message "------"
         done
         ;;
@@ -414,8 +423,6 @@ case "$1" in
         done
         ;;
     restart)
-        game_check $1
-
         for i in ${@:2}; do
             game_check $i
             command_stop
@@ -427,7 +434,6 @@ case "$1" in
         ;;
     restore)
         argument_check $2
-
         for i in ${@:2}; do
             game_check $i
             command_restore
@@ -444,7 +450,6 @@ case "$1" in
         ;;
     start)
         argument_check $2
-
         for i in ${@:2}; do
             game_check $i
             server_check
