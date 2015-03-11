@@ -164,8 +164,7 @@ game_restore()
 
 game_update()
 {
-    message "Status" "Updating"
-    mkdir -p "$gamedir/$name"
+    message "Status" "$1"
     bash $steamcmd +login "$username" "$password" +force_install_dir \
         "$gamedir/$name" +app_update "$appid" +quit
 }
@@ -244,6 +243,23 @@ command_console()
     fi
 }
 
+command_install()
+{
+    steamcmd_check
+    info
+
+    if [ $status == 2 ]; then
+        mkdir -p "$gamedir"
+        game_update "Installing"
+    elif [ $status == 1 ]; then
+        message "Error" "Stop server before updating"
+        error+="$name "
+    else
+        message "Error" "App is already installed"
+        error+="$name "
+    fi
+}
+
 command_remove()
 {
     info
@@ -318,12 +334,13 @@ command_update()
     info
 
     if [ $status == 2 ]; then
-        game_update
+        message "Error" "App is not installed"
+        error+="$name "
     elif [ $status == 1 ]; then
         message "Error" "Stop server before updating"
         error+="$name "
     else
-        game_update
+        game_update "Updating"
     fi
 }
 
@@ -391,6 +408,13 @@ case "$1" in
         game_check $2
         server_check
         command_console
+        ;;
+    install)
+        argument_check $2
+        for i in ${@:2}; do
+            game_check $i
+            command_install
+        done
         ;;
     list)
         for i in $( ls $gamedir ); do
