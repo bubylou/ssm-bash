@@ -22,10 +22,10 @@ do_all()
 {
     for i in $( ls $gamedir ); do
         game_check $i
-        game_status $i
         servers=$( jq ".[$index]" $startcfg | grep '\[' | awk -F\" '{print $2}' )
         for server in $servers; do
             for k in ${@}; do
+                game_status $server
                 $k $j
             done
         done
@@ -115,6 +115,16 @@ message()
     printf '\n'
 }
 
+option_check()
+{
+    if [[ "$1" == "-r" || "$1" == "-s" ]]; then
+        option="$1"
+        if [ "$2" != 0 ]; then
+            continue
+        fi
+    fi
+}
+
 server_check()
 {
     if [ -z "$server" ]; then
@@ -131,7 +141,7 @@ session_check()
         local session="$server-$appid"
     fi
 
-    screen -ls | grep '(' | grep "$session" | cut -d '.' -f 2 | cut -f 1
+    screen -ls | grep '(' | grep "$session" | cut -d '.' -f 2 | cut -d '-' -f 1
 }
 
 steamcmd_check()
@@ -139,6 +149,34 @@ steamcmd_check()
     if [ ! -e $steamcmd ]; then
         message "Error" "SteamCMD not installed"
         steamcmd_install
+    fi
+}
+
+stop_run_start()
+{
+    for server in $( session_check ); do
+        servers+="$server "
+        message "------"
+        message "Name" "$server"
+        server_stop
+        message "------"
+    done
+
+    if [ -z "$error" ]; then
+        game_status
+        $1
+    else
+        message "Error" "A server would not stop"
+        break
+    fi
+
+    if [ "$option" != "-s" ]; then
+        for server in $servers; do
+            message "------"
+            message "Name" "$server"
+            server_start
+            message "------"
+        done
     fi
 }
 
@@ -172,21 +210,30 @@ game_remove()
 
 game_restore()
 {
-    message "Status" "Restoring"
-    local hash1=$( ls -la --full-time $gamedir/$name | md5sum )
-    tar xf "$( ls -t $backupdir/$name/*.tar.xz | head -1 )" -C "$gamedir"
+    if [ -d "$backupdir/$name" ]; then
+        backup=$( ls -t $backupdir/$name/*.tar.xz | head -1 )
+    fi
 
-    local hash2=$( ls -la --full-time $gamedir/$name | md5sum )
-    if [ "$hash1" != "$hash2" ]; then
-        message "Status" "Restore Complete"
+    if [ -e "$backup" ]; then
+        message "Status" "Restoring"
+        local hash1=$( ls -la --full-time $gamedir/$name | md5sum )
+        tar xf "$backup" -C "$gamedir"
+
+        local hash2=$( ls -la --full-time $gamedir/$name | md5sum )
+        if [ "$hash1" != "$hash2" ]; then
+            message "Status" "Restore Complete"
+        else
+            message "Error" "Restore Failed"
+        fi
     else
-        message "Error" "Restore Failed"
+        message "Error" "There are no backups"
     fi
 }
 
 game_update()
 {
     message "Status" "$1"
+    message "------"
     bash $steamcmd +login "$username" "$password" +force_install_dir \
         "$gamedir/$name" +app_update "$appid" +quit
 }
@@ -194,6 +241,7 @@ game_update()
 game_validate()
 {
     message "Status" "Validating"
+    message "------"
     bash $steamcmd +login "$username" "$password" +force_install_dir \
         "$gamedir/$name" +app_update "$appid" -validate +quit
 }
@@ -240,7 +288,8 @@ server_stop()
 steamcmd_install()
 {
     message "Status" "Installing SteamCMD"
-    wget -Nq http://media.steampowered.com/installer/steamcmd_linux.tar.gz
+    wget -Nq http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
+        -P "$rootdir"
     tar xf steamcmd_linux.tar.gz -C "$rootdir"
 
     if [ -e $steamcmd ]; then
@@ -260,8 +309,12 @@ command_backup()
         message "Error" "App is not installed"
         error+="\"$name-$appid\" "
     elif [ $status == 1 ]; then
-        message "Error" "Stop server before backup"
-        error+="\"$name-$appid\" "
+        if [[ "$option" == "-r" || "$option" == "-s" ]]; then
+            stop_run_start command_backup
+        else
+            message "Error" "Stop server before backup"
+            error+="\"$name-$appid\" "
+        fi
     else
         game_backup
     fi
@@ -296,7 +349,7 @@ command_install()
         mkdir -p "$gamedir"
         game_update "Installing"
     elif [ $status == 1 ]; then
-        message "Error" "Stop server before updating"
+        message "Error" "Stop server before installing"
         error+="\"$name-$appid\" "
     else
         message "Error" "App is already installed"
@@ -314,8 +367,15 @@ command_remove()
         message "Error" "App is not installed"
         error+="\"$name-$appid\" "
     elif [ $status == 1 ]; then
-        message "Error" "Stop server before removing"
-        error+="\"$name-$appid\" "
+        if [ "$option" == "-s" ]; then
+            stop_run_start command_remove
+        elif [ "$option" == "-r" ]; then
+            option="-s"
+            stop_run_start command_remove
+        else
+            message "Error" "Stop server before removing"
+            error+="\"$name-$appid\" "
+        fi
     else
         game_remove
     fi
@@ -331,8 +391,12 @@ command_restore()
         message "Error" "App is not installed"
         error+="\"$name-$appid\" "
     elif [ $status == 1 ]; then
-        message "Error" "Stop server before restoring"
-        error+="\"$name-$appid\" "
+        if [[ "$option" == "-r" || "$option" == "-s" ]]; then
+            stop_run_start command_restore
+        else
+            message "Error" "Stop server before restoring"
+            error+="\"$name-$appid\" "
+        fi
     else
         game_restore
     fi
@@ -391,8 +455,12 @@ command_update()
         message "Error" "App is not installed"
         error+="\"$name-$appid\" "
     elif [ $status == 1 ]; then
-        message "Error" "Stop server before updating"
-        error+="\"$name-$appid\" "
+        if [[ "$option" == "-r" || "$option" == "-s" ]]; then
+            stop_run_start command_update
+        else
+            message "Error" "Stop server before updating"
+            error+="\"$name-$appid\" "
+        fi
     else
         game_update "Updating"
     fi
@@ -407,8 +475,12 @@ command_validate()
         message "Error" "App is not installed"
         error+="\"$name-$appid\" "
     elif [ $status == 1 ]; then
-        message "Error" "Stop server before validating"
-        error+="\"$name-$appid\" "
+        if [[ "$option" == "-r" || "$option" == "-s" ]]; then
+            stop_run_start command_validate
+        else
+            message "Error" "Stop server before validating"
+            error+="\"$name-$appid\" "
+        fi
     else
         game_validate
     fi
@@ -447,12 +519,14 @@ case "$1" in
     backup)
         argument_check $2
         for i in ${@:2}; do
+            option_check $i
             game_check $i
             game_status $i
             command_backup
         done
         ;;
     backup-all)
+        option_check $2 0
         for i in $( ls $gamedir ); do
             game_check $i
             game_status $i
@@ -471,6 +545,15 @@ case "$1" in
         for i in ${@:2}; do
             game_check $i
             game_status $i
+            command_install
+        done
+        ;;
+    install-all)
+        length=$( jq ". | length - 1" $startcfg )
+        for i in $( seq 0 $length ); do
+            name=$( jq -r ".[$i].name" $startcfg )
+            appid=$( jq -r ".[$i].appid" $startcfg )
+            game_status $name
             command_install
         done
         ;;
@@ -495,12 +578,14 @@ case "$1" in
     remove)
         argument_check $2
         for i in ${@:2}; do
+            option_check $i
             game_check $i
             game_status $i
             command_remove
         done
         ;;
     remove-all)
+        option_check $2 0
         for i in $( ls $gamedir ); do
             game_check $i
             game_status $i
@@ -521,12 +606,14 @@ case "$1" in
     restore)
         argument_check $2
         for i in ${@:2}; do
+            option_check $i
             game_check $i
             game_status $i
             command_restore
         done
         ;;
     restore-all)
+        option_check $2 0
         for i in $( ls $gamedir ); do
             game_check $i
             game_status $i
@@ -575,12 +662,14 @@ case "$1" in
     update)
         argument_check $2
         for i in ${@:2}; do
+            option_check $i
             game_check $i
             game_status $i
             command_update
         done
         ;;
     update-all)
+        option_check $2 0
         for i in $( ls $gamedir ); do
             game_check $i
             game_status $i
@@ -590,12 +679,14 @@ case "$1" in
     validate)
         argument_check $2
         for i in ${@:2}; do
+            option_check $i
             game_check $i
             game_status $i
             command_validate $i
         done
         ;;
     validate-all)
+        option_check $2 0
         for i in $( ls $gamedir ); do
             game_check $i
             game_status $i

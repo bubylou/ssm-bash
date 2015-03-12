@@ -4,21 +4,39 @@ A simple Bash script to make managing your SteamCMD easier.
 
 ## Usage
 
-`./steamcmder.sh <command> [<app_id>...]`
+`./steamcmder.sh <command> [option] [<app> ...]`
+
+## Options
+
+`-r`
+
+- If the App is running then stop it, run the command, and then start it.
+
+`-s`
+
+- If the App is running then stop it and then run the command.
 
 ## Commands
 
-`backup <app_id>...`
+`backup [option] <app> ...`
 
 - Backup the chosen application.
 
-`backup-all`
+`backup-all [option]`
 
 - Backup all the installed applications.
 
-`console <app_id>`
+`console <app>`
 
 - Attach to the applications screen session.
+
+`install <app> ...`
+
+- Install the selected application.
+
+`install-all <app> ...`
+
+- Install all applications.
 
 `list`
 
@@ -28,15 +46,15 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - List all the installable applications.
 
-`remove <app_id>...`
+`remove [option] <app> ...`
 
 - Deletes the files for the selected application.
 
-`remove-all`
+`remove-all [option]`
 
 - Deletes the files for all your installed applications.
 
-`restart <app_id>...`
+`restart <app> ...`
 
 - Restart the selected application.
 
@@ -44,11 +62,11 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Restart all installed applications.
 
-`restore <app_id>...`
+`restore [option] <app> ...`
 
 - Restore the selected application from the newest backup.
 
-`restore-all`
+`restore-all [option]`
 
 - Restores all your applications from there newest backups.
 
@@ -56,7 +74,7 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Installs SteaCMD.
 
-`start <app_id>...`
+`start <app> ...`
 
 - Start application.
 
@@ -64,11 +82,11 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Start all applications.
 
-`status [<app_id>...]`
+`status [<app> ...]`
 
-- Check status of an application or all applications.
+- Check status of an application or all applications if none are specified.
 
-`stop <app_id>...`
+`stop <app> ...`
 
 - Stop an application.
 
@@ -76,18 +94,18 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Stop all installed applications.
 
-`update <app_id>...`
+`update [option] <app> ...`
 
-- Install or update the chosen applications.
+- Update the chosen applications.
 
-`update-all`
+`update-all [option]`
 
 - Update all the installed applications.
 
-`validate <app_id>...`
+`validate [option] <app> ...`
 
 - Validate the chosen application.
 
-`validate-all`
+`validate-all [option]`
 
 - Validate all the installed applications.
