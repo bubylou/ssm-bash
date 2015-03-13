@@ -8,6 +8,10 @@ A simple Bash script to make managing your SteamCMD easier.
 
 ## Options
 
+`-i`
+
+- Run the command and then start the app.
+
 `-r`
 
 - If the App is running then stop it, run the command, and then start it.
