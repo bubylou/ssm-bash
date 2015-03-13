@@ -62,7 +62,7 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Restart the selected application.
 
-`restart-all`
+`restart-all [<app> ...]`
 
 - Restart all installed applications.
 
@@ -82,7 +82,7 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Start application.
 
-`start-all`
+`start-all [<app> ...]`
 
 - Start all applications.
 
@@ -94,7 +94,7 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Stop an application.
 
-`stop-all`
+`stop-all [<app> ...]`
 
 - Stop all installed applications.
 

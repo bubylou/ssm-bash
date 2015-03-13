@@ -21,14 +21,11 @@ argument_check()
 
 do_all()
 {
-    for i in $( ls $gamedir ); do
-        game_check $i
-        servers=$( jq ".[$index]" $startcfg | grep '\[' | awk -F\" '{print $2}' )
-        for server in $servers; do
-            for k in ${@}; do
-                game_status $server
-                $k $j
-            done
+    servers=$( jq ".[$index]" $startcfg | grep '\[' | awk -F\" '{print $2}' )
+    for server in $servers; do
+        for k in ${@}; do
+            game_status $server
+            $k $server
         done
     done
 }
@@ -94,13 +91,15 @@ info()
         message "Name" "$name"
     fi
 
-    if [ -n "$appid" ]; then
-        message "App ID" "$appid"
-    fi
+    message "App ID" "$appid"
 
     if [ $status == 2 ]; then
         message "Status" "Not Installed"
-    elif [ $status == 1 ]; then
+    else
+        message "Status" "Installed"
+    fi
+
+    if [ $status == 1 ]; then
         message "Status" "Running"
     else
         message "Status" "Not Running"
@@ -449,10 +448,8 @@ command_start()
 
 command_status()
 {
-    if [ $status != 2 ]; then
-        info
-        message "------"
-    fi
+    info
+    message "------"
 }
 
 command_stop()
@@ -645,7 +642,17 @@ case "$1" in
         done
         ;;
     restart-all)
-        do_all command_stop command_start
+        if [ -z "$2" ]; then
+            for i in $( ls $gamedir ); do
+                game_check $i
+                do_all command_stop command_start
+            done
+        else
+            for i in ${@:2}; do
+                game_check $i
+                do_all command_stop command_start
+            done
+        fi
         ;;
     restore)
         argument_check $2
@@ -677,17 +684,28 @@ case "$1" in
         done
         ;;
     start-all)
-        do_all command_start
-        ;;
-    status)
         if [ -z "$2" ]; then
-            do_all command_status
+            for i in $( ls $gamedir ); do
+                game_check $i
+                do_all command_start
+            done
         else
             for i in ${@:2}; do
                 game_check $i
-                game_status $i
-                server_check
-                command_status
+                do_all command_start
+            done
+        fi
+        ;;
+    status)
+        if [ -z "$2" ]; then
+            for i in $( ls $gamedir ); do
+                game_check $i
+                do_all command_status
+            done
+        else
+            for i in ${@:2}; do
+                game_check $i
+                do_all command_status
             done
         fi
         ;;
@@ -697,11 +715,21 @@ case "$1" in
             game_check $i
             game_status $i
             server_check
-            command_stop $i
+            command_stop
         done
         ;;
     stop-all)
-        do_all command_stop
+        if [ -z "$2" ]; then
+            for i in $( ls $gamedir ); do
+                game_check $i
+                do_all command_stop
+            done
+        else
+            for i in ${@:2}; do
+                game_check $i
+                do_all command_stop
+            done
+        fi
         ;;
     update)
         argument_check $2
