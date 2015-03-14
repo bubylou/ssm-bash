@@ -8,8 +8,27 @@ backupdir="$rootdir/backup"
 steamcmd="$rootdir/steamcmd.sh"
 startcfg="$rootdir/startcfg.json"
 maxwait=10
+maxbackups=5
 
 # Checking / Utility Functions
+
+are_you_sure()
+{
+    while true; do
+        printf "[ Status ] - Are you sure? ( y/n ): "
+        read answer
+        case "$answer" in
+            Y|y)
+                break
+                ;;
+            N|n)
+                exit
+                ;;
+            *)
+                message "Error" "Invalid answer. Try again."
+        esac
+    done
+}
 
 argument_check()
 {
@@ -142,7 +161,7 @@ session_check()
 
 steamcmd_check()
 {
-    if [ ! -e $steamcmd ]; then
+    if [ ! -s $steamcmd ]; then
         message "Error" "SteamCMD not installed"
         steamcmd_install
     fi
@@ -180,12 +199,20 @@ stop_run_start()
 
 game_backup()
 {
+    local backups=$(( $( ls -1 "$backupdir/$name/" | wc -l ) - $maxbackups ))
+    if (( $backups >= 0 )); then
+        for i in $( seq 0 $backups ); do
+            message "Status" "Removing Old Backup"
+            rm "$backupdir/$name/$( ls -rt "$backupdir/$name/" | head -1 )"
+        done
+    fi
+
     message "Status" "Backing Up"
     mkdir -p "$backupdir/$name"
     local backup="$backupdir/$name/$( date +%Y-%m-%d-%H%M%S ).tar.xz"
     tar cJf "$backup" --exclude "$backupdir" -C "$gamedir" $name
 
-    if [ -e "$backup" ]; then
+    if [ -s "$backup" ]; then
         message "Status" "Backup Complete"
     else
         message "Error" "Backup Failed"
@@ -197,7 +224,7 @@ game_remove()
     message "Status" "Removing"
     rm -r "$gamedir/$name"
 
-    if [ ! -e "$gamedir/$name" ]; then
+    if [ ! -d "$gamedir/$name" ]; then
         message "Status" "Remove Complete"
     else
         message "Error" "Remove Failed"
@@ -207,15 +234,15 @@ game_remove()
 game_restore()
 {
     if [ -d "$backupdir/$name" ]; then
-        backup=$( ls -t $backupdir/$name/*.tar.xz | head -1 )
+        backup=$( ls -t "$backupdir/$name/" | head -1 )
     fi
 
-    if [ -e "$backup" ]; then
+    if [ -s "$backup" ]; then
         message "Status" "Restoring"
-        local hash1=$( ls -la --full-time $gamedir/$name | md5sum )
+        local hash1=$( ls -la --full-time "$gamedir/$name" | md5sum )
         tar xf "$backup" -C "$gamedir"
 
-        local hash2=$( ls -la --full-time $gamedir/$name | md5sum )
+        local hash2=$( ls -la --full-time "$gamedir/$name" | md5sum )
         if [ "$hash1" != "$hash2" ]; then
             message "Status" "Restore Complete"
         else
@@ -297,7 +324,7 @@ steamcmd_install()
         -P "$rootdir"
     tar xf steamcmd_linux.tar.gz -C "$rootdir"
 
-    if [ -e $steamcmd ]; then
+    if [ -s $steamcmd ]; then
         message "Status" "SteamCMD was installed"
     else
         message "Error" "SteamCMD was not installed"
@@ -529,10 +556,10 @@ command_validate()
 
 command_setup()
 {
-    if [ -e "$steamcmd" ]; then
+    if [ -s "$steamcmd" ]; then
         message "Error" "SteamCMD is already installed"
-        printf "[ Status ] - Would you like to reinstall it? ( y/n ): "
         while true; do
+            printf "[ Status ] - Would you like to reinstall it? ( y/n ): "
             read answer
             case "$answer" in
                 Y|y)
@@ -626,6 +653,7 @@ case "$1" in
         done
         ;;
     remove-all)
+        are_you_sure
         option_check $2 0
         for i in $( ls $gamedir ); do
             game_check $i
@@ -664,6 +692,7 @@ case "$1" in
         done
         ;;
     restore-all)
+        are_you_sure
         option_check $2 0
         for i in $( ls $gamedir ); do
             game_check $i
