@@ -26,7 +26,7 @@ A simple Bash script to make managing your SteamCMD easier.
 
 ## Commands
 
-`backup [option] <app> ...`
+`backup [option] <app|server> ...`
 
 - Backup the selected application.
 
@@ -34,7 +34,7 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Backup all the installed applications.
 
-`console <app>`
+`console <server>`
 
 - Attach to the server's screen session.
 
@@ -42,19 +42,19 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Install the selected application.
 
-`install-all <app> ...`
+`install-all`
 
 - Install all the available applications.
 
 `list`
 
-- List the installed applications.
+- List all the installed applications.
 
 `list-all`
 
 - List all the installable applications.
 
-`remove [option] <app> ...`
+`remove [option] <app|server> ...`
 
 - Deletes the files for the selected application.
 
@@ -62,15 +62,15 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Deletes the files for all your installed applications.
 
-`restart <app> ...`
+`restart <server> ...`
 
 - Restart the selected server.
 
-`restart-all [<app> ...]`
+`restart-all [<app|server> ...]`
 
 - Restart all servers.
 
-`restore [option] <app> ...`
+`restore [option] <app|server> ...`
 
 - Restore the selected application from the newest backup.
 
@@ -82,27 +82,27 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Installs SteaCMD.
 
-`start <app> ...`
+`start <server> ...`
 
 - Start the selected server.
 
-`start-all [<app> ...]`
+`start-all [<app|server> ...]`
 
 - Start all servers.
 
-`status [<app> ...]`
+`status [<app|server> ...]`
 
 - Check status of a server or all servers if none are specified.
 
-`stop <app> ...`
+`stop <server> ...`
 
 - Stop a server.
 
-`stop-all [<app> ...]`
+`stop-all [<app|server> ...]`
 
 - Stop all servers.
 
-`update [option] <app> ...`
+`update [option] <app|server> ...`
 
 - Update the selected applications.
 
@@ -110,7 +110,7 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Update all the installed applications.
 
-`validate [option] <app> ...`
+`validate [option] <app|server> ...`
 
 - Validate the selected application.
 

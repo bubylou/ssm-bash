@@ -57,16 +57,22 @@ game_check()
     number="^[0-9]+([.][0-9]+)?$"
     local length=$( jq ". | length - 1" $startcfg )
 
-    for i in $( seq 0 $length ); do
-        name=$( jq -r ".[$i].name" $startcfg )
-        appid=$( jq -r ".[$i].appid" $startcfg )
 
-        if [[ $1 =~ $number ]]; then
+    if [[ $1 =~ $number ]]; then
+        for i in $( seq 0 $length ); do
+            appid=$( jq -r ".[$i].appid" $startcfg )
+
             if [ "$1" == "$appid" ]; then
                 index=$i
                 break
             fi
-        else
+        done
+
+        name=$( jq -r ".[$i].name" $startcfg )
+    else
+        for i in $( seq 0 $length ); do
+            name=$( jq -r ".[$i].name" $startcfg )
+
             if [ "$1" == "$name" ]; then
                 index=$i
                 if [ "null" != "$( jq -r ".[$i].$1" $startcfg )" ]; then
@@ -78,8 +84,10 @@ game_check()
                 server=$1
                 break
             fi
-        fi
-    done
+        done
+
+        appid=$( jq -r ".[$i].appid" $startcfg )
+    fi
 
     if [ -z "$index" ]; then
         message "Error" "Invalid App Name"
