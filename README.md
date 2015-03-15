@@ -8,6 +8,10 @@ A simple Bash script to make managing your SteamCMD easier.
 
 ## Options
 
+`-f`
+
+- Run the command even if the application has a server running. NOT RECOMMENDED
+
 `-i`
 
 - Run the command and then start the server.

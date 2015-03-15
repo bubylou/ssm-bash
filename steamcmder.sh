@@ -2,11 +2,13 @@
 
 username="anonymous"
 password=""
+
 rootdir="$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )"
-gamedir="$rootdir/games"
 backupdir="$rootdir/backup"
-steamcmd="$rootdir/steamcmd.sh"
+gamedir="$rootdir/games"
 startcfg="$rootdir/startcfg.json"
+steamcmd="$rootdir/steamcmd.sh"
+
 maxwait=10
 maxbackups=5
 
@@ -138,7 +140,7 @@ message()
 
 option_check()
 {
-    if [[ "$1" == "-i" || "$1" == "-r" || "$1" == "-s" ]]; then
+    if [[ "$1" == "-f" || "$1" == "-i" || "$1" == "-r" || "$1" == "-s" ]]; then
         option="$1"
         if [ "$2" != 0 ]; then
             continue
@@ -199,11 +201,11 @@ stop_run_start()
 
 game_backup()
 {
-    local backups=$(( $( ls -1 "$backupdir/$name/" | wc -l ) - $maxbackups ))
+    local backups=$(( $( ls -1 "$backupdir/$name/"*.tar.xz | wc -l ) - $maxbackups ))
     if (( $backups >= 0 )); then
         for i in $( seq 0 $backups ); do
             message "Status" "Removing Old Backup"
-            rm "$backupdir/$name/$( ls -rt "$backupdir/$name/" | head -1 )"
+            rm "$( ls -rt "$backupdir/$name/"*.tar.xz | head -1 )"
         done
     fi
 
@@ -234,7 +236,7 @@ game_remove()
 game_restore()
 {
     if [ -d "$backupdir/$name" ]; then
-        backup=$( ls -t "$backupdir/$name/" | head -1 )
+        backup=$( ls -t "$backupdir/$name/"*.tar.xz | head -1 )
     fi
 
     if [ -s "$backup" ]; then
@@ -343,6 +345,8 @@ command_backup()
     elif [ $status == 1 ]; then
         if [[ "$option" == "-r" || "$option" == "-s" ]]; then
             stop_run_start game_backup
+        elif [ "$option" == "-f" ]; then
+            game_backup
         else
             message "Error" "Stop server before backup"
             error+="\"$name-$appid\" "
@@ -412,11 +416,10 @@ command_remove()
         message "Error" "App is not installed"
         error+="\"$name-$appid\" "
     elif [ $status == 1 ]; then
-        if [ "$option" == "-s" ]; then
+        if [[ "$option" == "-r" || "$option" == "-s" ]]; then
             stop_run_start game_remove
-        elif [ "$option" == "-r" ]; then
-            option="-s"
-            stop_run_start game_remove
+        elif [ "$option" == "-f" ]; then
+            game_remove
         else
             message "Error" "Stop server before removing"
             error+="\"$name-$appid\" "
@@ -438,6 +441,8 @@ command_restore()
     elif [ $status == 1 ]; then
         if [[ "$option" == "-r" || "$option" == "-s" ]]; then
             stop_run_start game_restore
+        elif [ "$option" == "-f" ]; then
+            game_restore
         else
             message "Error" "Stop server before restoring"
             error+="\"$name-$appid\" "
@@ -507,6 +512,8 @@ command_update()
     elif [ $status == 1 ]; then
         if [[ "$option" == "-r" || "$option" == "-s" ]]; then
             stop_run_start game_update
+        elif [ "$option" == "-f" ]; then
+            game_update
         else
             message "Error" "Stop server before updating"
             error+="\"$name-$appid\" "
@@ -536,6 +543,8 @@ command_validate()
     elif [ $status == 1 ]; then
         if [[ "$option" == "-r" || "$option" == "-s" ]]; then
             stop_run_start game_validate
+        elif [ "$option" == "-f" ]; then
+            game_validate
         else
             message "Error" "Stop server before validating"
             error+="\"$name-$appid\" "
@@ -783,7 +792,7 @@ case "$1" in
             option_check $i
             game_check $i
             game_status $i
-            command_validate $i
+            command_validate
         done
         ;;
     validate-all)
