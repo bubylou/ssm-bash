@@ -9,8 +9,8 @@ gamedir="$rootdir/games"
 startcfg="$rootdir/startcfg.json"
 steamcmd="$rootdir/steamcmd.sh"
 
-maxwait=10
 maxbackups=5
+maxwait=10
 
 # Checking / Utility Functions
 
@@ -43,6 +43,7 @@ argument_check()
 do_all()
 {
     servers=$( jq ".[$index]" $startcfg | grep '\[' | awk -F\" '{print $2}' )
+
     for server in $servers; do
         for k in ${@}; do
             game_status $server
@@ -75,9 +76,11 @@ game_check()
 
             if [ "$1" == "$name" ]; then
                 index=$i
+
                 if [ "null" != "$( jq -r ".[$i].$1" $startcfg )" ]; then
                     server=$1
                 fi
+
                 break
             elif [ "null" != "$( jq -r ".[$i].$1" $startcfg )" ]; then
                 index=$i
@@ -140,9 +143,11 @@ message()
     printf '[ '
     printf '%-6s' "$1"
     printf " ]"
+
     if [ -n "$2" ]; then
         printf " - $2"
     fi
+
     printf '\n'
 }
 
@@ -150,6 +155,7 @@ option_check()
 {
     if [[ "$1" == "-f" || "$1" == "-i" || "$1" == "-r" || "$1" == "-s" ]]; then
         option="$1"
+
         if [ "$2" != 0 ]; then
             continue
         fi
@@ -209,18 +215,22 @@ stop_run_start()
 
 game_backup()
 {
-    local backups=$(( $( ls -1 "$backupdir/$name/"*.tar.xz | wc -l ) - $maxbackups ))
-    if (( $backups >= 0 )); then
-        for i in $( seq 0 $backups ); do
-            message "Status" "Removing Old Backup"
-            rm "$( ls -rt "$backupdir/$name/"*.tar.xz | head -1 )"
-        done
+    if [ -d "$backupdir/$name" ]; then
+        local backups=$( ls -1 "$backupdir/$name/"*.tar.xz | wc -l )
+
+        if (( $backups >= $maxbackups )); then
+            for i in $( seq $maxbackups $backups ); do
+                message "Status" "Removing Old Backup"
+                rm "$( ls -rt "$backupdir/$name/"*.tar.xz | head -1 )"
+            done
+        fi
     fi
 
     message "Status" "Backing Up"
+
     mkdir -p "$backupdir/$name"
-    local backup="$backupdir/$name/$( date +%Y-%m-%d-%H%M%S ).tar.xz"
-    tar cJf "$backup" --exclude "$backupdir" -C "$gamedir" $name
+    tar cJf "$backupdir/$name/$( date +%Y-%m-%d-%H%M%S ).tar.xz" \
+        --exclude "$backupdir" -C "$gamedir" $name
 
     if [ -s "$backup" ]; then
         message "Status" "Backup Complete"
@@ -248,11 +258,13 @@ game_restore()
     fi
 
     if [ -s "$backup" ]; then
-        message "Status" "Restoring"
         local hash1=$( ls -la --full-time "$gamedir/$name" | md5sum )
+
+        message "Status" "Restoring"
         tar xf "$backup" -C "$gamedir"
 
         local hash2=$( ls -la --full-time "$gamedir/$name" | md5sum )
+
         if [ "$hash1" != "$hash2" ]; then
             message "Status" "Restore Complete"
         else
@@ -323,6 +335,7 @@ server_stop()
             error+="\"$server-$appid\" "
             break
         fi
+
         sleep 1
     done
 }
@@ -332,6 +345,7 @@ steamcmd_install()
     message "Status" "Installing SteamCMD"
     wget -Nq http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
         -P "$rootdir"
+
     tar xf steamcmd_linux.tar.gz -C "$rootdir"
 
     if [ -s $steamcmd ]; then
