@@ -75,7 +75,7 @@
         "appid" : "90",
         "exec" : "hlds_run",
 
-        "hldm" : [
+        "hl" : [
             "-game valve",
             "+maxplayers 16",
             "+map crossfire",
@@ -94,11 +94,11 @@
     {
         "comment" : "Half-Life: Opposing Force",
 
-        "name" : "hldm",
+        "name" : "hlof",
         "appid" : "90 +app_set_config 90 mod gearbox",
         "exec" : "hlds_run",
 
-        "hldm" : [
+        "hlof" : [
             "-game valve",
             "+maxplayers 16",
             "+map crossfire",
@@ -175,36 +175,13 @@
     },
 
     {
-        "comment" : "The Ship",
-
-        "name" : "theship",
-        "appid" : "2403",
-        "exec" : "srcds_run",
-
-        "theship" : [
-            "-game ship",
-            "+maxplayers 8",
-            "+map batavier",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64"
-        ]
-    },
-
-    {
         "comment" : "Garrysmod",
 
         "name" : "gmod",
         "appid" : "4020",
         "exec" : "srcds_run",
 
-        "gmod1" : [
+        "gmod" : [
             "-game garrysmod",
             "+maxplayers 16",
             "+gamemode sandbox",
@@ -216,22 +193,6 @@
             "+clientport 27015",
             "-port 27015",
             "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64"
-        ],
-
-        "gmod2" : [
-            "-game garrysmod",
-            "+maxplayers 16",
-            "+gamemode sandbox",
-            "+map gm_construct",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname",
-            "-ip 0.0.0.0",
-            "+clientport 27016",
-            "-port 27016",
-            "+tv_port 27021",
             "+sv_lan 0",
             "-tickrate 64"
         ]
@@ -271,11 +232,23 @@
     {
         "comment" : "Pirates, Vikings, and Knights II",
 
-        "name" : "pvk2",
+        "name" : "pvkii",
         "appid" : "17575",
-        "exec" : "example",
+        "exec" : "srcds_run",
 
-        "pvk2" : [
+        "pvkii" : [
+            "-game pvkii",
+            "-maxplayers 16",
+            "+map bt_island",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
         ]
     },
 
@@ -284,9 +257,17 @@
 
         "name" : "serioussam3",
         "appid" : "41080",
-        "exec" : "example",
+        "exec" : "Bin/runSam3_DedicatedServer.sh",
 
         "serioussam3" : [
+            "+gamemode Deathmatch",
+            "+level SunPalace",
+            "+gameoptions",
+            "+maxplayers",
+            "+sessionname",
+            "+ip",
+            "+port",
+            "+fps"
         ]
     },
 
@@ -526,24 +507,21 @@
 
         "name" : "hldms",
         "appid" : "255470",
-        "exec" : "hlds_run",
+        "exec" : "srcds_run",
 
         "hldms" : [
-        ]
-    },
-
-    {
-        "comment" : "Rust",
-
-        "name" : "rust",
-        "appid" : "258550",
-        "exec" : "rust_server",
-
-        "rust" : [
-            "-batchmode",
-            "-maxplayers 16",
-            "-hostname",
-            "-port 28015"
+             "-game hl1mp",
+             "+maxplayers 16",
+             "+map crossfire",
+             "+host_workshop_collection",
+             "-authkey",
+             "+hostname",
+             "-ip 0.0.0.0",
+             "+clientport 27015",
+             "-port 27015",
+             "+tv_port 27020",
+             "+sv_lan 0",
+             "-tickrate 64"
         ]
     },
 

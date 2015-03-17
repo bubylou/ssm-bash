@@ -316,6 +316,7 @@ server_start()
     done
 
     message "Status" "Starting"
+    cd "$gamedir/$name/"
     screen -dmS "$server-$appid" "$gamedir/$name/$exec" "$gameoptions"
 
     for i in $( seq 0 $maxwait ); do
