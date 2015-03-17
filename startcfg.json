@@ -23,7 +23,7 @@
     },
 
     {
-        "comment" : "Counter Strike Condition Zero",
+        "comment" : "Counter Strike: Condition Zero",
 
         "name" : "czero",
         "appid" : "90 +app_set_config 90 mod czero",
@@ -69,9 +69,9 @@
     },
 
     {
-        "comment" : "Half Life Deathmatch",
+        "comment" : "Half-Life",
 
-        "name" : "hldm",
+        "name" : "hl",
         "appid" : "90",
         "exec" : "hlds_run",
 
@@ -88,6 +88,40 @@
             "+tv_port 27020",
             "+sv_lan 0",
             "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Half-Life: Opposing Force",
+
+        "name" : "hldm",
+        "appid" : "90 +app_set_config 90 mod gearbox",
+        "exec" : "hlds_run",
+
+        "hldm" : [
+            "-game valve",
+            "+maxplayers 16",
+            "+map crossfire",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Ricochet",
+
+        "name" : "ricochet",
+        "appid" : "90 +app_set_config 90 mod ricochet",
+        "exec" : "hlds_run",
+
+        "ricochet" : [
         ]
     },
 
@@ -115,7 +149,7 @@
     },
 
     {
-        "comment" : "Counter Strike Global Offensive",
+        "comment" : "Counter Strike: Global Offensive",
 
         "name" : "csgo",
         "appid" : "740",
@@ -224,57 +258,46 @@
     },
 
     {
-        "comment" : "Example",
+        "comment" : "Zombie Panic: Source",
 
-        "name" : "example",
+        "name" : "zombiepanic",
         "appid" : "17505",
         "exec" : "example",
 
-        "example" : [
+        "zombiepanic" : [
         ]
     },
 
     {
-        "comment" : "Example",
+        "comment" : "Pirates, Vikings, and Knights II",
 
-        "name" : "example",
+        "name" : "pvk2",
         "appid" : "17575",
         "exec" : "example",
 
-        "example" : [
-        ]
-    },
-
-    {
-        "comment" : "Example",
-
-        "name" : "example",
-        "appid" : "17705",
-        "exec" : "example",
-
-        "example" : [
+        "pvk2" : [
         ]
     },
 
     {
         "comment" : "Serious Sam 3 BFE",
 
-        "name" : "ss3",
+        "name" : "serioussam3",
         "appid" : "41080",
         "exec" : "example",
 
-        "example" : [
+        "serioussam3" : [
         ]
     },
 
     {
-        "comment" : "Example",
+        "comment" : "Project Zomboid",
 
-        "name" : "example",
+        "name" : "zomboid",
         "appid" : "108600",
-        "exec" : "example",
+        "exec" : "projectzomboid-dedi-server.sh",
 
-        "example" : [
+        "zomboid" : [
         ]
     },
 
@@ -360,11 +383,11 @@
     {
         "comment" : "Blade Symphony",
 
-        "name" : "bs",
+        "name" : "bladesymphony",
         "appid" : "228780",
         "exec" : "example",
 
-        "example" : [
+        "bladesymphony" : [
         ]
     },
 
@@ -394,7 +417,7 @@
     },
 
     {
-        "comment" : "Day of Defeat Source",
+        "comment" : "Day of Defeat: Source",
 
         "name" : "dods",
         "appid" : "232290",
@@ -417,7 +440,7 @@
     },
 
     {
-        "comment" : "Counter Strike Source",
+        "comment" : "Counter Strike: Source",
 
         "name" : "css",
         "appid" : "232330",
@@ -440,7 +463,7 @@
     },
 
     {
-        "comment" : "Half Life 2 Deathmatch",
+        "comment" : "Half-Life 2: Deathmatch",
 
         "name" : "hl2dm",
         "appid" : "232370",
@@ -499,24 +522,13 @@
     },
 
     {
-        "comment" : "Example",
+        "comment" : "Half-Life Deathmatch: Source",
 
-        "name" : "example",
-        "appid" : "244310",
-        "exec" : "example",
-
-        "example" : [
-        ]
-    },
-
-    {
-        "comment" : "Example",
-
-        "name" : "example",
+        "name" : "hldms",
         "appid" : "255470",
-        "exec" : "example",
+        "exec" : "hlds_run",
 
-        "example" : [
+        "hldms" : [
         ]
     },
 
@@ -583,24 +595,33 @@
     },
 
     {
-        "comment" : "Example",
+        "comment" : "Dark Horizons: Mechanized Corps",
 
-        "name" : "example",
+        "name" : "dhmc",
         "appid" : "312070",
         "exec" : "example",
 
-        "example" : [
+        "dhmc" : [
         ]
     },
 
     {
-        "comment" : "Example",
+        "comment" : "NS2: Combat",
 
-        "name" : "example",
+        "name" : "ns2c",
         "appid" : "313900",
-        "exec" : "example",
+        "exec" : "server_linux32",
 
-        "example" : [
+        "ns2c" : [
+            "-limit 24",
+            "-map ns2_summit",
+            "-name",
+            "-port 27015",
+            "-webadmin",
+            "-webuser admin",
+            "-webpassword CHANGEME",
+            "-webdomain 0.0.0.0",
+            "-webport 8080"
         ]
     },
 
@@ -618,6 +639,7 @@
             "+host_workshop_collection",
             "-authkey",
             "+hostname",
+            "-insecure",
             "-ip 0.0.0.0",
             "+clientport 27015",
             "-port 27015",
@@ -628,13 +650,13 @@
     },
 
     {
-        "comment" : "Example",
+        "comment" : "BlazeRush",
 
-        "name" : "example",
+        "name" : "blazerush",
         "appid" : "332850",
         "exec" : "example",
 
-        "example" : [
+        "blazerush" : [
         ]
     }
 ]

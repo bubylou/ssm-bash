@@ -141,7 +141,17 @@ info()
 message()
 {
     printf '[ '
-    printf '%-6s' "$1"
+
+    if [[ "$1" == "Name" || "$1" == "App ID" ]]; then
+        printf '\e[0;33m%-6s\e[m' "$1"
+    elif [[ "$1" == "Status" || "$1" == "Done" ]]; then
+        printf '\e[0;32m%-6s\e[m' "$1"
+    elif [[ "$1" == "Error" || "$1" == "Errors" ]]; then
+        printf '\e[0;31m%-6s\e[m' "$1"
+    else
+        printf '%-6s' "$1"
+    fi
+
     printf " ]"
 
     if [ -n "$2" ]; then
@@ -297,7 +307,7 @@ game_validate()
 
 server_start()
 {
-    local exec=$( jq -r ".[$index].exec" $startcfg )
+    local exec="./$( jq -r ".[$index].exec" $startcfg )"
     local length=$( jq ".[$index].$server | length - 1" $startcfg )
 
     for i in $( seq 0 $length ); do
@@ -306,7 +316,7 @@ server_start()
     done
 
     message "Status" "Starting"
-    screen -dmS "$server-$appid" sh "$gamedir/$name/$exec" $gameoptions
+    screen -dmS "$server-$appid" "$gamedir/$name/$exec" "$gameoptions"
 
     for i in $( seq 0 $maxwait ); do
         if [ -n "$( session_check "$server-$appid" )" ]; then
