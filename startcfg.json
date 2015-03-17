@@ -69,6 +69,29 @@
     },
 
     {
+        "comment" : "Deathmatch Classic",
+
+        "name" : "dmc",
+        "appid" : "90 +app_set_config 90 mod dmc",
+        "exec" : "hlds_run",
+
+        "dmc" : [
+            "-game dmc",
+            "+maxplayers 16",
+            "+map dod_anzio",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
         "comment" : "Half-Life",
 
         "name" : "hl",
@@ -135,16 +158,17 @@
         "tfc" : [
             "-game tfc",
             "+maxplayers 16",
-            "+map dustbowl",
+            "+map 2fort",
             "+host_workshop_collection",
             "-authkey",
             "+hostname",
-            "-ip 0.0.0.0",
+            "+ip 0.0.0.0",
             "+clientport 27015",
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-tickrate 64",
+            "+MP_CONSISTENCY 0"
         ]
     },
 

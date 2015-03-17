@@ -225,7 +225,9 @@ stop_run_start()
 
 game_backup()
 {
-    if [ -d "$backupdir/$name" ]; then
+    mkdir -p "$backupdir/$name"
+
+    if [ -n "$( find "$backupdir/$name" -name "*.tar.xz" )" ]; then
         local backups=$( ls -1 "$backupdir/$name/"*.tar.xz | wc -l )
 
         if (( $backups >= $maxbackups )); then
@@ -237,8 +239,6 @@ game_backup()
     fi
 
     message "Status" "Backing Up"
-
-    mkdir -p "$backupdir/$name"
     tar cJf "$backupdir/$name/$( date +%Y-%m-%d-%H%M%S ).tar.xz" \
         --exclude "$backupdir" -C "$gamedir" $name
 
@@ -311,7 +311,7 @@ server_start()
     local length=$( jq ".[$index].$server | length - 1" $startcfg )
 
     for i in $( seq 0 $length ); do
-        local tmp=$( jq -r ".[$index].$server[$i]" $startcfg )
+        local tmp="$( jq -r ".[$index].$server[$i]" $startcfg )"
         gameoptions+=" $tmp"
     done
 
@@ -330,6 +330,12 @@ server_start()
         fi
         sleep 1
     done
+}
+
+server_status()
+{
+    info
+    message "------"
 }
 
 server_stop()
@@ -513,8 +519,15 @@ command_start()
 
 command_status()
 {
-    info
-    message "------"
+    if [ -n "$server" ]; then
+        if [ "$server" != "$name" ]; then
+            server_status
+        else
+            do_all server_status
+        fi
+    else
+        do_all server_status
+    fi
 }
 
 command_stop()
@@ -771,12 +784,13 @@ case "$1" in
         if [ -z "$2" ]; then
             for i in $( ls $gamedir ); do
                 game_check $i
-                do_all command_status
+                command_status
             done
         else
             for i in ${@:2}; do
                 game_check $i
-                do_all command_status
+                game_status $i
+                command_status
             done
         fi
         ;;
