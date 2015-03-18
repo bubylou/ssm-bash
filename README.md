@@ -4,7 +4,7 @@ A simple Bash script to make managing your SteamCMD easier.
 
 ## Usage
 
-`./steamcmder.sh <command> [option] [<app> ...]`
+`./steamcmder.sh <command> [options] [<app> ...]`
 
 ## Options
 
@@ -24,13 +24,17 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - If there are any servers running for an application stop them and then run the command.
 
+`-v`
+
+- Make the output of the command more verbose.
+
 ## Commands
 
-`backup [option] <app|server> ...`
+`backup [options] <app|server> ...`
 
 - Backup the selected application.
 
-`backup-all [option]`
+`backup-all [options]`
 
 - Backup all the installed applications.
 
@@ -54,11 +58,11 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - List all the installable applications.
 
-`remove [option] <app|server> ...`
+`remove [options] <app|server> ...`
 
 - Deletes the files for the selected application.
 
-`remove-all [option]`
+`remove-all [options]`
 
 - Deletes the files for all your installed applications.
 
@@ -70,11 +74,11 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Restart all servers.
 
-`restore [option] <app|server> ...`
+`restore [options] <app|server> ...`
 
 - Restore the selected application from the newest backup.
 
-`restore-all [option]`
+`restore-all [options]`
 
 - Restores all your applications from there newest backups.
 
@@ -102,18 +106,18 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Stop all servers.
 
-`update [option] <app|server> ...`
+`update [options] <app|server> ...`
 
 - Update the selected applications.
 
-`update-all [option]`
+`update-all [options]`
 
 - Update all the installed applications.
 
-`validate [option] <app|server> ...`
+`validate [options] <app|server> ...`
 
 - Validate the selected application.
 
-`validate-all [option]`
+`validate-all [options]`
 
 - Validate all the installed applications.
