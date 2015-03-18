@@ -10,15 +10,10 @@
             "-game cstrike",
             "+maxplayers 16",
             "+map de_dust2",
-            "+host_workshop_collection",
-            "-authkey",
             "+hostname",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
+            "+ip 0.0.0.0",
             "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64"
+            "+sv_lan 0"
         ]
     },
 
@@ -33,15 +28,10 @@
             "-game czero",
             "+maxplayers 16",
             "+map de_dust2",
-            "+host_workshop_collection",
-            "-authkey",
             "+hostname",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
+            "+ip 0.0.0.0",
             "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64"
+            "+sv_lan 0"
         ]
     },
 
@@ -56,15 +46,10 @@
             "-game dod",
             "+maxplayers 16",
             "+map dod_anzio",
-            "+host_workshop_collection",
-            "-authkey",
             "+hostname",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
+            "+ip 0.0.0.0",
             "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64"
+            "+sv_lan 0"
         ]
     },
 
@@ -78,16 +63,11 @@
         "dmc" : [
             "-game dmc",
             "+maxplayers 16",
-            "+map dod_anzio",
-            "+host_workshop_collection",
-            "-authkey",
+            "+map dcdm5",
             "+hostname",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
+            "+ip 0.0.0.0",
             "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64"
+            "+sv_lan 0"
         ]
     },
 
@@ -102,15 +82,10 @@
             "-game valve",
             "+maxplayers 16",
             "+map crossfire",
-            "+host_workshop_collection",
-            "-authkey",
             "+hostname",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
+            "+ip 0.0.0.0",
             "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64"
+            "+sv_lan 0"
         ]
     },
 
@@ -122,18 +97,13 @@
         "exec" : "hlds_run",
 
         "hlof" : [
-            "-game valve",
+            "-game gearbox",
             "+maxplayers 16",
             "+map crossfire",
-            "+host_workshop_collection",
-            "-authkey",
             "+hostname",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
+            "+ip 0.0.0.0",
             "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64"
+            "+sv_lan 0"
         ]
     },
 
@@ -159,16 +129,10 @@
             "-game tfc",
             "+maxplayers 16",
             "+map 2fort",
-            "+host_workshop_collection",
-            "-authkey",
             "+hostname",
             "+ip 0.0.0.0",
-            "+clientport 27015",
             "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "+MP_CONSISTENCY 0"
+            "+sv_lan 0"
         ]
     },
 

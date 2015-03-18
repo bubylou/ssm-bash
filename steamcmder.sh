@@ -294,15 +294,15 @@ game_update()
         message "Status" "Installing"
     fi
 
-    bash $steamcmd +login "$username" "$password" +force_install_dir \
-        "$gamedir/$name" +app_update "$appid" +quit
+    bash $steamcmd +login $username $password +force_install_dir \
+        $gamedir/$name +app_update $appid +quit
 }
 
 game_validate()
 {
     message "Status" "Validating"
-    bash $steamcmd +login "$username" "$password" +force_install_dir \
-        "$gamedir/$name" +app_update "$appid" -validate +quit
+    bash $steamcmd +login $username $password +force_install_dir \
+        $gamedir/$name +app_update $appid -validate +quit
 }
 
 server_start()
