@@ -115,6 +115,13 @@
         "exec" : "hlds_run",
 
         "ricochet" : [
+            "-game ricochet",
+            "+maxplayers 16",
+            "+map rc_arena",
+            "+hostname",
+            "+ip 0.0.0.0",
+            "-port 27015",
+            "+sv_lan 0"
         ]
     },
 
@@ -253,9 +260,9 @@
             "+gameoptions",
             "+maxplayers",
             "+sessionname",
-            "+ip",
-            "+port",
-            "+fps"
+            "+ip 0.0.0.0",
+            "+port 27015",
+            "+fps 60"
         ]
     },
 
@@ -354,9 +361,19 @@
 
         "name" : "bladesymphony",
         "appid" : "228780",
-        "exec" : "example",
+        "exec" : "srcds_run.sh",
 
         "bladesymphony" : [
+            "+maxplayers 16",
+            "+map duel_winter",
+            "+sv_ranked 0",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
         ]
     },
 
@@ -521,7 +538,9 @@
         "exec" : "Jcmp-Server",
 
         "justcause2" : [
-            "--maxplayers 16"
+            "--maxplayers 16",
+            "--bindip 0.0.0.0",
+            "--bindport 27015"
         ]
     },
 
