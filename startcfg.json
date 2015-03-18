@@ -1,0 +1,647 @@
+[
+    {
+        "comment" : "Counter Strike",
+
+        "name" : "cstrike",
+        "appid" : "90 +app_set_config 90 mod cstrike",
+        "exec" : "hlds_run",
+
+        "cstrike" : [
+            "-game cstrike",
+            "+maxplayers 16",
+            "+map de_dust2",
+            "+hostname",
+            "+ip 0.0.0.0",
+            "-port 27015",
+            "+sv_lan 0"
+        ]
+    },
+
+    {
+        "comment" : "Counter Strike: Condition Zero",
+
+        "name" : "czero",
+        "appid" : "90 +app_set_config 90 mod czero",
+        "exec" : "hlds_run",
+
+        "czero" : [
+            "-game czero",
+            "+maxplayers 16",
+            "+map de_dust2",
+            "+hostname",
+            "+ip 0.0.0.0",
+            "-port 27015",
+            "+sv_lan 0"
+        ]
+    },
+
+    {
+        "comment" : "Day of Defeat",
+
+        "name" : "dod",
+        "appid" : "90 +app_set_config 90 mod dod",
+        "exec" : "hlds_run",
+
+        "dod" : [
+            "-game dod",
+            "+maxplayers 16",
+            "+map dod_anzio",
+            "+hostname",
+            "+ip 0.0.0.0",
+            "-port 27015",
+            "+sv_lan 0"
+        ]
+    },
+
+    {
+        "comment" : "Deathmatch Classic",
+
+        "name" : "dmc",
+        "appid" : "90 +app_set_config 90 mod dmc",
+        "exec" : "hlds_run",
+
+        "dmc" : [
+            "-game dmc",
+            "+maxplayers 16",
+            "+map dcdm5",
+            "+hostname",
+            "+ip 0.0.0.0",
+            "-port 27015",
+            "+sv_lan 0"
+        ]
+    },
+
+    {
+        "comment" : "Half-Life",
+
+        "name" : "hl",
+        "appid" : "90",
+        "exec" : "hlds_run",
+
+        "hl" : [
+            "-game valve",
+            "+maxplayers 16",
+            "+map crossfire",
+            "+hostname",
+            "+ip 0.0.0.0",
+            "-port 27015",
+            "+sv_lan 0"
+        ]
+    },
+
+    {
+        "comment" : "Half-Life: Opposing Force",
+
+        "name" : "hlof",
+        "appid" : "90 +app_set_config 90 mod gearbox",
+        "exec" : "hlds_run",
+
+        "hlof" : [
+            "-game gearbox",
+            "+maxplayers 16",
+            "+map crossfire",
+            "+hostname",
+            "+ip 0.0.0.0",
+            "-port 27015",
+            "+sv_lan 0"
+        ]
+    },
+
+    {
+        "comment" : "Ricochet",
+
+        "name" : "ricochet",
+        "appid" : "90 +app_set_config 90 mod ricochet",
+        "exec" : "hlds_run",
+
+        "ricochet" : [
+            "-game ricochet",
+            "+maxplayers 16",
+            "+map rc_arena",
+            "+hostname",
+            "+ip 0.0.0.0",
+            "-port 27015",
+            "+sv_lan 0"
+        ]
+    },
+
+    {
+        "comment" : "Team Fortress Classic",
+
+        "name" : "tfc",
+        "appid" : "90 +app_set_config 90 mod tfc",
+        "exec" : "hlds_run",
+
+        "tfc" : [
+            "-game tfc",
+            "+maxplayers 16",
+            "+map 2fort",
+            "+hostname",
+            "+ip 0.0.0.0",
+            "-port 27015",
+            "+sv_lan 0"
+        ]
+    },
+
+    {
+        "comment" : "Counter Strike: Global Offensive",
+
+        "name" : "csgo",
+        "appid" : "740",
+        "exec" : "srcds_run",
+
+        "csgo" : [
+            "-game csgo",
+            "+maxplayers 16",
+            "+gametype 0",
+            "+gamemode 0",
+            "+mapgroup random_classic",
+            "+map de_dust2",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Garrysmod",
+
+        "name" : "gmod",
+        "appid" : "4020",
+        "exec" : "srcds_run",
+
+        "gmod" : [
+            "-game garrysmod",
+            "+maxplayers 16",
+            "+gamemode sandbox",
+            "+map gm_construct",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Natural Selection 2",
+
+        "name" : "ns2",
+        "appid" : "4940",
+        "exec" : "server_linux32",
+
+        "ns2" : [
+            "-limit 24",
+            "-map ns2_summit",
+            "-name",
+            "-port 27015",
+            "-webadmin",
+            "-webuser admin",
+            "-webpassword CHANGEME",
+            "-webdomain 0.0.0.0",
+            "-webport 8080"
+        ]
+    },
+
+    {
+        "comment" : "Zombie Panic: Source",
+
+        "name" : "zombiepanic",
+        "appid" : "17505",
+        "exec" : "example",
+
+        "zombiepanic" : [
+        ]
+    },
+
+    {
+        "comment" : "Pirates, Vikings, and Knights II",
+
+        "name" : "pvkii",
+        "appid" : "17575",
+        "exec" : "srcds_run",
+
+        "pvkii" : [
+            "-game pvkii",
+            "-maxplayers 16",
+            "+map bt_island",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Serious Sam 3 BFE",
+
+        "name" : "serioussam3",
+        "appid" : "41080",
+        "exec" : "Bin/runSam3_DedicatedServer.sh",
+
+        "serioussam3" : [
+            "+gamemode Deathmatch",
+            "+level SunPalace",
+            "+gameoptions",
+            "+maxplayers",
+            "+sessionname",
+            "+ip 0.0.0.0",
+            "+port 27015",
+            "+fps 60"
+        ]
+    },
+
+    {
+        "comment" : "Project Zomboid",
+
+        "name" : "zomboid",
+        "appid" : "108600",
+        "exec" : "projectzomboid-dedi-server.sh",
+
+        "zomboid" : [
+        ]
+    },
+
+    {
+        "comment" : "Starbound",
+
+        "name" : "starbound",
+        "appid" : "211820",
+        "exec" : "starbound_server",
+
+        "starbound" : [
+        ]
+    },
+
+    {
+        "comment" : "Killing Floor",
+
+        "name" : "killingfloor",
+        "appid" : "215360",
+        "exec" : "ucc-bin",
+
+        "killingfloor" : [
+        ]
+    },
+
+    {
+        "comment" : "Left 4 Dead",
+
+        "name" : "left4dead",
+        "appid" : "222840",
+        "exec" : "srcds_run",
+
+        "left4dead" : [
+            "-game left4dead",
+            "+maxplayers 16",
+            "+map l4d_hospital01_apartment",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Left 4 Dead 2",
+
+        "name" : "left4dead2",
+        "appid" : "222860",
+        "exec" : "srcds_run",
+
+        "left4dead2" : [
+            "-game left4dead2",
+            "+maxplayers 16",
+            "+map c5m1_waterfront",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Red Orchestra",
+
+        "name" : "redorch",
+        "appid" : "223250",
+        "exec" : "ucc-bin",
+
+        "redorch" : [
+        ]
+    },
+
+    {
+        "comment" : "Blade Symphony",
+
+        "name" : "bladesymphony",
+        "appid" : "228780",
+        "exec" : "srcds_run.sh",
+
+        "bladesymphony" : [
+            "+maxplayers 16",
+            "+map duel_winter",
+            "+sv_ranked 0",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+
+    {
+        "comment" : "Team Fortress 2",
+
+        "name" : "tf2",
+        "appid" : "232250",
+        "exec" : "srcds_run",
+
+        "tf2" : [
+            "-game tf",
+            "+maxplayers 16",
+            "+map ctf_2fort",
+            "+sv_pure 1",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Day of Defeat: Source",
+
+        "name" : "dods",
+        "appid" : "232290",
+        "exec" : "srcds_run",
+
+        "dods" : [
+            "-game dod",
+            "+maxplayers 16",
+            "+map dod_Anzio",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Counter Strike: Source",
+
+        "name" : "css",
+        "appid" : "232330",
+        "exec" : "srcds_run",
+
+        "css" : [
+             "-game cstrike",
+             "+maxplayers 16",
+             "+map de_dust2",
+             "+host_workshop_collection",
+             "-authkey",
+             "+hostname",
+             "-ip 0.0.0.0",
+             "+clientport 27015",
+             "-port 27015",
+             "+tv_port 27020",
+             "+sv_lan 0",
+             "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Half-Life 2: Deathmatch",
+
+        "name" : "hl2dm",
+        "appid" : "232370",
+        "exec" : "srcds_run",
+
+        "hl2dm" : [
+            "-game hl2mp",
+            "+maxplayers 16",
+            "+map dm_lockdown",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Arma 3",
+
+        "name" : "arma3",
+        "appid" : "233780",
+        "exec" : "arma3server",
+
+        "arma3" : [
+            "-name=",
+            "-port=2302"
+        ]
+    },
+
+    {
+        "comment" : "Insurgency",
+
+        "name" : "insurgency",
+        "appid" : "237410",
+        "exec" : "srcds_run",
+
+        "insurgency" : [
+             "-game insurgency",
+             "+maxplayers 16",
+             "+map ministry",
+             "+host_workshop_collection",
+             "-authkey",
+             "+hostname",
+             "-ip 0.0.0.0",
+             "+clientport 27015",
+             "-port 27015",
+             "+tv_port 27020",
+             "+sv_lan 0",
+             "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Half-Life Deathmatch: Source",
+
+        "name" : "hldms",
+        "appid" : "255470",
+        "exec" : "srcds_run",
+
+        "hldms" : [
+             "-game hl1mp",
+             "+maxplayers 16",
+             "+map crossfire",
+             "+host_workshop_collection",
+             "-authkey",
+             "+hostname",
+             "-ip 0.0.0.0",
+             "+clientport 27015",
+             "-port 27015",
+             "+tv_port 27020",
+             "+sv_lan 0",
+             "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Just Cause 2",
+
+        "name" : "justcause2",
+        "appid" : "261140",
+        "exec" : "Jcmp-Server",
+
+        "justcause2" : [
+            "--maxplayers 16",
+            "--bindip 0.0.0.0",
+            "--bindport 27015"
+        ]
+    },
+
+    {
+        "comment" : "7 Days to Die",
+
+        "name" : "7daystodie",
+        "appid" : "294420",
+        "exec" : "7DaysToDie.sh",
+
+        "7daystodie" : [
+            "-dedicated"
+        ]
+    },
+
+    {
+        "comment" : "Fistful of Frags",
+
+        "name" : "fof",
+        "appid" : "295230",
+        "exec" : "srcds_run",
+
+        "fof" : [
+             "-game fof",
+             "+maxplayers 16",
+             "+map fof_depot",
+             "+host_workshop_collection",
+             "-authkey",
+             "+hostname",
+             "-ip 0.0.0.0",
+             "+clientport 27015",
+             "-port 27015",
+             "+tv_port 27020",
+             "+sv_lan 0",
+             "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "Dark Horizons: Mechanized Corps",
+
+        "name" : "dhmc",
+        "appid" : "312070",
+        "exec" : "example",
+
+        "dhmc" : [
+        ]
+    },
+
+    {
+        "comment" : "NS2: Combat",
+
+        "name" : "ns2c",
+        "appid" : "313900",
+        "exec" : "server_linux32",
+
+        "ns2c" : [
+            "-limit 24",
+            "-map ns2_summit",
+            "-name",
+            "-port 27015",
+            "-webadmin",
+            "-webuser admin",
+            "-webpassword CHANGEME",
+            "-webdomain 0.0.0.0",
+            "-webport 8080"
+        ]
+    },
+
+    {
+        "comment" : "No More Room in Hell",
+
+        "name" : "nmrih",
+        "appid" : "317670",
+        "exec" : "srcds_run",
+
+        "nmrih" : [
+            "-game nmrih",
+            "+maxplayers 8",
+            "+map nmo_broadway",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-insecure",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
+        ]
+    },
+
+    {
+        "comment" : "BlazeRush",
+
+        "name" : "blazerush",
+        "appid" : "332850",
+        "exec" : "example",
+
+        "blazerush" : [
+        ]
+    }
+]

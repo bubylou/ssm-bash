@@ -2,33 +2,83 @@
 
 A simple Bash script to make managing your SteamCMD easier.
 
-### Usage
+## Usage
 
-`./steamcmder.sh <command> [<app_id>...]`
+`./steamcmder.sh <command> [options] [<app> ...]`
 
-### Commands
+## Options
 
-`backup <app_id>...`
+`-f`
 
-- Backup the chosen application.
+- Run the command even if the application has a server running. NOT RECOMMENDED
 
-`backup-all`
+`-i`
+
+- Run the command and then start the server.
+
+`-r`
+
+- If there are any servers running for an application stop them, run the command, and then start them again.
+
+`-s`
+
+- If there are any servers running for an application stop them and then run the command.
+
+`-v`
+
+- Make the output of the command more verbose.
+
+## Commands
+
+`backup [options] <app|server> ...`
+
+- Backup the selected application.
+
+`backup-all [options]`
 
 - Backup all the installed applications.
 
-`remove <app_id>...`
+`console <server>`
+
+- Attach to the server's screen session.
+
+`install <app> ...`
+
+- Install the selected application.
+
+`install-all`
+
+- Install all the available applications.
+
+`list`
+
+- List all the installed applications.
+
+`list-all`
+
+- List all the installable applications.
+
+`remove [options] <app|server> ...`
 
 - Deletes the files for the selected application.
 
-`remove-all`
+`remove-all [options]`
 
 - Deletes the files for all your installed applications.
 
-`restore <app_id>...`
+`restart <server> ...`
+
+- Restart the selected server.
+
+`restart-all [<app|server> ...]`
+
+- Restart all servers.
+
+`restore [options] <app|server> ...`
 
 - Restore the selected application from the newest backup.
 
-`restore-all`
+`restore-all [options]`
 
 - Restores all your applications from there newest backups.
 
@@ -36,18 +86,38 @@ A simple Bash script to make managing your SteamCMD easier.
 
 - Installs SteaCMD.
 
-`update <app_id>...`
+`start <server> ...`
 
-- Install or update the chosen applications.
+- Start the selected server.
 
-`update-all`
+`start-all [<app|server> ...]`
+
+- Start all servers.
+
+`status [<app|server> ...]`
+
+- Check status of a server or all servers if none are specified.
+
+`stop <server> ...`
+
+- Stop a server.
+
+`stop-all [<app|server> ...]`
+
+- Stop all servers.
+
+`update [options] <app|server> ...`
+
+- Update the selected applications.
+
+`update-all [options]`
 
 - Update all the installed applications.
 
-`validate <app_id>...`
+`validate [options] <app|server> ...`
 
-- Validate the chosen application.
+- Validate the selected application.
 
-`validate-all`
+`validate-all [options]`
 
 - Validate all the installed applications.
