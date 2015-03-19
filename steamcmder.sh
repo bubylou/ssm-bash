@@ -218,13 +218,13 @@ success_check()
     while read line ; do
         if [ ! "$verbose" == true ]; then
             if [ -n "$( echo "$line" | grep "Success" )" ]; then
-                message "Status" "${1}ed"
+                message "Status" "${1}d"
             elif [ -n "$( echo "$line" | grep "Fail" )" ]; then
-                message "Error" "${1}ing Failed"
+                message "Error" "${1} Failed"
                 message "Error" "$line"
             fi
         else
-            echo $line
+            echo "$line"
         fi
     done
 }
@@ -296,21 +296,23 @@ game_restore()
 game_update()
 {
     if [ -d "$gamedir/$name" ]; then
+        local message="Update"
         message "Status" "Updating"
     else
         mkdir -p "$gamedir"
+        local message="Install"
         message "Status" "Installing"
     fi
 
-    bash $steamcmd +login $username $password +force_install_dir \
-        $gamedir/$name +app_update $appid +quit | success_check "Updat"
+    unbuffer bash $steamcmd +login $username $password +force_install_dir \
+        $gamedir/$name +app_update $appid +quit | success_check "$message"
 }
 
 game_validate()
 {
     message "Status" "Validating"
-    bash $steamcmd +login $username $password +force_install_dir \
-        $gamedir/$name +app_update $appid -validate +quit | success_check "Validat"
+    unbuffer bash $steamcmd +login $username $password +force_install_dir \
+        $gamedir/$name +app_update $appid -validate +quit | success_check "Validate"
 }
 
 server_start()
@@ -676,11 +678,13 @@ case "$1" in
     install)
         argument_check $2
         for i in ${@:2}; do
+            flag_check $i
             game_check $i
             command_install
         done
         ;;
     install-all)
+        flag_check $2 0
         length=$( jq ". | length - 1" $startcfg )
         for i in $( seq 0 $length ); do
             name=$( jq -r ".[$i].name" $startcfg )

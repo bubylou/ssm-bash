@@ -144,6 +144,17 @@
     },
 
     {
+        "comment" : "Source SDK Base 2007",
+
+        "name" : "source2007",
+        "appid" : "310",
+        "exec" : "srcds_run",
+
+        "source2007" : [
+        ]
+    },
+
+    {
         "comment" : "Counter Strike: Global Offensive",
 
         "name" : "csgo",
@@ -506,6 +517,18 @@
              "-tickrate 64"
         ]
     },
+
+    {
+        "comment" : "Source SDK Base 2013",
+
+        "name" : "source2013",
+        "appid" : "244310",
+        "exec" : "srcds_run",
+
+        "source2013" : [
+        ]
+    },
+
 
     {
         "comment" : "Half-Life Deathmatch: Source",
