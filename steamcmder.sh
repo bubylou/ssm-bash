@@ -187,7 +187,7 @@ steamcmd_check()
 
 stop_run_start()
 {
-    for server in $( session_check "$name" ); do
+    for server in $( session_check "\-$name" ); do
         servers+="$server "
         message "------"
         info
@@ -195,6 +195,7 @@ stop_run_start()
     done
 
     if [ -z "$error" ]; then
+        unset server
         message "------"
         info
         $1
@@ -393,7 +394,7 @@ command_backup()
     if [ ! -d "$gamedir/$name" ]; then
         message "Error" "App is not installed"
         error+="\"$name\" "
-    elif [ -n "$( session_check $name )" ]; then
+    elif [ -n "$( session_check "\-$name" )" ]; then
         if [[ "$option" == "r" || "$option" == "s" ]]; then
             stop_run_start game_backup
         elif [ "$option" == "f" ]; then
@@ -448,7 +449,7 @@ command_install()
         else
             game_update
         fi
-    elif [ -n "$( session_check $name )" ]; then
+    elif [ -n "$( session_check "\-$name" )" ]; then
         message "Error" "Stop server before installing"
         error+="\"$name\" "
     else
@@ -466,7 +467,7 @@ command_remove()
     if [ ! -d "$gamedir/$name" ]; then
         message "Error" "App is not installed"
         error+="\"$name\" "
-    elif [ -n "$( session_check $name )" ]; then
+    elif [ -n "$( session_check "\-$name" )" ]; then
         if [[ "$option" == "r" || "$option" == "s" ]]; then
             stop_run_start game_remove
         elif [ "$option" == "f" ]; then
@@ -489,7 +490,7 @@ command_restore()
     if [ ! -d "$gamedir/$name" ]; then
         message "Error" "App is not installed"
         error+="\"$name\" "
-    elif [ -n "$( session_check $name )" ]; then
+    elif [ -n "$( session_check "\-$name" )" ]; then
         if [[ "$option" == "r" || "$option" == "s" ]]; then
             stop_run_start game_restore
         elif [ "$option" == "f" ]; then
@@ -567,7 +568,7 @@ command_update()
     if [ ! -d "$gamedir/$name" ]; then
         message "Error" "App is not installed"
         error+="\"$name\" "
-    elif [ -n "$( session_check $name )" ]; then
+    elif [ -n "$( session_check "\-$name" )" ]; then
         if [[ "$option" == "r" || "$option" == "s" ]]; then
             stop_run_start game_update
         elif [ "$option" == "f" ]; then
@@ -598,7 +599,7 @@ command_validate()
     if [ ! -d "$gamedir/$name" ]; then
         message "Error" "App is not installed"
         error+="\"$name\" "
-    elif [ -n "$( session_check $name )" ]; then
+    elif [ -n "$( session_check "\-$name" )" ]; then
         if [[ "$option" == "r" || "$option" == "s" ]]; then
             stop_run_start game_validate
         elif [ "$option" == "f" ]; then
