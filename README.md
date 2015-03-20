@@ -2,6 +2,13 @@
 
 A Bash script for managing your SteamCMD servers.
 
+
+## Requirments
+
+The following programs are required for the script to run.
+
+`find jq md5sum screen tar wget`
+
 ## Usage
 
 `./steamcmder.sh <command> [options] [<app> ...]`

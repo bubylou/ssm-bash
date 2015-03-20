@@ -93,16 +93,17 @@ game_check()
     else
         for i in $( seq 0 $length ); do
             name=$( jq -r ".[$i].name" $startcfg )
+            servercheck=$( jq -r ".[$i].$1" $startcfg )
 
             if [ "$1" == "$name" ]; then
                 index=$i
 
-                if [ "null" != "$( jq -r ".[$i].$1" $startcfg )" ]; then
+                if [ "null" != "$servercheck"  ]; then
                     server=$1
                 fi
 
                 break
-            elif [ "null" != "$( jq -r ".[$i].$1" $startcfg )" ]; then
+            elif [ "null" != "$servercheck" ]; then
                 index=$i
                 server=$1
                 break
@@ -339,6 +340,7 @@ game_validate()
 
 server_start()
 {
+    local dir="$( jq -r ".[$index].dir" $startcfg )"
     local exec="$( jq -r ".[$index].exec" $startcfg )"
     local length=$( jq ".[$index].$server | length - 1" $startcfg )
 
@@ -347,13 +349,10 @@ server_start()
         gameoptions+=" $tmp"
     done
 
-    if [ $appid == 223250 ]; then
-        cd "$gamedir/$name/system"
-    elif [ "$exec" == "ucc-bin" ]; then
-        cd "$gamedir/$name/System"
+    if [ "null" != "$dir" ]; then
+        cd "$gamedir/$name/$dir"
     else
         cd "$gamedir/$name/"
-
     fi
 
     message "Status" "Starting"
@@ -415,6 +414,8 @@ steamcmd_install()
     else
         message "Error" "SteamCMD was not installed"
     fi
+
+    message "------"
 }
 
 # Command Functions

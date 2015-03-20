@@ -229,9 +229,21 @@
 
         "name" : "zombiepanic",
         "appid" : "17505",
-        "exec" : "example",
+        "exec" : "srcds_run",
 
         "zombiepanic" : [
+            "-game zps",
+            "+maxplayers 16",
+            "+map zps_silence",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64"
         ]
     },
 
@@ -293,6 +305,7 @@
 
         "name" : "starbound",
         "appid" : "211820",
+        "dir" : "linux64",
         "exec" : "starbound_server",
 
         "starbound" : [
@@ -304,6 +317,7 @@
 
         "name" : "killingfloor",
         "appid" : "215360",
+        "dir" : "System",
         "exec" : "ucc-bin",
 
         "killingfloor" : [
@@ -364,6 +378,7 @@
 
         "name" : "redorch",
         "appid" : "223250",
+        "dir" : "system",
         "exec" : "ucc-bin",
 
         "redorch" : [
@@ -613,7 +628,7 @@
 
         "name" : "dhmc",
         "appid" : "312070",
-        "exec" : "example",
+        "exec" : "DHMCDed",
 
         "dhmc" : [
         ]
