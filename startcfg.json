@@ -307,6 +307,9 @@
         "exec" : "ucc-bin",
 
         "killingfloor" : [
+            "server",
+            "KF-Bedlam.rom?game=KFmod.KFGameType?MaxPlayers=6?VACSecured=true",
+            "-nohomedir"
         ]
     },
 
@@ -364,6 +367,9 @@
         "exec" : "ucc-bin",
 
         "redorch" : [
+            "server",
+            "RO-Arad.rom?game=ROGame.ROTeamGame?VACSecured=true",
+            "-nohomedir"
         ]
     },
 

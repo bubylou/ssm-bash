@@ -52,6 +52,26 @@ do_all()
     done
 }
 
+flag_check()
+{
+    if [[ "$1" =~ -.* ]]; then
+        flags=$( echo $1 | cut -d '-' -f 2 | grep -o . )
+
+        for flag in $flags; do
+            if [[ "$flag" =~ [firs] ]]; then
+                option="$flag"
+            elif [ "$flag" == "v" ]; then
+                verbose=true
+                v="v"
+            fi
+        done
+
+        if [ "$2" != 0 ]; then
+            continue
+        fi
+    fi
+}
+
 game_check()
 {
     unset index name appid server
@@ -144,26 +164,22 @@ message()
     printf '\n'
 }
 
-flag_check()
+requirment_check()
 {
-    if [[ "$1" =~ -.* ]]; then
-        flags=$( echo $1 | cut -d '-' -f 2 | grep -o . )
+    local requirments="expect find jq md5sum screen tar wget"
 
-        for flag in $flags; do
-            if [[ "$flag" =~ [firs] ]]; then
-                option="$flag"
-            elif [ "$flag" == "v" ]; then
-                verbose=true
-                v="v"
-            fi
-        done
-
-        if [ "$2" != 0 ]; then
-            continue
+    for i in $requirments; do
+        if [ -z $( which $i ) ]; then
+            missing+="$i "
         fi
+    done
+
+    if [ -n "$missing" ]; then
+        message "Error" "Missing required programs"
+        message "Error" "$missing"
+        exit
     fi
 }
-
 server_check()
 {
     if [ -z "$server" ]; then
@@ -217,8 +233,10 @@ success_check()
 {
     while read line ; do
         if [ ! "$verbose" == true ]; then
-            if [ -n "$( echo "$line" | grep "Success" )" ]; then
+            if [ -n "$( echo "$line" | grep "fully installed" )" ]; then
                 message "Status" "${1}d"
+            elif [ -n "$( echo "$line" | grep "already up to date" )" ]; then
+                message "Status" "Already ${1}d"
             elif [ -n "$( echo "$line" | grep "Fail" )" ]; then
                 message "Error" "${1} Failed"
                 message "Error" "$line"
@@ -325,9 +343,17 @@ server_start()
         gameoptions+=" $tmp"
     done
 
+    if [ $appid == 223250 ]; then
+        cd "$gamedir/$name/system"
+    elif [ "$exec" == "./ucc-bin" ]; then
+        cd "$gamedir/$name/System"
+    else
+        cd "$gamedir/$name/"
+
+    fi
+
     message "Status" "Starting"
-    cd "$gamedir/$name/"
-    screen -dmS "$server-$name" "$gamedir/$name/$exec" "$gameoptions"
+    screen -dmS "$server-$name" "$exec" "$gameoptions"
 
     for i in $( seq 0 $maxwait ); do
         if [ -n "$( session_check "$server-$name" )" ]; then
@@ -652,6 +678,8 @@ if [ $( whoami ) == "root" ]; then
     message "Error" "Do not run as root"
     exit
 fi
+
+requirment_check
 
 case "$1" in
     backup)
