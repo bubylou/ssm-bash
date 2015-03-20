@@ -1,6 +1,6 @@
 # SteamCMDer
 
-A simple Bash script to make managing your SteamCMD easier.
+A Bash script for managing your SteamCMD servers.
 
 ## Usage
 

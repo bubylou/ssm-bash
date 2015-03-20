@@ -166,7 +166,7 @@ message()
 
 requirment_check()
 {
-    local requirments="expect find jq md5sum screen tar wget"
+    local requirments="find jq md5sum screen tar wget"
 
     for i in $requirments; do
         if [ -z $( which $i ) ]; then
@@ -201,6 +201,17 @@ steamcmd_check()
     fi
 }
 
+steamcmd_filter()
+{
+    read input
+
+    if [ -n "$( echo "$input" | grep "Success" )" ]; then
+        message "Status" "$( echo "$input" | cut -d ' ' -f2- )"
+    elif [ -n "$( echo "$input" | grep "ERROR" )" ]; then
+        message "Error" "$( echo "$input" | cut -d ' ' -f2- )"
+    fi
+}
+
 stop_run_start()
 {
     for server in $( session_check "\-$name" ); do
@@ -227,24 +238,6 @@ stop_run_start()
             server_start
         done
     fi
-}
-
-success_check()
-{
-    while read line ; do
-        if [ ! "$verbose" == true ]; then
-            if [ -n "$( echo "$line" | grep "fully installed" )" ]; then
-                message "Status" "${1}d"
-            elif [ -n "$( echo "$line" | grep "already up to date" )" ]; then
-                message "Status" "Already ${1}d"
-            elif [ -n "$( echo "$line" | grep "Fail" )" ]; then
-                message "Error" "${1} Failed"
-                message "Error" "$line"
-            fi
-        else
-            echo "$line"
-        fi
-    done
 }
 
 # Normal Functions
@@ -314,28 +307,39 @@ game_restore()
 game_update()
 {
     if [ -d "$gamedir/$name" ]; then
-        local message="Update"
         message "Status" "Updating"
     else
         mkdir -p "$gamedir"
-        local message="Install"
         message "Status" "Installing"
     fi
 
-    unbuffer bash $steamcmd +login $username $password +force_install_dir \
-        $gamedir/$name +app_update $appid +quit | success_check "$message"
+    if [ "$verbose" == true  ]; then
+        bash $steamcmd +login $username $password +force_install_dir \
+            $gamedir/$name +app_update $appid +quit
+    else
+        bash $steamcmd +login $username $password +force_install_dir \
+            $gamedir/$name +app_update $appid +quit | \
+            grep "Success!\|ERROR!" | steamcmd_filter
+    fi
 }
 
 game_validate()
 {
     message "Status" "Validating"
-    unbuffer bash $steamcmd +login $username $password +force_install_dir \
-        $gamedir/$name +app_update $appid -validate +quit | success_check "Validate"
+
+    if [ "$verbose" == true  ]; then
+        bash $steamcmd +login $username $password +force_install_dir \
+            $gamedir/$name +app_update $appid -validate +quit
+    else
+        bash $steamcmd +login $username $password +force_install_dir \
+            $gamedir/$name +app_update $appid -validate +quit \
+            grep "Success!\|ERROR!" | steamcmd_filter
+    fi
 }
 
 server_start()
 {
-    local exec="./$( jq -r ".[$index].exec" $startcfg )"
+    local exec="$( jq -r ".[$index].exec" $startcfg )"
     local length=$( jq ".[$index].$server | length - 1" $startcfg )
 
     for i in $( seq 0 $length ); do
@@ -345,7 +349,7 @@ server_start()
 
     if [ $appid == 223250 ]; then
         cd "$gamedir/$name/system"
-    elif [ "$exec" == "./ucc-bin" ]; then
+    elif [ "$exec" == "ucc-bin" ]; then
         cd "$gamedir/$name/System"
     else
         cd "$gamedir/$name/"
@@ -353,7 +357,7 @@ server_start()
     fi
 
     message "Status" "Starting"
-    screen -dmS "$server-$name" "$exec" "$gameoptions"
+    screen -dmS "$server-$name" "./$exec" "$gameoptions"
 
     for i in $( seq 0 $maxwait ); do
         if [ -n "$( session_check "$server-$name" )" ]; then
