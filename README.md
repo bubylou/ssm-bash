@@ -2,18 +2,88 @@
 
 A Bash script for managing your SteamCMD servers.
 
+## Getting Started
 
-## Requirments
+### Install Dependencies
 
-The following programs are required for the script to run.
+- Install all the dependencies for steacmd and steamcmder.
 
-`find jq md5sum screen tar wget`
+#### Debian / Ubuntu 32 bit
+
+`aptitude install jq screen unzip`
+
+#### Debian / Ubuntu 64 bit
+
+`aptitude install lib32gcc1 jq screen unzip`
+
+- RedHat and CentOS do not have "jq" in there repositories by default.
+- You will have to get it from another repository or manually install it.
+
+#### RedHat / CentOS 32 bit
+
+`yum install glibc libstdc++ jq screen unzip`
+
+#### RedHat / CentOS 64 bit
+
+`yum install glibc.i686 libstdc++.i686 jq screen unzip`
+
+### Setup Account
+
+- Create a unpriveleged user account to use for steamcmder.
+
+#### Debian / Ubuntu
+
+`adduser steamcmder`
+
+#### RedHat / CentOS
+
+`adduser steamcmder`
+
+`passwd steamcmder`
+
+### Install SteamCMDer
+
+- Log in to the new account.
+
+`su - steamcmder`
+
+- Download and unzip SteamCMDer.
+
+`wget https://github.com/bubylou/steamcmder/archive/master.zip`
+
+`unzip master.zip`
+
+- Change to the new directory and make the script executable.
+
+`cd steamcmder-master`
+
+`chmod +x steamcmder.sh`
+
+### Install Game
+
+- First install steamcmd
+
+`./steamcmder.sh setup`
+
+- Install a game
+
+`./steamcmder.sh install <app>`
+
+### Start Server
+
+- Start the server and enjoy.
+
+`./steamcmder.sh start <server>`
 
 ## Usage
 
 `./steamcmder.sh <command> [options] [<app> ...]`
 
 ## Options
+
+`-d`
+
+- Debug server startup.
 
 `-f`
 
@@ -93,7 +163,7 @@ The following programs are required for the script to run.
 
 - Installs SteaCMD.
 
-`start <server> ...`
+`start [options] <server> ...`
 
 - Start the selected server.
 

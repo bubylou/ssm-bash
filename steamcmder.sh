@@ -58,7 +58,7 @@ flag_check()
         flags=$( echo $1 | cut -d '-' -f 2 | grep -o . )
 
         for flag in $flags; do
-            if [[ "$flag" =~ [firs] ]]; then
+            if [[ "$flag" =~ [dfirs] ]]; then
                 option="$flag"
             elif [ "$flag" == "v" ]; then
                 verbose=true
@@ -146,7 +146,7 @@ message()
 {
     printf '[ '
 
-    if [[ "$1" == "Name" || "$1" == "App ID" ]]; then
+    if [[ "$1" == "Name" || "$1" == "App ID" || "$1" == "F-Name" ]]; then
         printf '\e[0;33m%-6s\e[m' "$1"
     elif [[ "$1" == "Status" || "$1" == "Done" ]]; then
         printf '\e[0;32m%-6s\e[m' "$1"
@@ -269,6 +269,16 @@ game_backup()
     fi
 }
 
+game_list()
+{
+    fname=$( jq -r ".[$index].comment" $startcfg )
+    status=0
+
+    message "F-Name" "$fname"
+    info | head -2
+    message "------"
+}
+
 game_remove()
 {
     message "Status" "Removing"
@@ -355,8 +365,14 @@ server_start()
         cd "$gamedir/$name/"
     fi
 
-    message "Status" "Starting"
-    screen -dmS "$server-$name" "./$exec" "$gameoptions"
+    if [ "$option" == "d" ]; then
+        message "Status" "Debugging"
+        "./$exec" "$gameoptions"
+    else
+        message "Status" "Starting"
+        screen -dmS "$server-$name" "./$exec" "$gameoptions"
+    fi
+
 
     for i in $( seq 0 $maxwait ); do
         if [ -n "$( session_check "$server-$name" )" ]; then
@@ -728,19 +744,13 @@ case "$1" in
     list)
         for i in $( ls $gamedir ); do
             game_check $i
-            status=0
-            info | head -2
-            message "------"
+            game_list
         done
         ;;
     list-all)
-        length=$( jq ". | length - 1" $startcfg )
-        for i in $( seq 0 $length ); do
-            name=$( jq -r ".[$i].name" $startcfg )
-            appid=$( jq -r ".[$i].appid" $startcfg )
-            status=0
-            info | head -2
-            message "------"
+        for i in $( jq -r ".[].name" $startcfg ); do
+            game_check $i
+            game_list
         done
         ;;
     remove)
@@ -802,6 +812,7 @@ case "$1" in
     start)
         argument_check $2
         for i in ${@:2}; do
+            flag_check $i
             game_check $i
             server_check
             command_start
