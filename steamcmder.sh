@@ -72,7 +72,7 @@ flag_check()
     fi
 }
 
-game_check()
+game_info()
 {
     unset index name appid server
     number="^[0-9]+([.][0-9]+)?$"
@@ -84,18 +84,19 @@ game_check()
             appid=$( jq -r ".[$i].appid" $startcfg )
 
             if [ "$1" == "$appid" ]; then
+                name=$( jq -r ".[$i].name" $startcfg )
                 index=$i
                 break
             fi
         done
 
-        name=$( jq -r ".[$i].name" $startcfg )
     else
         for i in $( seq 0 $length ); do
             name=$( jq -r ".[$i].name" $startcfg )
             servercheck=$( jq -r ".[$i].$1" $startcfg )
 
             if [ "$1" == "$name" ]; then
+                appid=$( jq -r ".[$i].appid" $startcfg )
                 index=$i
 
                 if [ "null" != "$servercheck"  ]; then
@@ -103,18 +104,19 @@ game_check()
                 fi
 
                 break
+
             elif [ "null" != "$servercheck" ]; then
+                appid=$( jq -r ".[$i].appid" $startcfg )
                 index=$i
                 server=$1
                 break
             fi
         done
 
-        appid=$( jq -r ".[$i].appid" $startcfg )
     fi
 
     if [ -z "$index" ]; then
-        message "Error" "Invalid App Name"
+        message "Error" "Invalid App"
         exit
     fi
 }
@@ -181,6 +183,15 @@ requirment_check()
         exit
     fi
 }
+
+root_check()
+{
+    if [ $( whoami ) == "root" ]; then
+        message "Error" "Do not run as root"
+        exit
+    fi
+}
+
 server_check()
 {
     if [ -z "$server" ]; then
@@ -695,32 +706,28 @@ command_setup()
     fi
 }
 
-if [ $( whoami ) == "root" ]; then
-    message "Error" "Do not run as root"
-    exit
-fi
-
 requirment_check
+root_check
 
 case "$1" in
     backup)
         argument_check $2
         for i in ${@:2}; do
             flag_check $i
-            game_check $i
+            game_info $i
             command_backup
         done
         ;;
     backup-all)
         flag_check $2 0
         for i in $( ls $gamedir ); do
-            game_check $i
+            game_info $i
             command_backup
         done
         ;;
     console)
         argument_check $2
-        game_check $2
+        game_info $2
         server_check
         command_console
         ;;
@@ -728,7 +735,7 @@ case "$1" in
         argument_check $2
         for i in ${@:2}; do
             flag_check $i
-            game_check $i
+            game_info $i
             command_install
         done
         ;;
@@ -743,13 +750,13 @@ case "$1" in
         ;;
     list)
         for i in $( ls $gamedir ); do
-            game_check $i
+            game_info $i
             game_list
         done
         ;;
     list-all)
         for i in $( jq -r ".[].name" $startcfg ); do
-            game_check $i
+            game_info $i
             game_list
         done
         ;;
@@ -757,7 +764,7 @@ case "$1" in
         argument_check $2
         for i in ${@:2}; do
             flag_check $i
-            game_check $i
+            game_info $i
             command_remove
         done
         ;;
@@ -765,13 +772,13 @@ case "$1" in
         are_you_sure
         flag_check $2 0
         for i in $( ls $gamedir ); do
-            game_check $i
+            game_info $i
             command_remove
         done
         ;;
     restart)
         for i in ${@:2}; do
-            game_check $i
+            game_info $i
             command_stop
             command_start
         done
@@ -779,12 +786,12 @@ case "$1" in
     restart-all)
         if [ -z "$2" ]; then
             for i in $( ls $gamedir ); do
-                game_check $i
+                game_info $i
                 do_all command_stop command_start
             done
         else
             for i in ${@:2}; do
-                game_check $i
+                game_info $i
                 do_all command_stop command_start
             done
         fi
@@ -793,7 +800,7 @@ case "$1" in
         argument_check $2
         for i in ${@:2}; do
             flag_check $i
-            game_check $i
+            game_info $i
             command_restore
         done
         ;;
@@ -801,7 +808,7 @@ case "$1" in
         are_you_sure
         flag_check $2 0
         for i in $( ls $gamedir ); do
-            game_check $i
+            game_info $i
             command_restore
         done
         ;;
@@ -813,7 +820,7 @@ case "$1" in
         argument_check $2
         for i in ${@:2}; do
             flag_check $i
-            game_check $i
+            game_info $i
             server_check
             command_start
         done
@@ -821,12 +828,12 @@ case "$1" in
     start-all)
         if [ -z "$2" ]; then
             for i in $( ls $gamedir ); do
-                game_check $i
+                game_info $i
                 do_all command_start
             done
         else
             for i in ${@:2}; do
-                game_check $i
+                game_info $i
                 do_all command_start
             done
         fi
@@ -834,12 +841,12 @@ case "$1" in
     status)
         if [ -z "$2" ]; then
             for i in $( ls $gamedir ); do
-                game_check $i
+                game_info $i
                 command_status
             done
         else
             for i in ${@:2}; do
-                game_check $i
+                game_info $i
                 command_status
             done
         fi
@@ -847,7 +854,7 @@ case "$1" in
     stop)
         argument_check $2
         for i in ${@:2}; do
-            game_check $i
+            game_info $i
             server_check
             command_stop
         done
@@ -855,12 +862,12 @@ case "$1" in
     stop-all)
         if [ -z "$2" ]; then
             for i in $( ls $gamedir ); do
-                game_check $i
+                game_info $i
                 do_all command_stop
             done
         else
             for i in ${@:2}; do
-                game_check $i
+                game_info $i
                 do_all command_stop
             done
         fi
@@ -869,14 +876,14 @@ case "$1" in
         argument_check $2
         for i in ${@:2}; do
             flag_check $i
-            game_check $i
+            game_info $i
             command_update
         done
         ;;
     update-all)
         flag_check $2 0
         for i in $( ls $gamedir ); do
-            game_check $i
+            game_info $i
             command_update
         done
         ;;
@@ -884,14 +891,14 @@ case "$1" in
         argument_check $2
         for i in ${@:2}; do
             flag_check $i
-            game_check $i
+            game_info $i
             command_validate
         done
         ;;
     validate-all)
         flag_check $2 0
         for i in $( ls $gamedir ); do
-            game_check $i
+            game_info $i
             command_validate
         done
         ;;

@@ -69,9 +69,38 @@ A Bash script for managing your SteamCMD servers.
 
 `./steamcmder.sh install <app>`
 
+### Configuration
+
+- At the top of `steacmder.sh` there are a number of settings you can change.
+    - `username` and `password` for steam which is required to download some applications.
+    - `rootdir` which is only used as a reference point for other directory settings.
+    - By defaults all files and directories are placed under the `rootdir` but can be changed.
+    - `maxbackups` for the max number of backups that are kept for each application.
+    - `maxwait` is for the max amount of time in seconds to wait for a server to start or stop.
+    - `verbose` toggles whether or not the script is verbose by default. ( true / false )
+
+- Inside `startcfg.json` is your application and server settings.
+    - `comment` is just the application's full name for reference and can be changed.
+    - `name` is what is actually used when using steamcmder and it can be changed if desired.
+    - If you have that application already installed or backed up those directories must also be renamed.
+    - `appid` is each applications unique id assigned by steam and should not changed.
+    - `dir` is a relative path from its install location when `exec` is run and should not be changed.
+    - This setting is only required by some applications because dont run from the main directory.
+    - `exec` is the file the is executed in order to start the server and should not change.
+    - Next is individual server configurations. You can add as many of these as you would like.
+    - No server can have the same name as any other one in the entire file.
+    - Inside each server configuration are the servers arguments which can be changed.
+    - These depend on what engine your server is running which can be identified by its `exec` option.
+    - If there are any quotes or double quotes in the server arguments they must be escaped.
+    - You can escape the characters by putting a '\' in front of them. Just like the hostname examples.
+
+- Here are some links where you can find additional server arguments.
+    - [Source](https://developer.valvesoftware.com/wiki/Command_Line_Options#Source_Dedicated_Server) (srcds_run)
+    - [Half Life](https://developer.valvesoftware.com/wiki/Command_Line_Options#Half-Life_Dedicated_Server) (hlds_run)
+
 ### Start Server
 
-- Start the server and enjoy.
+- Now you can start the server.
 
 `./steamcmder.sh start <server>`
 
