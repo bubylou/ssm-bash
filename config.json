@@ -6,15 +6,18 @@
         "appid" : "90 +app_set_config 90 mod cstrike",
         "exec" : "hlds_run",
 
-        "cstrike" : [
-            "-game cstrike",
-            "+maxplayers 16",
-            "+map de_dust2",
-            "+hostname \"Example\"",
-            "+ip 0.0.0.0",
-            "-port 27015",
-            "+sv_lan 0"
-        ]
+        "servers" : {
+            "cstrike" : [
+                "-game cstrike",
+                "+maxplayers 16",
+                "+map de_dust2",
+                "+hostname \"Example\"",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
     },
 
     {
@@ -24,15 +27,18 @@
         "appid" : "90 +app_set_config 90 mod czero",
         "exec" : "hlds_run",
 
-        "czero" : [
-            "-game czero",
-            "+maxplayers 16",
-            "+map de_dust2",
-            "+hostname \"Example\"",
-            "+ip 0.0.0.0",
-            "-port 27015",
-            "+sv_lan 0"
-        ]
+        "servers" : {
+            "czero" : [
+                "-game czero",
+                "+maxplayers 16",
+                "+map de_dust2",
+                "+hostname \"Example\"",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
     },
 
     {
@@ -42,15 +48,18 @@
         "appid" : "90 +app_set_config 90 mod dod",
         "exec" : "hlds_run",
 
-        "dod" : [
-            "-game dod",
-            "+maxplayers 16",
-            "+map dod_anzio",
-            "+hostname \"Example\"",
-            "+ip 0.0.0.0",
-            "-port 27015",
-            "+sv_lan 0"
-        ]
+        "servers" : {
+            "dod" : [
+                "-game dod",
+                "+maxplayers 16",
+                "+map dod_anzio",
+                "+hostname \"Example\"",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
     },
 
     {
@@ -60,15 +69,18 @@
         "appid" : "90 +app_set_config 90 mod dmc",
         "exec" : "hlds_run",
 
-        "dmc" : [
-            "-game dmc",
-            "+maxplayers 16",
-            "+map dcdm5",
-            "+hostname \"Example\"",
-            "+ip 0.0.0.0",
-            "-port 27015",
-            "+sv_lan 0"
-        ]
+        "servers" : {
+            "dmc" : [
+                "-game dmc",
+                "+maxplayers 16",
+                "+map dcdm5",
+                "+hostname \"Example\"",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
     },
 
     {
@@ -78,15 +90,18 @@
         "appid" : "90",
         "exec" : "hlds_run",
 
-        "hl" : [
-            "-game valve",
-            "+maxplayers 16",
-            "+map crossfire",
-            "+hostname \"Example\"",
-            "+ip 0.0.0.0",
-            "-port 27015",
-            "+sv_lan 0"
-        ]
+        "servers" : {
+            "hl" : [
+                "-game valve",
+                "+maxplayers 16",
+                "+map crossfire",
+                "+hostname \"Example\"",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
     },
 
     {
@@ -96,15 +111,18 @@
         "appid" : "90 +app_set_config 90 mod gearbox",
         "exec" : "hlds_run",
 
-        "hlof" : [
-            "-game gearbox",
-            "+maxplayers 16",
-            "+map crossfire",
-            "+hostname \"Example\"",
-            "+ip 0.0.0.0",
-            "-port 27015",
-            "+sv_lan 0"
-        ]
+        "servers" : {
+            "hlof" : [
+                "-game gearbox",
+                "+maxplayers 16",
+                "+map crossfire",
+                "+hostname \"Example\"",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
     },
 
     {
@@ -114,15 +132,18 @@
         "appid" : "90 +app_set_config 90 mod ricochet",
         "exec" : "hlds_run",
 
-        "ricochet" : [
-            "-game ricochet",
-            "+maxplayers 16",
-            "+map rc_arena",
-            "+hostname \"Example\"",
-            "+ip 0.0.0.0",
-            "-port 27015",
-            "+sv_lan 0"
-        ]
+        "servers" : {
+            "ricochet" : [
+                "-game ricochet",
+                "+maxplayers 16",
+                "+map rc_arena",
+                "+hostname \"Example\"",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
     },
 
     {
@@ -132,15 +153,18 @@
         "appid" : "90 +app_set_config 90 mod tfc",
         "exec" : "hlds_run",
 
-        "tfc" : [
-            "-game tfc",
-            "+maxplayers 16",
-            "+map 2fort",
-            "+hostname \"Example\"",
-            "+ip 0.0.0.0",
-            "-port 27015",
-            "+sv_lan 0"
-        ]
+        "servers" : {
+            "tfc" : [
+                "-game tfc",
+                "+maxplayers 16",
+                "+map 2fort",
+                "+hostname \"Example\"",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
     },
 
     {
@@ -150,8 +174,10 @@
         "appid" : "310",
         "exec" : "srcds_run",
 
-        "source2007" : [
-        ]
+        "servers" : {
+            "source2007" : [
+            ]
+        }
     },
 
     {
@@ -161,25 +187,27 @@
         "appid" : "740",
         "exec" : "srcds_run",
 
-        "csgo" : [
-            "-game csgo",
-            "+maxplayers 16",
-            "+gametype 0",
-            "+gamemode 0",
-            "+mapgroup random_classic",
-            "+map de_dust2",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "csgo" : [
+                "-game csgo",
+                "+maxplayers 16",
+                "+gametype 0",
+                "+gamemode 0",
+                "+mapgroup random_classic",
+                "+map de_dust2",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -189,23 +217,25 @@
         "appid" : "4020",
         "exec" : "srcds_run",
 
-        "gmod" : [
-            "-game garrysmod",
-            "+maxplayers 16",
-            "+gamemode sandbox",
-            "+map gm_construct",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "gmod" : [
+                "-game garrysmod",
+                "+maxplayers 16",
+                "+gamemode sandbox",
+                "+map gm_construct",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -215,17 +245,18 @@
         "appid" : "4940",
         "exec" : "server_linux32",
 
-        "ns2" : [
-            "-limit 24",
-            "-map ns2_summit",
-            "-name",
-            "-port 27015",
-            "-webadmin",
-            "-webuser admin",
-            "-webpassword CHANGEME",
-            "-webdomain 0.0.0.0",
-            "-webport 8080"
-        ]
+        "servers" : {
+            "ns2" : [
+                "-limit 24",
+                "-map ns2_summit",
+                "-name",
+                "-webadmin",
+                "-webuser admin",
+                "-webpassword CHANGEME",
+                "-webdomain 0.0.0.0",
+                "-webport 8080"
+            ]
+        }
     },
 
     {
@@ -235,22 +266,24 @@
         "appid" : "17505",
         "exec" : "srcds_run",
 
-        "zombiepanic" : [
-            "-game zps",
-            "+maxplayers 16",
-            "+map zps_silence",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "zombiepanic" : [
+                "-game zps",
+                "+maxplayers 16",
+                "+map zps_silence",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -260,22 +293,24 @@
         "appid" : "17575",
         "exec" : "srcds_run",
 
-        "pvkii" : [
-            "-game pvkii",
-            "-maxplayers 16",
-            "+map bt_island",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "pvkii" : [
+                "-game pvkii",
+                "-maxplayers 16",
+                "+map bt_island",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -285,16 +320,18 @@
         "appid" : "41080",
         "exec" : "Bin/runSam3_DedicatedServer.sh",
 
-        "serioussam3" : [
-            "+gamemode Deathmatch",
-            "+level SunPalace",
-            "+gameoptions",
-            "+maxplayers",
-            "+sessionname",
-            "+ip 0.0.0.0",
-            "+port 27015",
-            "+fps 60"
-        ]
+        "servers" : {
+            "serioussam3" : [
+                "+gamemode Deathmatch",
+                "+level SunPalace",
+                "+gameoptions",
+                "+maxplayers",
+                "+sessionname",
+                "+ip 0.0.0.0",
+                "+port 27016",
+                "+fps 60"
+            ]
+        }
     },
 
     {
@@ -304,8 +341,10 @@
         "appid" : "108600",
         "exec" : "projectzomboid-dedi-server.sh",
 
-        "zomboid" : [
-        ]
+        "servers" : {
+            "zomboid" : [
+            ]
+        }
     },
 
     {
@@ -316,8 +355,10 @@
         "dir" : "linux64",
         "exec" : "starbound_server",
 
-        "starbound" : [
-        ]
+        "servers" : {
+            "starbound" : [
+            ]
+        }
     },
 
     {
@@ -328,11 +369,13 @@
         "dir" : "System",
         "exec" : "ucc-bin",
 
-        "killingfloor" : [
-            "server",
-            "KF-Bedlam.rom?game=KFmod.KFGameType?MaxPlayers=6?VACSecured=true",
-            "-nohomedir"
-        ]
+        "servers" : {
+            "killingfloor" : [
+                "server",
+                "KF-Bedlam.rom?game=KFmod.KFGameType?MaxPlayers=6?VACSecured=true",
+                "-nohomedir"
+            ]
+        }
     },
 
     {
@@ -342,21 +385,23 @@
         "appid" : "222840",
         "exec" : "srcds_run",
 
-        "left4dead" : [
-            "-game left4dead",
-            "+maxplayers 16",
-            "+map l4d_hospital01_apartment",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "left4dead" : [
+                "-game left4dead",
+                "+maxplayers 16",
+                "+map l4d_hospital01_apartment",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -366,21 +411,23 @@
         "appid" : "222860",
         "exec" : "srcds_run",
 
-        "left4dead2" : [
-            "-game left4dead2",
-            "+maxplayers 16",
-            "+map c5m1_waterfront",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "left4dead2" : [
+                "-game left4dead2",
+                "+maxplayers 16",
+                "+map c5m1_waterfront",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -391,11 +438,13 @@
         "dir" : "system",
         "exec" : "ucc-bin",
 
-        "redorch" : [
-            "server",
-            "RO-Arad.rom?game=ROGame.ROTeamGame?VACSecured=true",
-            "-nohomedir"
-        ]
+        "servers" : {
+            "redorch" : [
+                "server",
+                "RO-Arad.rom?game=ROGame.ROTeamGame?VACSecured=true",
+                "-nohomedir"
+            ]
+        }
     },
 
     {
@@ -405,20 +454,22 @@
         "appid" : "228780",
         "exec" : "srcds_run.sh",
 
-        "bladesymphony" : [
-            "+maxplayers 16",
-            "+map duel_winter",
-            "+sv_ranked 0",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "bladesymphony" : [
+                "+maxplayers 16",
+                "+map duel_winter",
+                "+sv_ranked 0",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
 
@@ -429,22 +480,24 @@
         "appid" : "232250",
         "exec" : "srcds_run",
 
-        "tf2" : [
-            "-game tf",
-            "+maxplayers 16",
-            "+map ctf_2fort",
-            "+sv_pure 1",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "tf2" : [
+                "-game tf",
+                "+maxplayers 16",
+                "+map ctf_2fort",
+                "+sv_pure 1",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -454,22 +507,24 @@
         "appid" : "232290",
         "exec" : "srcds_run",
 
-        "dods" : [
-            "-game dod",
-            "+maxplayers 16",
-            "+map dod_Anzio",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "dods" : [
+                "-game dod",
+                "+maxplayers 16",
+                "+map dod_Anzio",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -479,21 +534,23 @@
         "appid" : "232330",
         "exec" : "srcds_run",
 
-        "css" : [
-            "-game cstrike",
-            "+maxplayers 16",
-            "+map de_dust2",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "css" : [
+                "-game cstrike",
+                "+maxplayers 16",
+                "+map de_dust2",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -503,22 +560,24 @@
         "appid" : "232370",
         "exec" : "srcds_run",
 
+        "servers" : {
         "hl2dm" : [
-            "-game hl2mp",
-            "+maxplayers 16",
-            "+map dm_lockdown",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+                "-game hl2mp",
+                "+maxplayers 16",
+                "+map dm_lockdown",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -528,10 +587,12 @@
         "appid" : "233780",
         "exec" : "arma3server",
 
-        "arma3" : [
-            "-name=",
-            "-port=2302"
-        ]
+        "servers" : {
+            "arma3" : [
+                "-name=",
+                "-port=2302"
+            ]
+        }
     },
 
     {
@@ -541,22 +602,24 @@
         "appid" : "237410",
         "exec" : "srcds_run",
 
-        "insurgency" : [
-            "-game insurgency",
-            "+maxplayers 16",
-            "+map ministry",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "insurgency" : [
+                "-game insurgency",
+                "+maxplayers 16",
+                "+map ministry",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -566,8 +629,10 @@
         "appid" : "244310",
         "exec" : "srcds_run",
 
-        "source2013" : [
-        ]
+        "servers" : {
+            "source2013" : [
+            ]
+        }
     },
 
 
@@ -578,22 +643,24 @@
         "appid" : "255470",
         "exec" : "srcds_run",
 
-        "hldms" : [
-            "-game hl1mp",
-            "+maxplayers 16",
-            "+map crossfire",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "hldms" : [
+                "-game hl1mp",
+                "+maxplayers 16",
+                "+map crossfire",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -603,11 +670,13 @@
         "appid" : "261140",
         "exec" : "Jcmp-Server",
 
-        "justcause2" : [
-            "--maxplayers 16",
-            "--bindip 0.0.0.0",
-            "--bindport 27015"
-        ]
+        "servers" : {
+            "justcause2" : [
+                "--maxplayers 16",
+                "--bindip 0.0.0.0",
+                "--bindport 27016"
+            ]
+        }
     },
 
     {
@@ -617,9 +686,11 @@
         "appid" : "294420",
         "exec" : "7DaysToDie.sh",
 
-        "sdtd" : [
-            "-dedicated"
-        ]
+        "servers" : {
+            "sdtd" : [
+                "-dedicated"
+            ]
+        }
     },
 
     {
@@ -629,22 +700,24 @@
         "appid" : "295230",
         "exec" : "srcds_run",
 
-        "fof" : [
-            "-game fof",
-            "+maxplayers 16",
-            "+map fof_depot",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "fof" : [
+                "-game fof",
+                "+maxplayers 16",
+                "+map fof_depot",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -654,8 +727,10 @@
         "appid" : "312070",
         "exec" : "DHMCDed",
 
-        "dhmc" : [
-        ]
+        "servers" : {
+            "dhmc" : [
+            ]
+        }
     },
 
     {
@@ -665,17 +740,18 @@
         "appid" : "313900",
         "exec" : "server_linux32",
 
-        "ns2c" : [
-            "-limit 24",
-            "-map ns2_summit",
-            "-name",
-            "-port 27015",
-            "-webadmin",
-            "-webuser admin",
-            "-webpassword CHANGEME",
-            "-webdomain 0.0.0.0",
-            "-webport 8080"
-        ]
+        "servers" : {
+            "ns2c" : [
+                "-limit 24",
+                "-map ns2_summit",
+                "-name",
+                "-webadmin",
+                "-webuser admin",
+                "-webpassword CHANGEME",
+                "-webdomain 0.0.0.0",
+                "-webport 8080"
+            ]
+        }
     },
 
     {
@@ -685,23 +761,25 @@
         "appid" : "317670",
         "exec" : "srcds_run",
 
-        "nmrih" : [
-            "-game nmrih",
-            "+maxplayers 8",
-            "+map nmo_broadway",
-            "+host_workshop_collection",
-            "-authkey",
-            "+hostname \"Example\"",
-            "-insecure",
-            "-ip 0.0.0.0",
-            "+clientport 27015",
-            "-port 27015",
-            "+tv_port 27020",
-            "+sv_lan 0",
-            "-tickrate 64",
-            "-strictportbind",
-            "-norestart"
-        ]
+        "servers" : {
+            "nmrih" : [
+                "-game nmrih",
+                "+maxplayers 8",
+                "+map nmo_broadway",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-insecure",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
     },
 
     {
@@ -711,7 +789,9 @@
         "appid" : "332850",
         "exec" : "example",
 
-        "blazerush" : [
-        ]
+        "servers" : {
+            "blazerush" : [
+            ]
+        }
     }
 ]

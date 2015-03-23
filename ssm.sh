@@ -43,7 +43,7 @@ argument_check()
 
 do_all()
 {
-    servers=$( jq ".[$index]" $config | grep '\[' | awk -F\" '{print $2}' )
+    servers=$( jq ".[$index].servers | keys" $config | awk -F\" '{print $2}' )
 
     for server in $servers; do
         for k in ${@}; do
@@ -93,7 +93,7 @@ game_info()
     else
         for i in $( seq 0 $length ); do
             name=$( jq -r ".[$i].name" $config )
-            servercheck=$( jq -r ".[$i].$1" $config )
+            servercheck=$( jq -r ".[$i].servers.$1" $config )
 
             if [ "$1" == "$name" ]; then
                 appid=$( jq -r ".[$i].appid" $config )
@@ -363,11 +363,11 @@ server_start()
 {
     local dir="$( jq -r ".[$index].dir" $config )"
     local exec="$( jq -r ".[$index].exec" $config )"
-    local length=$( jq ".[$index].$server | length - 1" $config )
+    local length=$( jq ".[$index].servers.$server | length - 1" $config )
 
     for i in $( seq 0 $length ); do
-        local tmp="$( jq -r ".[$index].$server[$i]" $config )"
-        gameoptions+=" $tmp"
+        local tmp="$( jq -r ".[$index].servers.$server[$i]" $config )"
+        gameoptions+="$tmp "
     done
 
     if [ "null" != "$dir" ]; then
@@ -903,7 +903,11 @@ case "$1" in
         done
         ;;
     *)
-        message "Error" "Invalid Command"
+        if [ -z "$1" ]; then
+            message "Error" "Must specify a command"
+        else
+            message "Error" "Invalid command"
+        fi
 esac
 
 if [ -n "$error" ]; then
