@@ -7,7 +7,7 @@ rootdir="$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )"
 backupdir="$rootdir/backup"
 gamedir="$rootdir/games"
 startcfg="$rootdir/startcfg.json"
-steamcmd="$rootdir/steamcmd.sh"
+steamcmd="$rootdir"
 
 maxbackups=5
 maxwait=10
@@ -36,7 +36,7 @@ are_you_sure()
 argument_check()
 {
     if [ -z "$1" ]; then
-        message "Error" "You must specify at least one App Name"
+        message "Error" "You must specify at least one App"
         exit
     fi
 }
@@ -207,7 +207,7 @@ session_check()
 
 steamcmd_check()
 {
-    if [ ! -s $steamcmd ]; then
+    if [ ! -s $steamcmd/steamcmd.sh ]; then
         message "Error" "SteamCMD not installed"
         steamcmd_install
     fi
@@ -336,10 +336,10 @@ game_update()
     fi
 
     if [ "$verbose" == true  ]; then
-        bash $steamcmd +login $username $password +force_install_dir \
+        $steamcmd/./steamcmd.sh +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid +quit
     else
-        bash $steamcmd +login $username $password +force_install_dir \
+        $steamcmd/./steamcmd.sh +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid +quit | \
             grep "Success!\|ERROR!" | steamcmd_filter
     fi
@@ -350,10 +350,10 @@ game_validate()
     message "Status" "Validating"
 
     if [ "$verbose" == true  ]; then
-        bash $steamcmd +login $username $password +force_install_dir \
+        $steamcmd/./steamcmd.sh +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid -validate +quit
     else
-        bash $steamcmd +login $username $password +force_install_dir \
+        $steamcmd/./steamcmd.sh +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid -validate +quit \
             grep "Success!\|ERROR!" | steamcmd_filter
     fi
@@ -432,11 +432,11 @@ steamcmd_install()
 
     message "Status" "Installing SteamCMD"
     wget -N${q} http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
-        -P "$rootdir"
+        -P "$steamcmd"
 
-    tar x${v}f steamcmd_linux.tar.gz -C "$rootdir"
+    tar x${v}f steamcmd_linux.tar.gz -C "$steamcmd"
 
-    if [ -s $steamcmd ]; then
+    if [ -s $steamcmd/steamcmd.sh ]; then
         message "Status" "SteamCMD was installed"
     else
         message "Error" "SteamCMD was not installed"
@@ -684,7 +684,7 @@ command_validate()
 
 command_setup()
 {
-    if [ -s "$steamcmd" ]; then
+    if [ -s $steamcmd/steamcmd.sh ]; then
         message "Error" "SteamCMD is already installed"
         while true; do
             printf "[ Status ] - Would you like to reinstall it? ( y/n ): "

@@ -176,7 +176,9 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -200,7 +202,9 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -243,7 +247,9 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -266,7 +272,9 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -346,7 +354,8 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -369,7 +378,8 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -405,7 +415,9 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -430,7 +442,8 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -453,7 +466,9 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -465,18 +480,19 @@
         "exec" : "srcds_run",
 
         "css" : [
-             "-game cstrike",
-             "+maxplayers 16",
-             "+map de_dust2",
-             "+host_workshop_collection",
-             "-authkey",
-             "+hostname \"Example\"",
-             "-ip 0.0.0.0",
-             "+clientport 27015",
-             "-port 27015",
-             "+tv_port 27020",
-             "+sv_lan 0",
-             "-tickrate 64"
+            "-game cstrike",
+            "+maxplayers 16",
+            "+map de_dust2",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname \"Example\"",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -499,7 +515,9 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -524,18 +542,20 @@
         "exec" : "srcds_run",
 
         "insurgency" : [
-             "-game insurgency",
-             "+maxplayers 16",
-             "+map ministry",
-             "+host_workshop_collection",
-             "-authkey",
-             "+hostname \"Example\"",
-             "-ip 0.0.0.0",
-             "+clientport 27015",
-             "-port 27015",
-             "+tv_port 27020",
-             "+sv_lan 0",
-             "-tickrate 64"
+            "-game insurgency",
+            "+maxplayers 16",
+            "+map ministry",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname \"Example\"",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -559,18 +579,20 @@
         "exec" : "srcds_run",
 
         "hldms" : [
-             "-game hl1mp",
-             "+maxplayers 16",
-             "+map crossfire",
-             "+host_workshop_collection",
-             "-authkey",
-             "+hostname \"Example\"",
-             "-ip 0.0.0.0",
-             "+clientport 27015",
-             "-port 27015",
-             "+tv_port 27020",
-             "+sv_lan 0",
-             "-tickrate 64"
+            "-game hl1mp",
+            "+maxplayers 16",
+            "+map crossfire",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname \"Example\"",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -608,18 +630,20 @@
         "exec" : "srcds_run",
 
         "fof" : [
-             "-game fof",
-             "+maxplayers 16",
-             "+map fof_depot",
-             "+host_workshop_collection",
-             "-authkey",
-             "+hostname \"Example\"",
-             "-ip 0.0.0.0",
-             "+clientport 27015",
-             "-port 27015",
-             "+tv_port 27020",
-             "+sv_lan 0",
-             "-tickrate 64"
+            "-game fof",
+            "+maxplayers 16",
+            "+map fof_depot",
+            "+host_workshop_collection",
+            "-authkey",
+            "+hostname \"Example\"",
+            "-ip 0.0.0.0",
+            "+clientport 27015",
+            "-port 27015",
+            "+tv_port 27020",
+            "+sv_lan 0",
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
@@ -674,7 +698,9 @@
             "-port 27015",
             "+tv_port 27020",
             "+sv_lan 0",
-            "-tickrate 64"
+            "-tickrate 64",
+            "-strictportbind",
+            "-norestart"
         ]
     },
 
