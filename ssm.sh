@@ -280,16 +280,6 @@ game_backup()
     fi
 }
 
-game_list()
-{
-    fname=$( jq -r ".[$index].comment" $config )
-    status=0
-
-    message "F-Name" "$fname"
-    info | head -2
-    message "------"
-}
-
 game_remove()
 {
     message "Status" "Removing"
@@ -751,13 +741,24 @@ case "$1" in
     list)
         for i in $( ls $gamedir ); do
             game_info $i
-            game_list
+            message "F-Name" "$fname"
+            message "Name" "$name"
+            message "App ID" "$appid"
+            message "------"
         done
         ;;
     list-all)
-        for i in $( jq -r ".[].name" $config ); do
-            game_info $i
-            game_list
+        length=$( jq ". | length - 1" $config )
+
+        for i in $( seq 0 $length ); do
+            fname=$( jq -r ".[$i].comment" $config )
+            name=$( jq -r ".[$i].name" $config )
+            appid=$( jq -r ".[$i].appid" $config )
+
+            message "F-Name" "$fname"
+            message "Name" "$name"
+            message "App ID" "$appid"
+            message "------"
         done
         ;;
     remove)
