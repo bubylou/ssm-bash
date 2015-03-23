@@ -5,8 +5,8 @@ password=""
 
 rootdir="$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )"
 backupdir="$rootdir/backup"
+config="$rootdir/config.json"
 gamedir="$rootdir/games"
-startcfg="$rootdir/startcfg.json"
 steamcmd="$rootdir"
 
 maxbackups=5
@@ -43,7 +43,7 @@ argument_check()
 
 do_all()
 {
-    servers=$( jq ".[$index]" $startcfg | grep '\[' | awk -F\" '{print $2}' )
+    servers=$( jq ".[$index]" $config | grep '\[' | awk -F\" '{print $2}' )
 
     for server in $servers; do
         for k in ${@}; do
@@ -76,15 +76,15 @@ game_info()
 {
     unset index name appid server
     number="^[0-9]+([.][0-9]+)?$"
-    local length=$( jq ". | length - 1" $startcfg )
+    local length=$( jq ". | length - 1" $config )
 
 
     if [[ $1 =~ $number ]]; then
         for i in $( seq 0 $length ); do
-            appid=$( jq -r ".[$i].appid" $startcfg )
+            appid=$( jq -r ".[$i].appid" $config )
 
             if [ "$1" == "$appid" ]; then
-                name=$( jq -r ".[$i].name" $startcfg )
+                name=$( jq -r ".[$i].name" $config )
                 index=$i
                 break
             fi
@@ -92,11 +92,11 @@ game_info()
 
     else
         for i in $( seq 0 $length ); do
-            name=$( jq -r ".[$i].name" $startcfg )
-            servercheck=$( jq -r ".[$i].$1" $startcfg )
+            name=$( jq -r ".[$i].name" $config )
+            servercheck=$( jq -r ".[$i].$1" $config )
 
             if [ "$1" == "$name" ]; then
-                appid=$( jq -r ".[$i].appid" $startcfg )
+                appid=$( jq -r ".[$i].appid" $config )
                 index=$i
 
                 if [ "null" != "$servercheck"  ]; then
@@ -106,7 +106,7 @@ game_info()
                 break
 
             elif [ "null" != "$servercheck" ]; then
-                appid=$( jq -r ".[$i].appid" $startcfg )
+                appid=$( jq -r ".[$i].appid" $config )
                 index=$i
                 server=$1
                 break
@@ -282,7 +282,7 @@ game_backup()
 
 game_list()
 {
-    fname=$( jq -r ".[$index].comment" $startcfg )
+    fname=$( jq -r ".[$index].comment" $config )
     status=0
 
     message "F-Name" "$fname"
@@ -361,12 +361,12 @@ game_validate()
 
 server_start()
 {
-    local dir="$( jq -r ".[$index].dir" $startcfg )"
-    local exec="$( jq -r ".[$index].exec" $startcfg )"
-    local length=$( jq ".[$index].$server | length - 1" $startcfg )
+    local dir="$( jq -r ".[$index].dir" $config )"
+    local exec="$( jq -r ".[$index].exec" $config )"
+    local length=$( jq ".[$index].$server | length - 1" $config )
 
     for i in $( seq 0 $length ); do
-        local tmp="$( jq -r ".[$index].$server[$i]" $startcfg )"
+        local tmp="$( jq -r ".[$index].$server[$i]" $config )"
         gameoptions+=" $tmp"
     done
 
@@ -741,10 +741,10 @@ case "$1" in
         ;;
     install-all)
         flag_check $2 0
-        length=$( jq ". | length - 1" $startcfg )
+        length=$( jq ". | length - 1" $config )
         for i in $( seq 0 $length ); do
-            name=$( jq -r ".[$i].name" $startcfg )
-            appid=$( jq -r ".[$i].appid" $startcfg )
+            name=$( jq -r ".[$i].name" $config )
+            appid=$( jq -r ".[$i].appid" $config )
             command_install
         done
         ;;
@@ -755,7 +755,7 @@ case "$1" in
         done
         ;;
     list-all)
-        for i in $( jq -r ".[].name" $startcfg ); do
+        for i in $( jq -r ".[].name" $config ); do
             game_info $i
             game_list
         done
