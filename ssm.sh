@@ -18,7 +18,7 @@ verbose=false
 are_you_sure()
 {
     while true; do
-        printf "[ Status ] - Are you sure? ( y/n ): "
+        printf "[ \e[0;32mStatus\e[m ] - Are you sure? ( y/n ): "
         read answer
         case "$answer" in
             Y|y)
@@ -123,6 +123,8 @@ game_info()
 
 info()
 {
+    message "------"
+
     if [ -n "$server" ]; then
         message "Name" "$server"
     elif [ -n "$name" ]; then
@@ -228,14 +230,11 @@ stop_run_start()
 {
     for server in $( session_check "\-$name" ); do
         servers+="$server "
-        message "------"
-        info
         server_stop
     done
 
     if [ -z "$error" ]; then
         unset server
-        message "------"
         info
         $1
     else
@@ -245,7 +244,6 @@ stop_run_start()
 
     if [ "$option" != "s" ]; then
         for server in $servers; do
-            message "------"
             info
             server_start
         done
@@ -270,8 +268,8 @@ game_backup()
     fi
 
     message "Status" "Backing Up"
-    tar c${v}Jf "$backupdir/$name/$( date +%Y-%m-%d-%H%M%S ).tar.xz" \
-        --exclude "$backupdir" -C "$gamedir" $name
+    backup="$backupdir/$name/$( date +%Y-%m-%d-%H%M%S ).tar.xz"
+    tar c${v}Jf "$backup" --exclude "$backupdir" -C "$gamedir" $name
 
     if [ -s "$backup" ]; then
         message "Status" "Backup Complete"
@@ -294,12 +292,31 @@ game_remove()
 
 game_restore()
 {
-    if [ -d "$backupdir/$name" ]; then
-        backup=$( ls -t "$backupdir/$name/"*.tar.xz | head -1 )
-    fi
+    if [ -n "$( ls $backupdir/$name )" ]; then
+        local backups=($( ls -t $backupdir/$name ))
+        local length=$(( ${#backups[@]} - 1 ))
 
-    if [ -s "$backup" ]; then
-        local hash1=$( ls -la --full-time "$gamedir/$name" | md5sum )
+        while true; do
+            for i in $( seq 0 $length ); do
+                message "$(( $i + 1 ))" "${backups[i]}"
+            done
+
+            printf "[ \e[0;32mStatus\e[m ] - Choose one: "
+            read answer
+            answer=$(( $answer - 1 ))
+
+            if [[ -n "${backups[answer]}" && "$answer" != -1 ]]; then
+                backup="$backupdir/$name/${backups[answer]}"
+                break
+            else
+                message "Error" "Invalid Selection"
+                message "------"
+            fi
+        done
+
+        if [ -d "$gamedir/$name" ]; then
+            local hash1=$( ls -la --full-time "$gamedir/$name" | md5sum )
+        fi
 
         message "Status" "Restoring"
         tar x${v}f "$backup" -C "$gamedir"
@@ -389,12 +406,6 @@ server_start()
     done
 }
 
-server_status()
-{
-    info
-    message "------"
-}
-
 server_stop()
 {
     message "Status" "Stopping"
@@ -456,15 +467,12 @@ command_backup()
     else
         if [ "$option" == "i" ]; then
             game_backup
-            message "------"
             info
             server_start
         else
             game_backup
         fi
     fi
-
-    message "------"
 }
 
 command_console()
@@ -481,8 +489,6 @@ command_console()
         message "Error" "Server is not running"
         error+="\"$server\" "
     fi
-
-    message "------"
 }
 
 command_install()
@@ -493,7 +499,6 @@ command_install()
     if [ ! -d "$gamedir/$name" ]; then
         if [ "$option" == "i" ]; then
             game_update
-            message "------"
             info
             server_start
         else
@@ -506,8 +511,6 @@ command_install()
         message "Error" "App is already installed"
         error+="\"$name\" "
     fi
-
-    message "------"
 }
 
 command_remove()
@@ -529,18 +532,13 @@ command_remove()
     else
         game_remove
     fi
-
-    message "------"
 }
 
 command_restore()
 {
     info
 
-    if [ ! -d "$gamedir/$name" ]; then
-        message "Error" "App is not installed"
-        error+="\"$name\" "
-    elif [ -n "$( session_check "\-$name" )" ]; then
+    if [ -n "$( session_check "\-$name" )" ]; then
         if [[ "$option" == "r" || "$option" == "s" ]]; then
             stop_run_start game_restore
         elif [ "$option" == "f" ]; then
@@ -552,15 +550,12 @@ command_restore()
     else
         if [ "$option" == "i" ]; then
             game_restore
-            message "------"
             info
             server_start
         else
             game_restore
         fi
     fi
-
-    message "------"
 }
 
 command_start()
@@ -576,20 +571,18 @@ command_start()
     else
         server_start
     fi
-
-    message "------"
 }
 
 command_status()
 {
     if [ -n "$server" ]; then
         if [ "$server" != "$name" ]; then
-            server_status
+            info
         else
-            do_all server_status
+            do_all info
         fi
     else
-        do_all server_status
+        do_all info
     fi
 }
 
@@ -606,8 +599,6 @@ command_stop()
         message "Error" "Server is not Running"
         error+="\"$server\" "
     fi
-
-    message "------"
 }
 
 command_update()
@@ -630,15 +621,12 @@ command_update()
     else
         if [ "$option" == "i" ]; then
             game_update
-            message "------"
             info
             server_start
         else
             game_update
         fi
     fi
-
-    message "------"
 }
 
 command_validate()
@@ -661,15 +649,12 @@ command_validate()
     else
         if [ "$option" == "i" ]; then
             game_validate
-            message "------"
             info
             server_start
         else
             game_validate
         fi
     fi
-
-    message "------"
 }
 
 command_setup()
@@ -677,7 +662,7 @@ command_setup()
     if [ -s $steamcmd/steamcmd.sh ]; then
         message "Error" "SteamCMD is already installed"
         while true; do
-            printf "[ Status ] - Would you like to reinstall it? ( y/n ): "
+            printf "[ \e[0;32mStatus\e[m ] - Would you like to reinstall it? ( y/n ): "
             read answer
             case "$answer" in
                 Y|y)
@@ -741,6 +726,8 @@ case "$1" in
     list)
         for i in $( ls $gamedir ); do
             game_info $i
+            fname=$( jq -r ".[$index].comment" $config )
+
             message "F-Name" "$fname"
             message "Name" "$name"
             message "App ID" "$appid"
