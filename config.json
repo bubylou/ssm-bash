@@ -783,6 +783,34 @@
     },
 
     {
+        "comment" : "Double Action: Boogaloo",
+
+        "name" : "dab",
+        "appid" : "317800",
+        "exec" : "srcds_run",
+
+        "servers" : {
+            "dab" : [
+                "-game dab",
+                "+maxplayers 8",
+                "+map da_rooftops",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-insecure",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
         "comment" : "BlazeRush",
 
         "name" : "blazerush",
@@ -791,6 +819,20 @@
 
         "servers" : {
             "blazerush" : [
+            ]
+        }
+    },
+
+    {
+        "comment" : "Dont Starve Together",
+
+        "name" : "dst",
+        "appid" : "343050",
+        "dir" : "bin",
+        "exec" : "dontstarve_dedicated_server_nullrenderer",
+
+        "servers" : {
+            "dst" : [
             ]
         }
     }
