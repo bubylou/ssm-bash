@@ -223,6 +223,10 @@ steamcmd_filter()
         message "Status" "$( echo "$input" | cut -d ' ' -f2- )"
     elif [ -n "$( echo "$input" | grep "ERROR" )" ]; then
         message "Error" "$( echo "$input" | cut -d ' ' -f2- )"
+    elif [ -n "$( echo "$input" | grep "Update complete" )" ]; then
+        message "Status" "SteamCMD Updated"
+    elif [ -n "$( echo "$input" | grep "Failed\|" )" ]; then
+        message "Error" "$( echo "$input" | cut -d ']' -f2- )"
     fi
 }
 
@@ -427,20 +431,26 @@ server_stop()
 
 steamcmd_install()
 {
-    if [ -z "$v" ]; then
-        q="q"
-    fi
+    message "Status" "SteamCMD Installing"
 
-    message "Status" "Installing SteamCMD"
-    wget -N${q} http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
+    wget -N${v-q} http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
         -P "$steamcmd"
-
     tar x${v}f steamcmd_linux.tar.gz -C "$steamcmd"
 
     if [ -s $steamcmd/steamcmd.sh ]; then
-        message "Status" "SteamCMD was installed"
+        message "Status" "SteamCMD Installed"
     else
         message "Error" "SteamCMD was not installed"
+        exit
+    fi
+
+    message "Status" "SteamCMD Updating"
+
+    if [ "$verbose" == true ]; then
+        $steamcmd/./steamcmd.sh +quit
+    else
+        $steamcmd/./steamcmd.sh +quit | grep "Update complete\|Fatal Error" | \
+            steamcmd_filter
     fi
 
     message "------"

@@ -287,6 +287,33 @@
     },
 
     {
+        "comment" : "Age of Chivalry",
+
+        "name" : "aoc",
+        "appid" : "17515",
+        "exec" : "srcds_run",
+
+        "servers" : {
+            "aoc" : [
+                "-game ageofchivalry",
+                "+maxplayers 16",
+                "+map aoc_monastery",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
         "comment" : "Pirates, Vikings, and Knights II",
 
         "name" : "pvkii",
@@ -343,6 +370,33 @@
 
         "servers" : {
             "zomboid" : [
+            ]
+        }
+    },
+
+    {
+        "comment" : "Nuclear Dawn",
+
+        "name" : "nd",
+        "appid" : "111710",
+        "exec" : "srcds_run",
+
+        "servers" : {
+            "nd" : [
+                "-game nucleardawn",
+                "-maxplayers 16",
+                "+map downtown",
+                "+host_workshop_collection",
+                "-authkey",
+                "+hostname \"Example\"",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
             ]
         }
     },
@@ -811,6 +865,19 @@
     },
 
     {
+        "comment" : "pcars",
+
+        "name" : "pcars",
+        "appid" : "332670",
+        "exec" : "DedicatedServerCmd",
+
+        "servers" : {
+            "pcars" : [
+            ]
+        }
+    },
+
+    {
         "comment" : "BlazeRush",
 
         "name" : "blazerush",
@@ -819,6 +886,20 @@
 
         "servers" : {
             "blazerush" : [
+            ]
+        }
+    },
+
+    {
+        "comment" : "BOMB",
+
+        "name" : "bomb",
+        "appid" : "338440",
+        "dir" : "bin/release",
+        "exec" : "server.sh",
+
+        "servers" : {
+            "bomb" : [
             ]
         }
     },
