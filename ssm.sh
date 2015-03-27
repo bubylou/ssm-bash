@@ -35,7 +35,7 @@ are_you_sure()
 
 argument_check()
 {
-    if [ -z "$1" ]; then
+    if [ -z "$apps" ]; then
         message "Error" "You must specify at least one App"
         exit
     fi
@@ -52,23 +52,21 @@ do_all()
     done
 }
 
-flag_check()
+flag_set()
 {
-    if [[ "$1" =~ -.* ]]; then
-        flags=$( echo $1 | cut -d '-' -f 2 | grep -o . )
+    flags=$( echo $1 | cut -d '-' -f 2 | grep -o . )
 
-        for flag in $flags; do
-            if [[ "$flag" =~ [dfirs] ]]; then
-                option="$flag"
-            elif [ "$flag" == "v" ]; then
-                verbose=true
-                v="v"
-            fi
-        done
-
-        if [ "$2" != 0 ]; then
-            continue
+    for flag in $flags; do
+        if [[ "$flag" =~ [dfirs] ]]; then
+            option="$flag"
+        elif [ "$flag" == "v" ]; then
+            verbose=true
+            v="v"
         fi
+    done
+
+    if [ "$2" != 0 ]; then
+        continue
     fi
 }
 
@@ -694,38 +692,44 @@ command_setup()
 requirment_check
 root_check
 
-case "$1" in
+for i in $@; do
+    if [[ "$i" =~ ^-.* ]]; then
+        flag_set $i
+    elif [ -z "$command" ]; then
+        command="$i"
+    else
+        apps+="$i "
+    fi
+done
+
+case "$command" in
     backup)
-        argument_check $2
-        for i in ${@:2}; do
-            flag_check $i
+        argument_check
+        for i in $apps; do
             game_info $i
             command_backup
         done
         ;;
     backup-all)
-        flag_check $2 0
         for i in $( ls $gamedir ); do
             game_info $i
             command_backup
         done
         ;;
     console)
-        argument_check $2
-        game_info $2
+        argument_check
+        game_info $apps
         server_check
         command_console
         ;;
     install)
-        argument_check $2
-        for i in ${@:2}; do
-            flag_check $i
+        argument_check
+        for i in $apps; do
             game_info $i
             command_install
         done
         ;;
     install-all)
-        flag_check $2 0
         length=$( jq ". | length - 1" $config )
         for i in $( seq 0 $length ); do
             name=$( jq -r ".[$i].name" $config )
@@ -759,149 +763,139 @@ case "$1" in
         done
         ;;
     remove)
-        argument_check $2
-        for i in ${@:2}; do
-            flag_check $i
+        argument_check
+        for i in $apps; do
             game_info $i
             command_remove
         done
         ;;
     remove-all)
         are_you_sure
-        flag_check $2 0
         for i in $( ls $gamedir ); do
             game_info $i
             command_remove
         done
         ;;
     restart)
-        for i in ${@:2}; do
+        for i in $apps; do
             game_info $i
             command_stop
             command_start
         done
         ;;
     restart-all)
-        if [ -z "$2" ]; then
+        if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
                 game_info $i
                 do_all command_stop command_start
             done
         else
-            for i in ${@:2}; do
+            for i in $apps; do
                 game_info $i
                 do_all command_stop command_start
             done
         fi
         ;;
     restore)
-        argument_check $2
-        for i in ${@:2}; do
-            flag_check $i
+        argument_check
+        for i in $apps; do
             game_info $i
             command_restore
         done
         ;;
     restore-all)
         are_you_sure
-        flag_check $2 0
         for i in $( ls $gamedir ); do
             game_info $i
             command_restore
         done
         ;;
     setup)
-        flag_check $2 0
         command_setup
         ;;
     start)
-        argument_check $2
-        for i in ${@:2}; do
-            flag_check $i
+        argument_check
+        for i in $apps; do
             game_info $i
             server_check
             command_start
         done
         ;;
     start-all)
-        if [ -z "$2" ]; then
+        if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
                 game_info $i
                 do_all command_start
             done
         else
-            for i in ${@:2}; do
+            for i in $apps; do
                 game_info $i
                 do_all command_start
             done
         fi
         ;;
     status)
-        if [ -z "$2" ]; then
+        if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
                 game_info $i
                 command_status
             done
         else
-            for i in ${@:2}; do
+            for i in $apps; do
                 game_info $i
                 command_status
             done
         fi
         ;;
     stop)
-        argument_check $2
-        for i in ${@:2}; do
+        argument_check
+        for i in $apps; do
             game_info $i
             server_check
             command_stop
         done
         ;;
     stop-all)
-        if [ -z "$2" ]; then
+        if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
                 game_info $i
                 do_all command_stop
             done
         else
-            for i in ${@:2}; do
+            for i in $apps; do
                 game_info $i
                 do_all command_stop
             done
         fi
         ;;
     update)
-        argument_check $2
-        for i in ${@:2}; do
-            flag_check $i
+        argument_check
+        for i in $apps; do
             game_info $i
             command_update
         done
         ;;
     update-all)
-        flag_check $2 0
         for i in $( ls $gamedir ); do
             game_info $i
             command_update
         done
         ;;
     validate)
-        argument_check $2
-        for i in ${@:2}; do
-            flag_check $i
+        argument_check
+        for i in $apps; do
             game_info $i
             command_validate
         done
         ;;
     validate-all)
-        flag_check $2 0
         for i in $( ls $gamedir ); do
             game_info $i
             command_validate
         done
         ;;
     *)
-        if [ -z "$1" ]; then
+        if [ -z "$command" ]; then
             message "Error" "Must specify a command"
         else
             message "Error" "Invalid command"
