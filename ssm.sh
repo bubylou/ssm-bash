@@ -215,17 +215,15 @@ steamcmd_check()
 
 steamcmd_filter()
 {
-    read input
-
-    if [ -n "$( echo "$input" | grep "Success" )" ]; then
-        message "Status" "$( echo "$input" | cut -d ' ' -f2- )"
-    elif [ -n "$( echo "$input" | grep "ERROR" )" ]; then
-        message "Error" "$( echo "$input" | cut -d ' ' -f2- )"
-    elif [ -n "$( echo "$input" | grep "Update complete" )" ]; then
-        message "Status" "SteamCMD Updated"
-    elif [ -n "$( echo "$input" | grep "Failed\|" )" ]; then
-        message "Error" "$( echo "$input" | cut -d ']' -f2- )"
-    fi
+    while read line; do
+        if [ -n "$( echo "$line" | grep "Success" )" ]; then
+            message "Status" "$( echo "$line" | cut -d ' ' -f2- )"
+        elif [ -n "$( echo "$line" | grep "ERROR\|Failed" )" ]; then
+            message "Error" "$( echo "$line" | cut -d ' ' -f2- )"
+        elif [ -n "$( echo "$line" | grep "launching Steam" )" ]; then
+            message "Status" "SteamCMD Updated"
+        fi
+    done
 }
 
 stop_run_start()
@@ -349,8 +347,7 @@ game_update()
             $gamedir/$name +app_update $appid +quit
     else
         $steamcmd/./steamcmd.sh +login $username $password +force_install_dir \
-            $gamedir/$name +app_update $appid +quit | \
-            grep "Success!\|ERROR!" | steamcmd_filter
+            $gamedir/$name +app_update $appid +quit | steamcmd_filter
     fi
 }
 
@@ -363,8 +360,7 @@ game_validate()
             $gamedir/$name +app_update $appid -validate +quit
     else
         $steamcmd/./steamcmd.sh +login $username $password +force_install_dir \
-            $gamedir/$name +app_update $appid -validate +quit \
-            grep "Success!\|ERROR!" | steamcmd_filter
+            $gamedir/$name +app_update $appid -validate +quit | steamcmd_filter
     fi
 }
 
@@ -447,8 +443,7 @@ steamcmd_install()
     if [ "$verbose" == true ]; then
         $steamcmd/./steamcmd.sh +quit
     else
-        $steamcmd/./steamcmd.sh +quit | grep "Update complete\|Fatal Error" | \
-            steamcmd_filter
+        $steamcmd/./steamcmd.sh +quit | steamcmd_filter
     fi
 
     message "------"

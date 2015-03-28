@@ -615,22 +615,22 @@
         "exec" : "srcds_run",
 
         "servers" : {
-        "hl2dm" : [
-                "-game hl2mp",
-                "+maxplayers 16",
-                "+map dm_lockdown",
-                "+host_workshop_collection",
-                "-authkey",
-                "+hostname \"Example\"",
-                "-ip 0.0.0.0",
-                "+clientport 27005",
-                "+hostport 27015",
-                "+tv_port 27020",
-                "+sv_lan 0",
-                "-tickrate 64",
-                "-strictportbind",
-                "-norestart"
-            ]
+            "hl2dm" : [
+                    "-game hl2mp",
+                    "+maxplayers 16",
+                    "+map dm_lockdown",
+                    "+host_workshop_collection",
+                    "-authkey",
+                    "+hostname \"Example\"",
+                    "-ip 0.0.0.0",
+                    "+clientport 27005",
+                    "+hostport 27015",
+                    "+tv_port 27020",
+                    "+sv_lan 0",
+                    "-tickrate 64",
+                    "-strictportbind",
+                    "-norestart"
+                ]
         }
     },
 
