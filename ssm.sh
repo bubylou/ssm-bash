@@ -5,7 +5,8 @@ password=""
 
 rootdir="$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )"
 backupdir="$rootdir/backup"
-config="$rootdir/config.json"
+appjson="$rootdir/applications.json"
+serverjson="$rootdir/servers.json"
 gamedir="$rootdir/games"
 steamcmd="$rootdir"
 
@@ -43,7 +44,7 @@ argument_check()
 
 do_all()
 {
-    servers=$( jq ".[$index].servers | keys" $config | awk -F\" '{print $2}' )
+    servers=$( jq ".[$index].servers | keys" $serverjson | awk -F\" '{print $2}' )
 
     for server in $servers; do
         for k in ${@}; do
@@ -74,15 +75,15 @@ game_info()
 {
     unset index name appid server
     number="^[0-9]+([.][0-9]+)?$"
-    local length=$( jq ". | length - 1" $config )
+    local length=$( jq ". | length - 1" $appjson )
 
 
     if [[ $1 =~ $number ]]; then
         for i in $( seq 0 $length ); do
-            appid=$( jq -r ".[$i].appid" $config )
+            appid=$( jq -r ".[$i].appid" $appjson )
 
             if [ "$1" == "$appid" ]; then
-                name=$( jq -r ".[$i].name" $config )
+                name=$( jq -r ".[$i].name" $appjson )
                 index=$i
                 break
             fi
@@ -90,23 +91,11 @@ game_info()
 
     else
         for i in $( seq 0 $length ); do
-            name=$( jq -r ".[$i].name" $config )
-            servercheck=$( jq -r ".[$i].servers.$1" $config )
+            name=$( jq -r ".[$i].name" $appjson )
 
             if [ "$1" == "$name" ]; then
-                appid=$( jq -r ".[$i].appid" $config )
+                appid=$( jq -r ".[$i].appid" $appjson )
                 index=$i
-
-                if [ "null" != "$servercheck"  ]; then
-                    server=$1
-                fi
-
-                break
-
-            elif [ "null" != "$servercheck" ]; then
-                appid=$( jq -r ".[$i].appid" $config )
-                index=$i
-                server=$1
                 break
             fi
         done
@@ -114,7 +103,7 @@ game_info()
     fi
 
     if [ -z "$index" ]; then
-        message "Error" "Invalid App"
+        message "Error" "Invalid App Name or App ID"
         exit
     fi
 }
@@ -127,9 +116,8 @@ info()
         message "Name" "$server"
     elif [ -n "$name" ]; then
         message "Name" "$name"
+        message "App ID" "$appid"
     fi
-
-    message "App ID" "$appid"
 
     if [ -n "$server" ]; then
         local session="$server-$name"
@@ -195,6 +183,28 @@ root_check()
 server_check()
 {
     if [ -z "$server" ]; then
+        message "Error" "Invalid Server Name"
+        exit
+    fi
+}
+
+server_info()
+{
+    unset index name appid server
+    local length=$( jq ". | length - 1" $serverjson )
+
+    for i in $( seq 0 $length ); do
+        servercheck=$( jq -r ".[$i].servers.$1" $serverjson )
+
+        if [ "null" != "$servercheck" ]; then
+            name=$( jq -r ".[$i].name" $serverjson )
+            index=$i
+            server=$1
+            break
+        fi
+    done
+
+    if [ -z "$index" ]; then
         message "Error" "Invalid Server Name"
         exit
     fi
@@ -366,14 +376,16 @@ game_validate()
 
 server_start()
 {
-    local dir="$( jq -r ".[$index].dir" $config )"
-    local exec="$( jq -r ".[$index].exec" $config )"
-    local length=$( jq ".[$index].servers.$server | length - 1" $config )
+    local length=$( jq ".[$index].servers.$server | length - 1" $serverjson )
 
     for i in $( seq 0 $length ); do
-        local tmp="$( jq -r ".[$index].servers.$server[$i]" $config )"
+        local tmp="$( jq -r ".[$index].servers.$server[$i]" $serverjson )"
         gameoptions+="$tmp "
     done
+
+    game_info $name
+    local dir="$( jq -r ".[$index].dir" $appjson )"
+    local exec="$( jq -r ".[$index].exec" $appjson )"
 
     if [ "null" != "$dir" ]; then
         cd "$gamedir/$name/$dir"
@@ -687,6 +699,12 @@ command_setup()
 requirment_check
 root_check
 
+if [ ! -e $serverjson ]; then
+    cp "$rootdir/example.json" "$serverjson"
+    message "Error" "No Server Config"
+    message "Status" "Copying Example"
+fi
+
 for i in $@; do
     if [[ "$i" =~ ^-.* ]]; then
         flag_set $i
@@ -713,7 +731,7 @@ case "$command" in
         ;;
     console)
         argument_check
-        game_info $apps
+        server_info $apps
         server_check
         command_console
         ;;
@@ -725,17 +743,17 @@ case "$command" in
         done
         ;;
     install-all)
-        length=$( jq ". | length - 1" $config )
+        length=$( jq ". | length - 1" $appjson )
         for i in $( seq 0 $length ); do
-            name=$( jq -r ".[$i].name" $config )
-            appid=$( jq -r ".[$i].appid" $config )
+            name=$( jq -r ".[$i].name" $appjson )
+            appid=$( jq -r ".[$i].appid" $appjson )
             command_install
         done
         ;;
     list)
         for i in $( ls $gamedir ); do
             game_info $i
-            fname=$( jq -r ".[$index].comment" $config )
+            fname=$( jq -r ".[$index].comment" $appjson )
 
             message "F-Name" "$fname"
             message "Name" "$name"
@@ -744,12 +762,12 @@ case "$command" in
         done
         ;;
     list-all)
-        length=$( jq ". | length - 1" $config )
+        length=$( jq ". | length - 1" $appjson )
 
         for i in $( seq 0 $length ); do
-            fname=$( jq -r ".[$i].comment" $config )
-            name=$( jq -r ".[$i].name" $config )
-            appid=$( jq -r ".[$i].appid" $config )
+            fname=$( jq -r ".[$i].comment" $appjson )
+            name=$( jq -r ".[$i].name" $appjson )
+            appid=$( jq -r ".[$i].appid" $appjson )
 
             message "F-Name" "$fname"
             message "Name" "$name"
@@ -773,7 +791,7 @@ case "$command" in
         ;;
     restart)
         for i in $apps; do
-            game_info $i
+            server_info $i
             command_stop
             command_start
         done
@@ -781,12 +799,12 @@ case "$command" in
     restart-all)
         if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
-                game_info $i
+                server_info $i
                 do_all command_stop command_start
             done
         else
             for i in $apps; do
-                game_info $i
+                server_info $i
                 do_all command_stop command_start
             done
         fi
@@ -811,7 +829,7 @@ case "$command" in
     start)
         argument_check
         for i in $apps; do
-            game_info $i
+            server_info $i
             server_check
             command_start
         done
@@ -819,12 +837,12 @@ case "$command" in
     start-all)
         if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
-                game_info $i
+                server_info $i
                 do_all command_start
             done
         else
             for i in $apps; do
-                game_info $i
+                server_info $i
                 do_all command_start
             done
         fi
@@ -832,12 +850,12 @@ case "$command" in
     status)
         if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
-                game_info $i
+                server_info $i
                 command_status
             done
         else
             for i in $apps; do
-                game_info $i
+                server_info $i
                 command_status
             done
         fi
@@ -845,7 +863,7 @@ case "$command" in
     stop)
         argument_check
         for i in $apps; do
-            game_info $i
+            server_info $i
             server_check
             command_stop
         done
@@ -853,12 +871,12 @@ case "$command" in
     stop-all)
         if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
-                game_info $i
+                server_info $i
                 do_all command_stop
             done
         else
             for i in $apps; do
-                game_info $i
+                server_info $i
                 do_all command_stop
             done
         fi
@@ -896,6 +914,8 @@ case "$command" in
             message "Error" "Invalid command"
         fi
 esac
+
+message "------"
 
 if [ -n "$error" ]; then
     message "Errors" "$error"

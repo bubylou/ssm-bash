@@ -1,0 +1,669 @@
+[
+    {
+        "name" : "aoc",
+        "servers" : {
+            "aoc" : [
+                "-game ageofchivalry",
+                "+maxplayers 16",
+                "+map aoc_monastery",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "arma3",
+        "servers" : {
+            "arma3" : [
+                "-name=",
+                "-port=2302"
+            ]
+        }
+    },
+
+    {
+        "name" : "bladesymphony",
+        "servers" : {
+            "bladesymphony" : [
+                "+maxplayers 16",
+                "+map duel_winter",
+                "+sv_ranked 0",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "blazerush",
+        "servers" : {
+            "blazerush" : [
+            ]
+        }
+    },
+
+    {
+        "name" : "bomb",
+        "servers" : {
+            "bomb" : [
+            ]
+        }
+    },
+
+    {
+        "name" : "csgo",
+        "servers" : {
+            "csgo" : [
+                "-game csgo",
+                "+maxplayers 16",
+                "+gametype 0",
+                "+gamemode 0",
+                "+mapgroup random_classic",
+                "+map de_dust2",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "css",
+        "servers" : {
+            "css" : [
+                "-game cstrike",
+                "+maxplayers 16",
+                "+map de_dust2",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "cstrike",
+        "servers" : {
+            "cstrike" : [
+                "-game cstrike",
+                "+maxplayers 16",
+                "+map de_dust2",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
+    },
+
+    {
+        "name" : "czero",
+        "servers" : {
+            "czero" : [
+                "-game czero",
+                "+maxplayers 16",
+                "+map de_dust2",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
+    },
+
+    {
+        "name" : "dab",
+        "servers" : {
+            "dab" : [
+                "-game dab",
+                "+maxplayers 8",
+                "+map da_rooftops",
+                "+host_workshop_collection",
+                "-authkey",
+                "-insecure",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "dhmc",
+        "servers" : {
+            "dhmc" : [
+            ]
+        }
+    },
+
+    {
+        "name" : "dmc",
+        "servers" : {
+            "dmc" : [
+                "-game dmc",
+                "+maxplayers 16",
+                "+map dcdm5",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
+    },
+
+    {
+        "name" : "dod",
+        "servers" : {
+            "dod" : [
+                "-game dod",
+                "+maxplayers 16",
+                "+map dod_anzio",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
+    },
+
+    {
+        "name" : "dods",
+        "servers" : {
+            "dods" : [
+                "-game dod",
+                "+maxplayers 16",
+                "+map dod_Anzio",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "dst",
+        "servers" : {
+            "dst" : [
+            ]
+        }
+    },
+
+    {
+        "name" : "fof",
+        "servers" : {
+            "fof" : [
+                "-game fof",
+                "+maxplayers 16",
+                "+map fof_depot",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "gmod",
+        "servers" : {
+            "gmod" : [
+                "-game garrysmod",
+                "+maxplayers 16",
+                "+gamemode sandbox",
+                "+map gm_construct",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "hl",
+        "servers" : {
+            "hl" : [
+                "-game valve",
+                "+maxplayers 16",
+                "+map crossfire",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
+    },
+
+    {
+        "name" : "hl2dm",
+        "servers" : {
+        "hl2dm" : [
+                "-game hl2mp",
+                "+maxplayers 16",
+                "+map dm_lockdown",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "hldms",
+        "servers" : {
+            "hldms" : [
+                "-game hl1mp",
+                "+maxplayers 16",
+                "+map crossfire",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "hlof",
+        "servers" : {
+            "hlof" : [
+                "-game gearbox",
+                "+maxplayers 16",
+                "+map crossfire",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
+    },
+
+    {
+        "name" : "insurgency",
+        "servers" : {
+            "insurgency" : [
+                "-game insurgency",
+                "+maxplayers 16",
+                "+map ministry",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "justcause2",
+        "servers" : {
+            "justcause2" : [
+                "--maxplayers 16",
+                "--bindip 0.0.0.0",
+                "--bindport 27016"
+            ]
+        }
+    },
+
+    {
+        "name" : "killingfloor",
+        "servers" : {
+            "killingfloor" : [
+                "server",
+                "KF-Bedlam.rom?game=KFmod.KFGameType?MaxPlayers=6?VACSecured=true",
+                "-nohomedir"
+            ]
+        }
+    },
+
+    {
+        "name" : "left4dead",
+        "servers" : {
+            "left4dead" : [
+                "-game left4dead",
+                "+maxplayers 16",
+                "+map l4d_hospital01_apartment",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "left4dead2",
+        "servers" : {
+            "left4dead2" : [
+                "-game left4dead2",
+                "+maxplayers 16",
+                "+map c5m1_waterfront",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "nd",
+        "servers" : {
+            "nd" : [
+                "-game nucleardawn",
+                "-maxplayers 16",
+                "+map downtown",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "nmrih",
+        "servers" : {
+            "nmrih" : [
+                "-game nmrih",
+                "+maxplayers 8",
+                "+map nmo_broadway",
+                "+host_workshop_collection",
+                "-authkey",
+                "-insecure",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "ns2",
+        "servers" : {
+            "ns2" : [
+                "-limit 24",
+                "-map ns2_summit",
+                "-webadmin",
+                "-webuser admin",
+                "-webpassword CHANGEME",
+                "-webdomain 0.0.0.0",
+                "-webport 8080"
+            ]
+        }
+    },
+
+    {
+        "name" : "ns2c",
+        "servers" : {
+            "ns2c" : [
+                "-limit 24",
+                "-map ns2_summit",
+                "-webadmin",
+                "-webuser admin",
+                "-webpassword CHANGEME",
+                "-webdomain 0.0.0.0",
+                "-webport 8080"
+            ]
+        }
+    },
+
+    {
+        "name" : "pcars",
+        "servers" : {
+            "pcars" : [
+            ]
+        }
+    },
+
+    {
+        "name" : "pvkii",
+        "servers" : {
+            "pvkii" : [
+                "-game pvkii",
+                "-maxplayers 16",
+                "+map bt_island",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "redorch",
+        "servers" : {
+            "redorch" : [
+                "server",
+                "RO-Arad.rom?game=ROGame.ROTeamGame?VACSecured=true",
+                "-nohomedir"
+            ]
+        }
+    },
+
+    {
+        "name" : "ricochet",
+        "servers" : {
+            "ricochet" : [
+                "-game ricochet",
+                "+maxplayers 16",
+                "+map rc_arena",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
+    },
+
+    {
+        "name" : "sdtd",
+        "servers" : {
+            "sdtd" : [
+                "-dedicated"
+            ]
+        }
+    },
+
+    {
+        "name" : "serioussam3",
+        "servers" : {
+            "serioussam3" : [
+                "+gamemode Deathmatch",
+                "+level SunPalace",
+                "+gameoptions",
+                "+maxplayers",
+                "+ip 0.0.0.0",
+                "+port 27016",
+                "+fps 60"
+            ]
+        }
+    },
+
+    {
+        "name" : "source2007",
+        "servers" : {
+            "source2007" : [
+            ]
+        }
+    },
+
+    {
+        "name" : "source2013",
+        "servers" : {
+            "source2013" : [
+            ]
+        }
+    },
+
+    {
+        "name" : "starbound",
+        "servers" : {
+            "starbound" : [
+            ]
+        }
+    },
+
+    {
+        "name" : "tf2",
+        "servers" : {
+            "tf2" : [
+                "-game tf",
+                "+maxplayers 16",
+                "+map ctf_2fort",
+                "+sv_pure 1",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "tfc",
+        "servers" : {
+            "tfc" : [
+                "-game tfc",
+                "+maxplayers 16",
+                "+map 2fort",
+                "+ip 0.0.0.0",
+                "-port 27015",
+                "-sport 26900",
+                "+sv_lan 0"
+            ]
+        }
+    },
+
+    {
+        "name" : "zombiepanic",
+        "servers" : {
+            "zombiepanic" : [
+                "-game zps",
+                "+maxplayers 16",
+                "+map zps_silence",
+                "+host_workshop_collection",
+                "-authkey",
+                "-ip 0.0.0.0",
+                "+clientport 27005",
+                "+hostport 27015",
+                "+tv_port 27020",
+                "+sv_lan 0",
+                "-tickrate 64",
+                "-strictportbind",
+                "-norestart"
+            ]
+        }
+    },
+
+    {
+        "name" : "zomboid",
+        "servers" : {
+            "zomboid" : [
+            ]
+        }
+    }
+]
