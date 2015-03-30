@@ -3,16 +3,20 @@
 username="anonymous"
 password=""
 
-rootdir="$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )"
-backupdir="$rootdir/backup"
-appjson="$rootdir/applications.json"
-serverjson="$rootdir/servers.json"
-gamedir="$rootdir/games"
-steamcmd="$rootdir"
-
 maxbackups=5
 maxwait=10
 verbose=false
+
+ssmdir="$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )"
+steamcmddir="$ssmdir/steamcmd"
+
+backupdir="$ssmdir/backup"
+gamedir="$ssmdir/games"
+
+appjson="$ssmdir/applications.json"
+examplejson="$ssmdir/example.json"
+serverjson="$ssmdir/servers.json"
+steamcmd="$steamcmddir/steamcmd.sh"
 
 # Checking / Utility Functions
 
@@ -73,7 +77,7 @@ flag_set()
 
 game_info()
 {
-    unset index name appid server
+    unset index name appid
     number="^[0-9]+([.][0-9]+)?$"
     local length=$( jq ". | length - 1" $appjson )
 
@@ -190,7 +194,7 @@ server_check()
 
 server_info()
 {
-    unset index name appid server
+    unset index name server
     local length=$( jq ". | length - 1" $serverjson )
 
     for i in $( seq 0 $length ); do
@@ -217,7 +221,7 @@ session_check()
 
 steamcmd_check()
 {
-    if [ ! -s $steamcmd/steamcmd.sh ]; then
+    if [ ! -s "$steamcmd" ]; then
         message "Error" "SteamCMD not installed"
         steamcmd_install
     fi
@@ -353,10 +357,10 @@ game_update()
     fi
 
     if [ "$verbose" == true  ]; then
-        $steamcmd/./steamcmd.sh +login $username $password +force_install_dir \
+        bash $steamcmd +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid +quit
     else
-        $steamcmd/./steamcmd.sh +login $username $password +force_install_dir \
+        bash $steamcmd +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid +quit | steamcmd_filter
     fi
 }
@@ -366,10 +370,10 @@ game_validate()
     message "Status" "Validating"
 
     if [ "$verbose" == true  ]; then
-        $steamcmd/./steamcmd.sh +login $username $password +force_install_dir \
+        bash $steamcmd +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid -validate +quit
     else
-        $steamcmd/./steamcmd.sh +login $username $password +force_install_dir \
+        bash $steamcmd +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid -validate +quit | steamcmd_filter
     fi
 }
@@ -437,13 +441,14 @@ server_stop()
 
 steamcmd_install()
 {
+    message "------"
     message "Status" "SteamCMD Installing"
 
     wget -N${v-q} http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
-        -P "$steamcmd"
-    tar x${v}f steamcmd_linux.tar.gz -C "$steamcmd"
+        -P "$steamcmddir"
+    tar x${v}f "$steamcmddir/steamcmd_linux.tar.gz" -C "$steamcmddir"
 
-    if [ -s $steamcmd/steamcmd.sh ]; then
+    if [ -s $steamcmd ]; then
         message "Status" "SteamCMD Installed"
     else
         message "Error" "SteamCMD was not installed"
@@ -453,12 +458,10 @@ steamcmd_install()
     message "Status" "SteamCMD Updating"
 
     if [ "$verbose" == true ]; then
-        $steamcmd/./steamcmd.sh +quit
+        bash $steamcmd +quit
     else
-        $steamcmd/./steamcmd.sh +quit | steamcmd_filter
+        bash $steamcmd +quit | steamcmd_filter
     fi
-
-    message "------"
 }
 
 # Command Functions
@@ -674,7 +677,7 @@ command_validate()
 
 command_setup()
 {
-    if [ -s $steamcmd/steamcmd.sh ]; then
+    if [ -s "$steamcmd" ]; then
         message "Error" "SteamCMD is already installed"
         while true; do
             printf "[ \e[0;32mStatus\e[m ] - Would you like to reinstall it? ( y/n ): "
@@ -700,7 +703,7 @@ requirment_check
 root_check
 
 if [ ! -e $serverjson ]; then
-    cp "$rootdir/example.json" "$serverjson"
+    cp "$examplejson" "$serverjson"
     message "Error" "No Server Config"
     message "Status" "Copying Example"
 fi
