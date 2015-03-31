@@ -107,8 +107,14 @@ game_info()
     fi
 
     if [ -z "$index" ]; then
-        message "Error" "Invalid App Name or App ID"
-        exit
+        server_info $1
+
+        if [ -n "$name" ]; then
+            game_info $name
+        else
+            message "Error" "Invalid App Name or App ID"
+            exit
+        fi
     fi
 }
 
@@ -184,24 +190,16 @@ root_check()
     fi
 }
 
-server_check()
-{
-    if [ -z "$server" ]; then
-        message "Error" "Invalid Server Name"
-        exit
-    fi
-}
-
 server_info()
 {
     unset index name server
     local length=$( jq ". | length - 1" $serverjson )
 
     for i in $( seq 0 $length ); do
+        name=$( jq -r ".[$i].name" $serverjson )
         servercheck=$( jq -r ".[$i].servers.$1" $serverjson )
 
-        if [ "null" != "$servercheck" ]; then
-            name=$( jq -r ".[$i].name" $serverjson )
+        if [[ "null" != "$servercheck"  || "$1" == "$name" ]]; then
             index=$i
             server=$1
             break
@@ -242,10 +240,19 @@ steamcmd_filter()
 
 stop_run_start()
 {
-    for server in $( session_check "\-$name" ); do
-        servers+="$server "
-        server_stop
-    done
+    if [ "$option" != "i" ]; then
+        for server in $( session_check "\-$name" ); do
+            servers+="$server "
+            info
+            server_stop
+        done
+    else
+        if [ -z "$server" ]; then
+            server_info $name
+        fi
+
+        servers="$server"
+    fi
 
     if [ -z "$error" ]; then
         unset server
@@ -258,6 +265,7 @@ stop_run_start()
 
     if [ "$option" != "s" ]; then
         for server in $servers; do
+            server_info $server
             info
             server_start
         done
@@ -468,25 +476,22 @@ steamcmd_install()
 
 command_backup()
 {
-    info
-
-    if [ ! -d "$gamedir/$name" ]; then
-        message "Error" "App is not installed"
-        error+="\"$name\" "
-    elif [ -n "$( session_check "\-$name" )" ]; then
-        if [[ "$option" == "r" || "$option" == "s" ]]; then
-            stop_run_start game_backup
-        elif [ "$option" == "f" ]; then
+    if [[ "$option" =~ [firs] ]]; then
+        if [ "$option" == "f" ]; then
+            info
             game_backup
         else
-            message "Error" "Stop server before backup"
-            error+="\"$name\" "
+            stop_run_start game_backup
         fi
     else
-        if [ "$option" == "i" ]; then
-            game_backup
-            info
-            server_start
+        info
+
+        if [ ! -d "$gamedir/$name" ]; then
+            message "Error" "App is not installed"
+            error+="\"$name\" "
+        elif [ -n "$( session_check "\-$name" )" ]; then
+            message "Error" "Stop server before backup"
+            error+="\"$name\" "
         else
             game_backup
         fi
@@ -514,62 +519,62 @@ command_install()
     steamcmd_check
     info
 
-    if [ ! -d "$gamedir/$name" ]; then
-        if [ "$option" == "i" ]; then
-            game_update
-            info
-            server_start
-        else
-            game_update
-        fi
-    elif [ -n "$( session_check "\-$name" )" ]; then
-        message "Error" "Stop server before installing"
-        error+="\"$name\" "
+    if [ "$option" == "i" ]; then
+        stop_run_start game_restore
     else
-        message "Error" "App is already installed"
-        error+="\"$name\" "
+        info
+
+        if [ ! -d "$gamedir/$name" ]; then
+            game_update
+        elif [ -n "$( session_check "\-$name" )" ]; then
+            message "Error" "Stop server before installing"
+            error+="\"$name\" "
+        else
+            message "Error" "App is already installed"
+            error+="\"$name\" "
+        fi
     fi
 }
 
 command_remove()
 {
-    info
-
-    if [ ! -d "$gamedir/$name" ]; then
-        message "Error" "App is not installed"
-        error+="\"$name\" "
-    elif [ -n "$( session_check "\-$name" )" ]; then
-        if [[ "$option" == "r" || "$option" == "s" ]]; then
-            stop_run_start game_remove
-        elif [ "$option" == "f" ]; then
+    if [[ "$option" =~ [firs] ]]; then
+        if [ "$option" == "f" ]; then
+            info
             game_remove
         else
-            message "Error" "Stop server before removing"
-            error+="\"$name\" "
+            stop_run_start game_remove
         fi
     else
-        game_remove
+        info
+
+        if [ ! -d "$gamedir/$name" ]; then
+            message "Error" "App is not installed"
+            error+="\"$name\" "
+        elif [ -n "$( session_check "\-$name" )" ]; then
+            message "Error" "Stop server before removing"
+            error+="\"$name\" "
+        else
+            game_remove
+        fi
     fi
 }
 
 command_restore()
 {
-    info
-
-    if [ -n "$( session_check "\-$name" )" ]; then
-        if [[ "$option" == "r" || "$option" == "s" ]]; then
-            stop_run_start game_restore
-        elif [ "$option" == "f" ]; then
+    if [[ "$option" =~ [firs] ]]; then
+        if [ "$option" == "f" ]; then
+            info
             game_restore
         else
-            message "Error" "Stop server before restoring"
-            error+="\"$name\" "
+            stop_run_start game_restore
         fi
     else
-        if [ "$option" == "i" ]; then
-            game_restore
-            info
-            server_start
+        info
+
+        if [ -n "$( session_check "\-$name" )" ]; then
+            message "Error" "Stop server before restoring"
+            error+="\"$name\" "
         else
             game_restore
         fi
@@ -622,25 +627,23 @@ command_stop()
 command_update()
 {
     steamcmd_check
-    info
 
-    if [ ! -d "$gamedir/$name" ]; then
-        message "Error" "App is not installed"
-        error+="\"$name\" "
-    elif [ -n "$( session_check "\-$name" )" ]; then
-        if [[ "$option" == "r" || "$option" == "s" ]]; then
-            stop_run_start game_update
-        elif [ "$option" == "f" ]; then
+    if [[ "$option" =~ [firs] ]]; then
+        if [ "$option" == "f" ]; then
+            info
             game_update
         else
-            message "Error" "Stop server before updating"
-            error+="\"$name\" "
+            stop_run_start game_update
         fi
     else
-        if [ "$option" == "i" ]; then
-            game_update
-            info
-            server_start
+        info
+
+        if [ ! -d "$gamedir/$name" ]; then
+            message "Error" "App is not installed"
+            error+="\"$name\" "
+        elif [ -n "$( session_check "\-$name" )" ]; then
+            message "Error" "Stop server before updating"
+            error+="\"$name\" "
         else
             game_update
         fi
@@ -650,25 +653,23 @@ command_update()
 command_validate()
 {
     steamcmd_check
-    info
 
-    if [ ! -d "$gamedir/$name" ]; then
-        message "Error" "App is not installed"
-        error+="\"$name\" "
-    elif [ -n "$( session_check "\-$name" )" ]; then
-        if [[ "$option" == "r" || "$option" == "s" ]]; then
-            stop_run_start game_validate
-        elif [ "$option" == "f" ]; then
+    if [[ "$option" =~ [firs] ]]; then
+        if [ "$option" == "f" ]; then
+            info
             game_validate
         else
-            message "Error" "Stop server before validating"
-            error+="\"$name\" "
+            stop_run_start game_validate
         fi
     else
-        if [ "$option" == "i" ]; then
-            game_validate
-            info
-            server_start
+        info
+
+        if [ ! -d "$gamedir/$name" ]; then
+            message "Error" "App is not installed"
+            error+="\"$name\" "
+        elif [ -n "$( session_check "\-$name" )" ]; then
+            message "Error" "Stop server before validating"
+            error+="\"$name\" "
         else
             game_validate
         fi
@@ -735,7 +736,6 @@ case "$command" in
     console)
         argument_check
         server_info $apps
-        server_check
         command_console
         ;;
     install)
@@ -833,7 +833,6 @@ case "$command" in
         argument_check
         for i in $apps; do
             server_info $i
-            server_check
             command_start
         done
         ;;
@@ -867,7 +866,6 @@ case "$command" in
         argument_check
         for i in $apps; do
             server_info $i
-            server_check
             command_stop
         done
         ;;
