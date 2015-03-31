@@ -16,7 +16,6 @@ gamedir="$ssmdir/games"
 appjson="$ssmdir/applications.json"
 examplejson="$ssmdir/example.json"
 serverjson="$ssmdir/servers.json"
-steamcmd="$steamcmddir/steamcmd.sh"
 
 # Checking / Utility Functions
 
@@ -25,6 +24,7 @@ are_you_sure()
     while true; do
         printf "[ \e[0;32mStatus\e[m ] - Are you sure? ( y/n ): "
         read answer
+
         case "$answer" in
             Y|y)
                 break
@@ -199,9 +199,9 @@ server_info()
         name=$( jq -r ".[$i].name" $serverjson )
         servercheck=$( jq -r ".[$i].servers.$1" $serverjson )
 
-        if [[ "null" != "$servercheck"  || "$1" == "$name" ]]; then
-            index=$i
+        if [ "null" != "$servercheck" ]; then
             server=$1
+            index=$i
             break
         fi
     done
@@ -219,7 +219,7 @@ session_check()
 
 steamcmd_check()
 {
-    if [ ! -s "$steamcmd" ]; then
+    if [ ! -s "$steamcmddir/steamcmd.sh" ]; then
         message "Error" "SteamCMD not installed"
         steamcmd_install
     fi
@@ -315,6 +315,8 @@ game_remove()
 game_restore()
 {
     if [ -n "$( ls $backupdir/$name )" ]; then
+        message "------"
+
         local backups=($( ls -t $backupdir/$name ))
         local length=$(( ${#backups[@]} - 1 ))
 
@@ -340,6 +342,7 @@ game_restore()
             local hash1=$( ls -la --full-time "$gamedir/$name" | md5sum )
         fi
 
+        message "------"
         message "Status" "Restoring"
         tar x${v}f "$backup" -C "$gamedir"
 
@@ -365,10 +368,10 @@ game_update()
     fi
 
     if [ "$verbose" == true  ]; then
-        bash $steamcmd +login $username $password +force_install_dir \
+        $steamcmddir/./steamcmd.sh +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid +quit
     else
-        bash $steamcmd +login $username $password +force_install_dir \
+        $steamcmddir/./steamcmd.sh +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid +quit | steamcmd_filter
     fi
 }
@@ -378,10 +381,10 @@ game_validate()
     message "Status" "Validating"
 
     if [ "$verbose" == true  ]; then
-        bash $steamcmd +login $username $password +force_install_dir \
+        $steamcmddir/./steamcmd.sh +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid -validate +quit
     else
-        bash $steamcmd +login $username $password +force_install_dir \
+        $steamcmddir/./steamcmd.sh +login $username $password +force_install_dir \
             $gamedir/$name +app_update $appid -validate +quit | steamcmd_filter
     fi
 }
@@ -456,7 +459,7 @@ steamcmd_install()
         -P "$steamcmddir"
     tar x${v}f "$steamcmddir/steamcmd_linux.tar.gz" -C "$steamcmddir"
 
-    if [ -s $steamcmd ]; then
+    if [ -s $steamcmddir/steamcmd.sh ]; then
         message "Status" "SteamCMD Installed"
     else
         message "Error" "SteamCMD was not installed"
@@ -466,9 +469,9 @@ steamcmd_install()
     message "Status" "SteamCMD Updating"
 
     if [ "$verbose" == true ]; then
-        bash $steamcmd +quit
+        $steamcmddir/./steamcmd.sh +quit
     else
-        bash $steamcmd +quit | steamcmd_filter
+        $steamcmddir/./steamcmd.sh +quit | steamcmd_filter
     fi
 }
 
@@ -678,11 +681,12 @@ command_validate()
 
 command_setup()
 {
-    if [ -s "$steamcmd" ]; then
+    if [ -s "$steamcmddir/steamcmd.sh" ]; then
         message "Error" "SteamCMD is already installed"
         while true; do
             printf "[ \e[0;32mStatus\e[m ] - Would you like to reinstall it? ( y/n ): "
             read answer
+
             case "$answer" in
                 Y|y)
                     steamcmd_install
