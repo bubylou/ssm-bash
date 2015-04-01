@@ -46,17 +46,6 @@ argument_check()
     fi
 }
 
-do_all()
-{
-    servers=$( jq ".[$index].servers | keys" $serverjson | awk -F\" '{print $2}' )
-
-    for server in $servers; do
-        for k in ${@}; do
-            $k $server
-        done
-    done
-}
-
 flag_set()
 {
     flags=$( echo $1 | cut -d '-' -f 2 | grep -o . )
@@ -190,55 +179,7 @@ root_check()
     fi
 }
 
-server_info()
-{
-    unset index name server
-    local length=$( jq ". | length - 1" $serverjson )
-
-    for i in $( seq 0 $length ); do
-        name=$( jq -r ".[$i].name" $serverjson )
-        servercheck=$( jq -r ".[$i].servers.$1" $serverjson )
-
-        if [ "null" != "$servercheck" ]; then
-            server=$1
-            index=$i
-            break
-        fi
-    done
-
-    if [ -z "$index" ]; then
-        message "Error" "Invalid Server Name"
-        exit
-    fi
-}
-
-session_check()
-{
-    screen -ls | grep '(' | grep "$1" | cut -d '.' -f 2 | cut -d '-' -f 1
-}
-
-steamcmd_check()
-{
-    if [ ! -s "$steamcmddir/steamcmd.sh" ]; then
-        message "Error" "SteamCMD not installed"
-        steamcmd_install
-    fi
-}
-
-steamcmd_filter()
-{
-    while read line; do
-        if [ -n "$( echo "$line" | grep "Success" )" ]; then
-            message "Status" "$( echo "$line" | cut -d ' ' -f2- )"
-        elif [ -n "$( echo "$line" | grep "ERROR\|Failed" )" ]; then
-            message "Error" "$( echo "$line" | cut -d ' ' -f2- )"
-        elif [ -n "$( echo "$line" | grep "launching Steam" )" ]; then
-            message "Status" "SteamCMD Updated"
-        fi
-    done
-}
-
-stop_run_start()
+run()
 {
     if [ "$option" != "i" ]; then
         for server in $( session_check "\-$name" ); do
@@ -272,6 +213,66 @@ stop_run_start()
     fi
 }
 
+server_all()
+{
+    servers=$( jq ".[$index].servers | keys" $serverjson | awk -F\" '{print $2}' )
+
+    for server in $servers; do
+        for k in ${@}; do
+            $k $server
+        done
+    done
+}
+
+server_info()
+{
+    unset index name server
+    local length=$( jq ". | length - 1" $serverjson )
+
+    for i in $( seq 0 $length ); do
+        name=$( jq -r ".[$i].name" $serverjson )
+        servercheck=$( jq -r ".[$i].servers.$1" $serverjson )
+
+        if [ "null" != "$servercheck" ]; then
+            server=$1
+            index=$i
+            break
+        fi
+    done
+
+    if [ -z "$index" ]; then
+        message "Error" "Invalid Server Name"
+        exit
+    fi
+}
+
+session_check()
+{
+    screen -ls | grep '(' | grep "$1" | cut -d '.' -f 2 | cut -d '-' -f 1
+}
+
+steamcmd_check()
+{
+    if [ ! -s "$steamcmddir/steamcmd.sh" ]; then
+        message "------"
+        message "Error" "SteamCMD not installed"
+        steamcmd_install
+    fi
+}
+
+steamcmd_filter()
+{
+    while read line; do
+        if [ -n "$( echo "$line" | grep "Success" )" ]; then
+            message "Status" "$( echo "$line" | cut -d ' ' -f2- )"
+        elif [ -n "$( echo "$line" | grep "ERROR\|Failed" )" ]; then
+            message "Error" "$( echo "$line" | cut -d ' ' -f2- )"
+        elif [ -n "$( echo "$line" | grep "launching Steam" )" ]; then
+            message "Status" "SteamCMD Updated"
+        fi
+    done
+}
+
 # Normal Functions
 
 game_backup()
@@ -290,6 +291,7 @@ game_backup()
     fi
 
     message "Status" "Backing Up"
+
     backup="$backupdir/$name/$( date +%Y-%m-%d-%H%M%S ).tar.xz"
     tar c${v}Jf "$backup" --exclude "$backupdir" -C "$gamedir" $name
 
@@ -344,6 +346,7 @@ game_restore()
 
         message "------"
         message "Status" "Restoring"
+
         tar x${v}f "$backup" -C "$gamedir"
 
         local hash2=$( ls -la --full-time "$gamedir/$name" | md5sum )
@@ -452,7 +455,6 @@ server_stop()
 
 steamcmd_install()
 {
-    message "------"
     message "Status" "SteamCMD Installing"
 
     wget -N${v-q} http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
@@ -484,7 +486,7 @@ command_backup()
             info
             game_backup
         else
-            stop_run_start game_backup
+            run game_backup
         fi
     else
         info
@@ -523,7 +525,7 @@ command_install()
     info
 
     if [ "$option" == "i" ]; then
-        stop_run_start game_restore
+        run game_restore
     else
         info
 
@@ -546,7 +548,7 @@ command_remove()
             info
             game_remove
         else
-            stop_run_start game_remove
+            run game_remove
         fi
     else
         info
@@ -570,7 +572,7 @@ command_restore()
             info
             game_restore
         else
-            stop_run_start game_restore
+            run game_restore
         fi
     else
         info
@@ -605,10 +607,10 @@ command_status()
         if [ "$server" != "$name" ]; then
             info
         else
-            do_all info
+            server_all info
         fi
     else
-        do_all info
+        server_all info
     fi
 }
 
@@ -636,7 +638,7 @@ command_update()
             info
             game_update
         else
-            stop_run_start game_update
+            run game_update
         fi
     else
         info
@@ -662,7 +664,7 @@ command_validate()
             info
             game_validate
         else
-            stop_run_start game_validate
+            run game_validate
         fi
     else
         info
@@ -682,7 +684,9 @@ command_validate()
 command_setup()
 {
     if [ -s "$steamcmddir/steamcmd.sh" ]; then
+        message "------"
         message "Error" "SteamCMD is already installed"
+
         while true; do
             printf "[ \e[0;32mStatus\e[m ] - Would you like to reinstall it? ( y/n ): "
             read answer
@@ -700,6 +704,7 @@ command_setup()
             esac
         done
     else
+        message "------"
         steamcmd_install
     fi
 }
@@ -807,12 +812,12 @@ case "$command" in
         if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
                 server_info $i
-                do_all command_stop command_start
+                server_all command_stop command_start
             done
         else
             for i in $apps; do
                 server_info $i
-                do_all command_stop command_start
+                server_all command_stop command_start
             done
         fi
         ;;
@@ -844,12 +849,12 @@ case "$command" in
         if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
                 server_info $i
-                do_all command_start
+                server_all command_start
             done
         else
             for i in $apps; do
                 server_info $i
-                do_all command_start
+                server_all command_start
             done
         fi
         ;;
@@ -877,12 +882,12 @@ case "$command" in
         if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
                 server_info $i
-                do_all command_stop
+                server_all command_stop
             done
         else
             for i in $apps; do
                 server_info $i
-                do_all command_stop
+                server_all command_stop
             done
         fi
         ;;
