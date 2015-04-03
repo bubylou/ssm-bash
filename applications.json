@@ -1,349 +1,262 @@
 [
     {
-        "comment" : "Counter Strike",
-
+        "fname" : "Counter Strike",
         "name" : "cstrike",
         "appid" : "90 +app_set_config 90 mod cstrike",
         "exec" : "hlds_run"
     },
-
     {
-        "comment" : "Counter Strike: Condition Zero",
-
+        "fname" : "Counter Strike: Condition Zero",
         "name" : "czero",
         "appid" : "90 +app_set_config 90 mod czero",
         "exec" : "hlds_run"
     },
-
     {
-        "comment" : "Day of Defeat",
-
+        "fname" : "Day of Defeat",
         "name" : "dod",
         "appid" : "90 +app_set_config 90 mod dod",
         "exec" : "hlds_run"
     },
-
     {
-        "comment" : "Deathmatch Classic",
-
+        "fname" : "Deathmatch Classic",
         "name" : "dmc",
         "appid" : "90 +app_set_config 90 mod dmc",
         "exec" : "hlds_run"
     },
-
     {
-        "comment" : "Half-Life",
-
+        "fname" : "Half-Life",
         "name" : "hl",
         "appid" : "90",
         "exec" : "hlds_run"
     },
-
     {
-        "comment" : "Half-Life: Opposing Force",
-
+        "fname" : "Half-Life: Opposing Force",
         "name" : "hlof",
         "appid" : "90 +app_set_config 90 mod gearbox",
         "exec" : "hlds_run"
     },
-
     {
-        "comment" : "Ricochet",
-
+        "fname" : "Ricochet",
         "name" : "ricochet",
         "appid" : "90 +app_set_config 90 mod ricochet",
         "exec" : "hlds_run"
     },
-
     {
-        "comment" : "Team Fortress Classic",
-
+        "fname" : "Team Fortress Classic",
         "name" : "tfc",
         "appid" : "90 +app_set_config 90 mod tfc",
         "exec" : "hlds_run"
     },
-
     {
-        "comment" : "Source SDK Base 2007",
-
+        "fname" : "Source SDK Base 2007",
         "name" : "source2007",
         "appid" : "310",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Counter Strike: Global Offensive",
-
+        "fname" : "Counter Strike: Global Offensive",
         "name" : "csgo",
         "appid" : "740",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Garrysmod",
-
+        "fname" : "Garrysmod",
         "name" : "gmod",
         "appid" : "4020",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Natural Selection 2",
-
+        "fname" : "Natural Selection 2",
         "name" : "ns2",
         "appid" : "4940",
         "exec" : "server_linux32"
     },
-
     {
-        "comment" : "Zombie Panic: Source",
-
+        "fname" : "Zombie Panic: Source",
         "name" : "zombiepanic",
         "appid" : "17505",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Age of Chivalry",
-
+        "fname" : "Age of Chivalry",
         "name" : "aoc",
         "appid" : "17515",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Pirates, Vikings, and Knights II",
-
+        "fname" : "Pirates, Vikings, and Knights II",
         "name" : "pvkii",
         "appid" : "17575",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Serious Sam 3 BFE",
-
+        "fname" : "Serious Sam 3 BFE",
         "name" : "serioussam3",
         "appid" : "41080",
         "exec" : "Bin/runSam3_DedicatedServer.sh"
     },
-
     {
-        "comment" : "Project Zomboid",
-
+        "fname" : "Project Zomboid",
         "name" : "zomboid",
         "appid" : "108600",
         "exec" : "projectzomboid-dedi-server.sh"
     },
-
     {
-        "comment" : "Nuclear Dawn",
-
+        "fname" : "Nuclear Dawn",
         "name" : "nd",
         "appid" : "111710",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Starbound",
-
+        "fname" : "Starbound",
         "name" : "starbound",
         "appid" : "211820",
         "dir" : "linux64",
         "exec" : "starbound_server"
     },
-
     {
-        "comment" : "Killing Floor",
-
+        "fname" : "Killing Floor",
         "name" : "killingfloor",
         "appid" : "215360",
         "dir" : "System",
         "exec" : "ucc-bin"
     },
-
     {
-        "comment" : "Left 4 Dead",
-
+        "fname" : "Left 4 Dead",
         "name" : "left4dead",
         "appid" : "222840",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Left 4 Dead 2",
-
+        "fname" : "Left 4 Dead 2",
         "name" : "left4dead2",
         "appid" : "222860",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Red Orchestra",
-
+        "fname" : "Red Orchestra",
         "name" : "redorch",
         "appid" : "223250",
         "dir" : "system",
         "exec" : "ucc-bin"
     },
-
     {
-        "comment" : "Blade Symphony",
-
+        "fname" : "Blade Symphony",
         "name" : "bladesymphony",
         "appid" : "228780",
         "exec" : "srcds_run.sh"
     },
-
-
     {
-        "comment" : "Team Fortress 2",
-
+        "fname" : "Team Fortress 2",
         "name" : "tf2",
         "appid" : "232250",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Day of Defeat: Source",
-
+        "fname" : "Day of Defeat: Source",
         "name" : "dods",
         "appid" : "232290",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Counter Strike: Source",
-
+        "fname" : "Counter Strike: Source",
         "name" : "css",
         "appid" : "232330",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Half-Life 2: Deathmatch",
-
+        "fname" : "Half-Life 2: Deathmatch",
         "name" : "hl2dm",
         "appid" : "232370",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Arma 3",
-
+        "fname" : "Arma 3",
         "name" : "arma3",
         "appid" : "233780",
         "exec" : "arma3server"
     },
-
     {
-        "comment" : "Insurgency",
-
+        "fname" : "Insurgency",
         "name" : "insurgency",
         "appid" : "237410",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Source SDK Base 2013",
-
+        "fname" : "Source SDK Base 2013",
         "name" : "source2013",
         "appid" : "244310",
         "exec" : "srcds_run"
     },
-
-
     {
-        "comment" : "Half-Life Deathmatch: Source",
-
+        "fname" : "Half-Life Deathmatch: Source",
         "name" : "hldms",
         "appid" : "255470",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Just Cause 2",
-
+        "fname" : "Just Cause 2",
         "name" : "justcause2",
         "appid" : "261140",
         "exec" : "Jcmp-Server"
     },
-
     {
-        "comment" : "7 Days to Die",
-
+        "fname" : "7 Days to Die",
         "name" : "sdtd",
         "appid" : "294420",
         "exec" : "7DaysToDie.sh"
     },
-
     {
-        "comment" : "Fistful of Frags",
-
+        "fname" : "Fistful of Frags",
         "name" : "fof",
         "appid" : "295230",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Dark Horizons: Mechanized Corps",
-
+        "fname" : "Dark Horizons: Mechanized Corps",
         "name" : "dhmc",
         "appid" : "312070",
         "exec" : "DHMCDed"
     },
-
     {
-        "comment" : "NS2: Combat",
-
+        "fname" : "NS2: Combat",
         "name" : "ns2c",
         "appid" : "313900",
         "exec" : "server_linux32"
     },
-
     {
-        "comment" : "No More Room in Hell",
-
+        "fname" : "No More Room in Hell",
         "name" : "nmrih",
         "appid" : "317670",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Double Action: Boogaloo",
-
+        "fname" : "Double Action: Boogaloo",
         "name" : "dab",
         "appid" : "317800",
         "exec" : "srcds_run"
     },
-
     {
-        "comment" : "Project CARS",
-
+        "fname" : "Project CARS",
         "name" : "pcars",
         "appid" : "332670",
         "exec" : "DedicatedServerCmd"
     },
-
     {
-        "comment" : "BlazeRush",
-
+        "fname" : "BlazeRush",
         "name" : "blazerush",
         "appid" : "332850",
         "exec" : "example"
     },
-
     {
-        "comment" : "BOMB",
-
+        "fname" : "BOMB",
         "name" : "bomb",
         "appid" : "338440",
         "dir" : "bin/release",
         "exec" : "server.sh"
     },
-
     {
-        "comment" : "Dont Starve Together",
-
+        "fname" : "Dont Starve Together",
         "name" : "dst",
         "appid" : "343050",
         "dir" : "bin",

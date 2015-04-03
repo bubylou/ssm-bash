@@ -19,7 +19,6 @@
             ]
         }
     },
-
     {
         "name" : "arma3",
         "servers" : {
@@ -29,7 +28,6 @@
             ]
         }
     },
-
     {
         "name" : "bladesymphony",
         "servers" : {
@@ -48,7 +46,6 @@
             ]
         }
     },
-
     {
         "name" : "blazerush",
         "servers" : {
@@ -56,7 +53,6 @@
             ]
         }
     },
-
     {
         "name" : "bomb",
         "servers" : {
@@ -64,7 +60,6 @@
             ]
         }
     },
-
     {
         "name" : "csgo",
         "servers" : {
@@ -88,7 +83,6 @@
             ]
         }
     },
-
     {
         "name" : "css",
         "servers" : {
@@ -108,7 +102,6 @@
             ]
         }
     },
-
     {
         "name" : "cstrike",
         "servers" : {
@@ -123,7 +116,6 @@
             ]
         }
     },
-
     {
         "name" : "czero",
         "servers" : {
@@ -138,7 +130,6 @@
             ]
         }
     },
-
     {
         "name" : "dab",
         "servers" : {
@@ -160,7 +151,6 @@
             ]
         }
     },
-
     {
         "name" : "dhmc",
         "servers" : {
@@ -168,7 +158,6 @@
             ]
         }
     },
-
     {
         "name" : "dmc",
         "servers" : {
@@ -183,7 +172,6 @@
             ]
         }
     },
-
     {
         "name" : "dod",
         "servers" : {
@@ -198,7 +186,6 @@
             ]
         }
     },
-
     {
         "name" : "dods",
         "servers" : {
@@ -219,7 +206,6 @@
             ]
         }
     },
-
     {
         "name" : "dst",
         "servers" : {
@@ -227,7 +213,6 @@
             ]
         }
     },
-
     {
         "name" : "fof",
         "servers" : {
@@ -248,7 +233,6 @@
             ]
         }
     },
-
     {
         "name" : "gmod",
         "servers" : {
@@ -270,7 +254,6 @@
             ]
         }
     },
-
     {
         "name" : "hl",
         "servers" : {
@@ -285,7 +268,6 @@
             ]
         }
     },
-
     {
         "name" : "hl2dm",
         "servers" : {
@@ -306,7 +288,6 @@
             ]
         }
     },
-
     {
         "name" : "hldms",
         "servers" : {
@@ -327,7 +308,6 @@
             ]
         }
     },
-
     {
         "name" : "hlof",
         "servers" : {
@@ -342,7 +322,6 @@
             ]
         }
     },
-
     {
         "name" : "insurgency",
         "servers" : {
@@ -363,7 +342,6 @@
             ]
         }
     },
-
     {
         "name" : "justcause2",
         "servers" : {
@@ -374,7 +352,6 @@
             ]
         }
     },
-
     {
         "name" : "killingfloor",
         "servers" : {
@@ -385,7 +362,6 @@
             ]
         }
     },
-
     {
         "name" : "left4dead",
         "servers" : {
@@ -405,7 +381,6 @@
             ]
         }
     },
-
     {
         "name" : "left4dead2",
         "servers" : {
@@ -425,7 +400,6 @@
             ]
         }
     },
-
     {
         "name" : "nd",
         "servers" : {
@@ -446,7 +420,6 @@
             ]
         }
     },
-
     {
         "name" : "nmrih",
         "servers" : {
@@ -468,7 +441,6 @@
             ]
         }
     },
-
     {
         "name" : "ns2",
         "servers" : {
@@ -483,7 +455,6 @@
             ]
         }
     },
-
     {
         "name" : "ns2c",
         "servers" : {
@@ -498,7 +469,6 @@
             ]
         }
     },
-
     {
         "name" : "pcars",
         "servers" : {
@@ -506,7 +476,6 @@
             ]
         }
     },
-
     {
         "name" : "pvkii",
         "servers" : {
@@ -527,7 +496,6 @@
             ]
         }
     },
-
     {
         "name" : "redorch",
         "servers" : {
@@ -538,7 +506,6 @@
             ]
         }
     },
-
     {
         "name" : "ricochet",
         "servers" : {
@@ -553,7 +520,6 @@
             ]
         }
     },
-
     {
         "name" : "sdtd",
         "servers" : {
@@ -562,7 +528,6 @@
             ]
         }
     },
-
     {
         "name" : "serioussam3",
         "servers" : {
@@ -577,7 +542,6 @@
             ]
         }
     },
-
     {
         "name" : "source2007",
         "servers" : {
@@ -585,7 +549,6 @@
             ]
         }
     },
-
     {
         "name" : "source2013",
         "servers" : {
@@ -593,7 +556,6 @@
             ]
         }
     },
-
     {
         "name" : "starbound",
         "servers" : {
@@ -601,7 +563,6 @@
             ]
         }
     },
-
     {
         "name" : "tf2",
         "servers" : {
@@ -622,7 +583,6 @@
             ]
         }
     },
-
     {
         "name" : "tfc",
         "servers" : {
@@ -637,7 +597,6 @@
             ]
         }
     },
-
     {
         "name" : "zombiepanic",
         "servers" : {
@@ -658,7 +617,6 @@
             ]
         }
     },
-
     {
         "name" : "zomboid",
         "servers" : {

@@ -328,9 +328,9 @@ game_remove()
 
 game_restore()
 {
-    if [ -n "$( ls $backupdir/$name )" ]; then
-        message "------"
+    message "------"
 
+    if [ -n "$( ls $backupdir/$name )" ]; then
         local backups=($( ls -t $backupdir/$name ))
         local length=$(( ${#backups[@]} - 1 ))
 
@@ -818,26 +818,26 @@ case "$command" in
     list)
         for i in $( ls $gamedir ); do
             game_info $i
-            fname=$( jq -r ".[$index].comment" $appjson )
+            fname=$( jq -r ".[$index].fname" $appjson )
 
+            message "------"
             message "F-Name" "$fname"
             message "Name" "$name"
             message "App ID" "$appid"
-            message "------"
         done
         ;;
     list-all)
         length=$( jq ". | length - 1" $appjson )
 
         for i in $( seq 0 $length ); do
-            fname=$( jq -r ".[$i].comment" $appjson )
+            fname=$( jq -r ".[$i].fname" $appjson )
             name=$( jq -r ".[$i].name" $appjson )
             appid=$( jq -r ".[$i].appid" $appjson )
 
+            message "------"
             message "F-Name" "$fname"
             message "Name" "$name"
             message "App ID" "$appid"
-            message "------"
         done
         ;;
     monitor)
