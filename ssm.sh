@@ -219,9 +219,18 @@ server_all()
 
     for server in $servers; do
         for k in ${@}; do
+            server_info $server
             $k $server
         done
     done
+}
+
+server_check()
+{
+    if [ -z "$server" ]; then
+        message "Error" "Invalid Server Name"
+        exit
+    fi
 }
 
 server_info()
@@ -235,6 +244,9 @@ server_info()
 
         if [ "null" != "$servercheck" ]; then
             server=$1
+            index=$i
+            break
+        elif [ "$1" == "$name" ]; then
             index=$i
             break
         fi
@@ -392,13 +404,53 @@ game_validate()
     fi
 }
 
+server_monitor()
+{
+    i=0
+
+    for app in $1; do
+        for server in $( session_check "\-$app" ); do
+            info
+
+            servers[$i]=$server
+            (( i++ ))
+        done
+    done
+
+    if [ ${#servers[@]} == 0 ]; then
+        message "Error" "No servers running"
+    fi
+
+    while [ ${#servers[@]} != 0 ]; do
+        local length=$(( ${#servers[@]} - 1 ))
+
+        for j in $( seq 0 $length ); do
+            server_info ${servers[j]}
+
+            if [ -z $( session_check "$server-$name" ) ]; then
+                info
+
+                if [ "$option" == "r" ]; then
+                    server_start
+                    info
+                else
+                    unset servers[$j]
+                    servers=( ${servers[@]} )
+                fi
+
+                break
+            fi
+        done
+    done
+}
+
 server_start()
 {
     local length=$( jq ".[$index].servers.$server | length - 1" $serverjson )
 
     for i in $( seq 0 $length ); do
         local tmp="$( jq -r ".[$index].servers.$server[$i]" $serverjson )"
-        gameoptions+="$tmp "
+        local gameoptions+="$tmp "
     done
 
     game_info $name
@@ -432,6 +484,19 @@ server_start()
 
         sleep 1
     done
+}
+
+server_status()
+{
+    if [ -n "$server" ]; then
+        if [ "$server" != "$name" ]; then
+            info
+        else
+            server_all info
+        fi
+    else
+        server_all info
+    fi
 }
 
 server_stop()
@@ -522,7 +587,6 @@ command_console()
 command_install()
 {
     steamcmd_check
-    info
 
     if [ "$option" == "i" ]; then
         run game_restore
@@ -588,6 +652,7 @@ command_restore()
 
 command_start()
 {
+    server_check
     info
 
     if [ ! -d "$gamedir/$name" ]; then
@@ -601,21 +666,9 @@ command_start()
     fi
 }
 
-command_status()
-{
-    if [ -n "$server" ]; then
-        if [ "$server" != "$name" ]; then
-            info
-        else
-            server_all info
-        fi
-    else
-        server_all info
-    fi
-}
-
 command_stop()
 {
+    server_check
     info
 
     if [ ! -d "$gamedir/$name" ]; then
@@ -787,6 +840,16 @@ case "$command" in
             message "------"
         done
         ;;
+    monitor)
+        if [ -z "$apps" ]; then
+            for i in $( ls $gamedir ); do
+                apps+="$i "
+            done
+            server_monitor "$apps"
+        else
+            server_monitor "$apps"
+        fi
+        ;;
     remove)
         argument_check
         for i in $apps; do
@@ -862,12 +925,12 @@ case "$command" in
         if [ -z "$apps" ]; then
             for i in $( ls $gamedir ); do
                 server_info $i
-                command_status
+                server_status
             done
         else
             for i in $apps; do
                 server_info $i
-                command_status
+                server_status
             done
         fi
         ;;
