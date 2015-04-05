@@ -1,13 +1,14 @@
 # SteamCMD Server Manager ( SSM )
 
-A Bash script for managing your SteamCMD servers.
+A command line script used to managing SteamCMD servers.
 
 ## Features
 
 - Backup / Restore
 - Install / Update / Validate
 - Start / Stop / Restart
-- Multiple Server Support
+- Monitor running servers
+- Multiple server support
 - and much more
 
 ## Wiki

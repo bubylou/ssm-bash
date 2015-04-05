@@ -41,8 +41,17 @@ are_you_sure()
 argument_check()
 {
     if [ -z "$apps" ]; then
-        message "Error" "You must specify at least one App"
+        message "Error" "You must specify at least one app or server"
         exit
+    fi
+}
+
+config_check()
+{
+    if [ ! -e $serverjson ]; then
+        cp "$examplejson" "$serverjson"
+        message "Error" "No server config"
+        message "Status" "Copying example"
     fi
 }
 
@@ -101,7 +110,7 @@ game_info()
         if [ -n "$name" ]; then
             game_info $name
         else
-            message "Error" "Invalid App Name or App ID"
+            message "Error" "Invalid app name or app id"
             exit
         fi
     fi
@@ -127,7 +136,7 @@ info()
     if [ -n "$( session_check "$session" )" ]; then
         message "Status" "Running"
     else
-        message "Status" "Not Running"
+        message "Status" "Not running"
     fi
 }
 
@@ -228,13 +237,15 @@ server_all()
 server_check()
 {
     if [ -z "$server" ]; then
-        message "Error" "Invalid Server Name"
+        message "Error" "Invalid server name"
         exit
     fi
 }
 
 server_info()
 {
+    config_check
+
     unset index name server
     local length=$( jq ". | length - 1" $serverjson )
 
@@ -253,7 +264,7 @@ server_info()
     done
 
     if [ -z "$index" ]; then
-        message "Error" "Invalid Server Name"
+        message "Error" "Invalid server name"
         exit
     fi
 }
@@ -280,7 +291,7 @@ steamcmd_filter()
         elif [ -n "$( echo "$line" | grep "ERROR\|Failed" )" ]; then
             message "Error" "$( echo "$line" | cut -d ' ' -f2- )"
         elif [ -n "$( echo "$line" | grep "launching Steam" )" ]; then
-            message "Status" "SteamCMD Updated"
+            message "Status" "SteamCMD updated"
         fi
     done
 }
@@ -296,21 +307,21 @@ game_backup()
 
         if (( $backups >= $maxbackups )); then
             for i in $( seq $maxbackups $backups ); do
-                message "Status" "Removing Old Backup"
+                message "Status" "Removing old backup"
                 rm "$( ls -rt "$backupdir/$name/"*.tar.xz | head -1 )"
             done
         fi
     fi
 
-    message "Status" "Backing Up"
+    message "Status" "Backing up"
 
     backup="$backupdir/$name/$( date +%Y-%m-%d-%H%M%S ).tar.xz"
     tar c${v}Jf "$backup" --exclude "$backupdir" -C "$gamedir" $name
 
     if [ -s "$backup" ]; then
-        message "Status" "Backup Complete"
+        message "Status" "Backup complete"
     else
-        message "Error" "Backup Failed"
+        message "Error" "Backup failed"
     fi
 }
 
@@ -320,9 +331,9 @@ game_remove()
     rm -r${v} "$gamedir/$name"
 
     if [ ! -d "$gamedir/$name" ]; then
-        message "Status" "Remove Complete"
+        message "Status" "Remove complete"
     else
-        message "Error" "Remove Failed"
+        message "Error" "Remove failed"
     fi
 }
 
@@ -347,7 +358,7 @@ game_restore()
                 backup="$backupdir/$name/${backups[answer]}"
                 break
             else
-                message "Error" "Invalid Selection"
+                message "Error" "Invalid selection"
                 message "------"
             fi
         done
@@ -364,9 +375,9 @@ game_restore()
         local hash2=$( ls -la --full-time "$gamedir/$name" | md5sum )
 
         if [ "$hash1" != "$hash2" ]; then
-            message "Status" "Restore Complete"
+            message "Status" "Restore complete"
         else
-            message "Error" "Restore Failed"
+            message "Error" "Restore failed"
         fi
     else
         message "Error" "There are no backups"
@@ -446,11 +457,10 @@ server_monitor()
 
 server_start()
 {
-    local length=$( jq ".[$index].servers.$server | length - 1" $serverjson )
+    options=$( jq ".[$index].servers.$server" $serverjson | awk -F\" '{print $2}' )
 
-    for i in $( seq 0 $length ); do
-        local tmp="$( jq -r ".[$index].servers.$server[$i]" $serverjson )"
-        local gameoptions+="$tmp "
+    for i in $options; do
+        local serveroptions+="$i "
     done
 
     game_info $name
@@ -465,10 +475,10 @@ server_start()
 
     if [ "$option" == "d" ]; then
         message "Status" "Debugging"
-        "./$exec" "$gameoptions"
+        "./$exec" "$serveroptions"
     else
         message "Status" "Starting"
-        screen -dmS "$server-$name" "./$exec" "$gameoptions"
+        screen -dmS "$server-$name" "./$exec" "$serveroptions"
     fi
 
 
@@ -477,7 +487,7 @@ server_start()
             message "Status" "Started"
             break
         elif [ $i == 10 ]; then
-            message "Error" "Start Failed"
+            message "Error" "Start failed"
             error+="\"$server\" "
             break
         fi
@@ -509,7 +519,7 @@ server_stop()
             message "Status" "Stopped"
             break
         elif [ $i == 10 ]; then
-            message "Error" "Stop Failed"
+            message "Error" "Stop failed"
             error+="\"$server\" "
             break
         fi
@@ -520,20 +530,20 @@ server_stop()
 
 steamcmd_install()
 {
-    message "Status" "SteamCMD Installing"
+    message "Status" "SteamCMD installing"
 
     wget -N${v-q} http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
         -P "$steamcmddir"
     tar x${v}f "$steamcmddir/steamcmd_linux.tar.gz" -C "$steamcmddir"
 
     if [ -s $steamcmddir/steamcmd.sh ]; then
-        message "Status" "SteamCMD Installed"
+        message "Status" "SteamCMD installed"
     else
         message "Error" "SteamCMD was not installed"
         exit
     fi
 
-    message "Status" "SteamCMD Updating"
+    message "Status" "SteamCMD updating"
 
     if [ "$verbose" == true ]; then
         $steamcmddir/./steamcmd.sh +quit
@@ -656,7 +666,7 @@ command_start()
     info
 
     if [ ! -d "$gamedir/$name" ]; then
-        message "Error" "App is not Installed"
+        message "Error" "App is not installed"
         error+="\"$name\" "
     elif [ -n "$( session_check "$server-$name" )" ]; then
         message "Error" "Server is already running"
@@ -672,7 +682,7 @@ command_stop()
     info
 
     if [ ! -d "$gamedir/$name" ]; then
-        message "Error" "App is not Installed"
+        message "Error" "App is not installed"
         error+="\"$name\" "
     elif [ -n "$( session_check "$server-$name" )" ]; then
         server_stop
@@ -764,12 +774,6 @@ command_setup()
 
 requirment_check
 root_check
-
-if [ ! -e $serverjson ]; then
-    cp "$examplejson" "$serverjson"
-    message "Error" "No Server Config"
-    message "Status" "Copying Example"
-fi
 
 for i in $@; do
     if [[ "$i" =~ ^-.* ]]; then
