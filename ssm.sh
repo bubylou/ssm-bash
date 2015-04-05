@@ -457,10 +457,11 @@ server_monitor()
 
 server_start()
 {
-    options=$( jq ".[$index].servers.$server" $serverjson | awk -F\" '{print $2}' )
+    local length=$( jq ".[$index].servers.$server | length - 1" $serverjson )
 
-    for i in $options; do
-        local serveroptions+="$i "
+    for i in $( seq 0 $length ); do
+        local tmp="$( jq -r ".[$index].servers.$server[$i]" $serverjson )"
+        local serveroptions+="$tmp "
     done
 
     game_info $name
