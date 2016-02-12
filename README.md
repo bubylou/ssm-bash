@@ -12,6 +12,6 @@ A command line script used to managing SteamCMD servers.
 - and much more
 
 ## Wiki
-- [Getting Started](https://github.com/bubylou/ssm/wiki/Getting-Started)
-- [Configuration](https://github.com/bubylou/ssm/wiki/Configuration)
-- [Usage](https://github.com/bubylou/ssm/wiki/Usage)
+- [Getting Started](https://github.com/bubylou/ssm-bash/wiki/Getting-Started)
+- [Configuration](https://github.com/bubylou/ssm-bash/wiki/Configuration)
+- [Usage](https://github.com/bubylou/ssm-bash/wiki/Usage)
