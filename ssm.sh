@@ -3,6 +3,7 @@
 username="anonymous"
 password=""
 
+compression="gz"
 maxbackups=5
 maxwait=10
 verbose=false
@@ -10,7 +11,7 @@ verbose=false
 ssmdir="$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )"
 steamcmddir="$ssmdir/steamcmd"
 
-backupdir="$ssmdir/backup"
+backupdir="$ssmdir/backups"
 gamedir="$ssmdir/games"
 
 appjson="$ssmdir/applications.json"
@@ -40,7 +41,7 @@ are_you_sure()
 
 argument_check()
 {
-    if [ -z "$apps" ]; then
+    if [ -z "$args" ]; then
         message "Error" "You must specify at least one app or server"
         exit
     fi
@@ -57,7 +58,7 @@ config_check()
 
 flag_set()
 {
-    flags=$( echo $1 | cut -d '-' -f 2 | grep -o . )
+    local flags=$( echo $1 | cut -d '-' -f 2 | grep -o . )
 
     for flag in $flags; do
         if [[ "$flag" =~ [dfirs] ]]; then
@@ -76,7 +77,7 @@ flag_set()
 game_info()
 {
     unset index name appid
-    number="^[0-9]+([.][0-9]+)?$"
+    local number="^[0-9]+([.][0-9]+)?$"
     local length=$( jq ". | length - 1" $appjson )
 
 
@@ -104,6 +105,13 @@ game_info()
 
     fi
 
+    fname=$( jq -r ".[$index].fname" $appjson )
+	config=$( jq -r ".[$index].config" $appjson )
+
+	if [ "$config" == "null" ]; then
+		unset config
+	fi
+
     if [ -z "$index" ]; then
         server_info $1
 
@@ -128,12 +136,12 @@ info()
     fi
 
     if [ -n "$server" ]; then
-        local session="$server-$name"
+        local session="server"
     else
-        local session="$name"
+        local session="name"
     fi
 
-    if [ -n "$( session_check "$session" )" ]; then
+    if [ -n "$( session_check $session )" ]; then
         message "Status" "Running"
     else
         message "Status" "Not running"
@@ -169,7 +177,7 @@ requirment_check()
 
     for i in $requirments; do
         if [ -z $( which $i ) ]; then
-            missing+="$i "
+            local missing+="$i "
         fi
     done
 
@@ -192,7 +200,7 @@ run()
 {
     if [ "$option" != "i" ]; then
         for server in $( session_check name ); do
-            servers+="$server "
+            local servers+="$server "
             info
             server_stop
         done
@@ -201,7 +209,7 @@ run()
             server_info $name
         fi
 
-        servers="$server"
+        local servers="$server"
     fi
 
     if [ -z "$error" ]; then
@@ -224,10 +232,10 @@ run()
 
 server_all()
 {
-    servers=$( jq ".[$index].servers | keys" $serverjson | awk -F\" '{print $2}' )
+    local servers=$( jq ".[$index].servers | keys" $serverjson | awk -F\" '{print $2}' )
 
     for server in $servers; do
-        for k in ${@}; do
+        for k in "${@}"; do
             server_info $server
             $k $server
         done
@@ -251,9 +259,8 @@ server_info()
 
     for i in $( seq 0 $length ); do
         name=$( jq -r ".[$i].name" $serverjson )
-        servercheck=$( jq -r ".[$i].servers.$1" $serverjson )
 
-        if [ "null" != "$servercheck" ]; then
+        if [ "null" != "$( jq -r ".[$i].servers.$1" $serverjson )" ]; then
             server=$1
             index=$i
             break
@@ -272,9 +279,9 @@ server_info()
 session_check()
 {
     if [ "$1" == "server" ]; then
-        local session="$server-$name"
+        local session="$name-$server"
     elif [ "$1" == "name" ]; then
-        local session="\-$name"
+        local session="$name\-"
     fi
 
     screen -ls | grep '(' | grep "$session" | cut -d '.' -f 2 | cut -d '-' -f 1
@@ -308,21 +315,26 @@ game_backup()
 {
     mkdir -p "$backupdir/$name"
 
+    if [ $compression ]; then
+        compression=".$compression"
+    fi
+
+
     if [ -n "$( find "$backupdir/$name" -name "*.tar.xz" )" ]; then
-        local backups=$( ls -1 "$backupdir/$name/"*.tar.xz | wc -l )
+        local backups=$( ls -1 "$backupdir/$name/"*.tar.* | wc -l )
 
         if (( $backups >= $maxbackups )); then
             for i in $( seq $maxbackups $backups ); do
                 message "Status" "Removing old backup"
-                rm "$( ls -rt "$backupdir/$name/"*.tar.xz | head -1 )"
+                rm "$( ls -rt "$backupdir/$name/"*.tar.* | head -1 )"
             done
         fi
     fi
 
     message "Status" "Backing up"
 
-    backup="$backupdir/$name/$( date +%Y-%m-%d-%H%M%S ).tar.xz"
-    tar c${v}Jf "$backup" --exclude "$backupdir" -C "$gamedir" $name
+    local backup="$backupdir/$name/$( date +%Y-%m-%d-%H%M%S ).tar$compression"
+    tar ac${v}f "$backup" --exclude "$backupdir" -C "$gamedir" $name
 
     if [ -s "$backup" ]; then
         message "Status" "Backup complete"
@@ -358,10 +370,10 @@ game_restore()
 
             printf "[ \e[0;32mStatus\e[m ] - Choose one: "
             read answer
-            answer=$(( $answer - 1 ))
+            local answer=$(( $answer - 1 ))
 
             if [[ -n "${backups[answer]}" && "$answer" != -1 ]]; then
-                backup="$backupdir/$name/${backups[answer]}"
+                local backup="$backupdir/$name/${backups[answer]}"
                 break
             else
                 message "Error" "Invalid selection"
@@ -390,21 +402,44 @@ game_restore()
     fi
 }
 
+game_update_check()
+{
+	local buildid_steam=$( $steamcmddir/./steamcmd.sh +login anonymous +app_info_update 1 \
+		+app_info_print $appid +quit | grep -m 1 "buildid" | cut -d '"' -f 4 )
+
+	local buildid_local=$( cat "$gamedir/$name/steamapps/appmanifest_$appid.acf" | \
+		grep -m 1 "buildid" | cut -d '"' -f 4 )
+
+	if [ $buildid_local == buildid_steam ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
 game_update()
 {
-    if [ -d "$gamedir/$name" ]; then
-        message "Status" "Updating"
-    else
+    if [ ! -d "$gamedir/$name" ]; then
         mkdir -p "$gamedir"
         message "Status" "Installing"
+    else
+        message "Status" "Checking for updates"
+
+        if [ $( game_update_check ) ]; then
+            message "Status" "Update available"
+            message "Status" "Updating"
+        else
+            message "Status" "Already up to date"
+            return
+        fi
     fi
 
     if [ "$verbose" == true  ]; then
         $steamcmddir/./steamcmd.sh +login $username $password +force_install_dir \
-            $gamedir/$name +app_update $appid +quit
+            $gamedir/$name +app_update $appid $config +quit
     else
         $steamcmddir/./steamcmd.sh +login $username $password +force_install_dir \
-            $gamedir/$name +app_update $appid +quit | steamcmd_filter
+            $gamedir/$name +app_update $appid $config +quit | steamcmd_filter
     fi
 }
 
@@ -414,17 +449,37 @@ game_validate()
 
     if [ "$verbose" == true  ]; then
         $steamcmddir/./steamcmd.sh +login $username $password +force_install_dir \
-            $gamedir/$name +app_update $appid -validate +quit
+            $gamedir/$name +app_update $appid $config -validate +quit
     else
         $steamcmddir/./steamcmd.sh +login $username $password +force_install_dir \
-            $gamedir/$name +app_update $appid -validate +quit | steamcmd_filter
+            $gamedir/$name +app_update $appid $config -validate +quit | steamcmd_filter
     fi
+}
+
+server_kill()
+{
+    message "Status" "Killing"
+    screen -S "$name-$server" -X "quit"
+
+    for i in $( seq 0 $maxwait ); do
+        if [ -z "$( session_check server )" ]; then
+            message "Status" "Stopped"
+            break
+        elif [ $i == 10 ]; then
+            message "Error" "Kill failed"
+            error+="\"$server\" "
+            server_kill
+            break
+        fi
+
+        sleep 1
+    done
 }
 
 server_monitor()
 {
     while true; do
-        for app in $1; do
+        for app in $@; do
             server_info $app
 
             if [ -n "$server" ]; then
@@ -443,7 +498,7 @@ server_monitor()
                 done
 
                 info
-                servers[$(( $length + 1))]=$server
+                local servers[$(( $length + 1))]=$server
             done
         done
 
@@ -460,7 +515,7 @@ server_monitor()
                     info
                 else
                     unset servers[$j]
-                    servers=( ${servers[@]} )
+                    local servers=( ${servers[@]} )
                 fi
 
                 break
@@ -471,12 +526,18 @@ server_monitor()
     done
 }
 
+server_send()
+{
+    message "Status" "Command sent"
+    screen -S "$name-$server" -X "stuff" "$1 $(echo -ne '\r')"
+}
+
 server_start()
 {
-    local length=$( jq ".[$index].servers.$server | length - 1" $serverjson )
+    local length=$( jq ".[$index].servers.$server.start | length - 1" $serverjson )
 
     for i in $( seq 0 $length ); do
-        local tmp="$( jq -r ".[$index].servers.$server[$i]" $serverjson )"
+        local tmp="$( jq -r ".[$index].servers.$server.start[$i]" $serverjson )"
         local serveroptions+="$tmp "
     done
 
@@ -495,9 +556,8 @@ server_start()
         "./$exec" "$serveroptions"
     else
         message "Status" "Starting"
-        screen -dmS "$server-$name" "./$exec" "$serveroptions"
+        screen -dmS "$name-$server" "./$exec" "$serveroptions"
     fi
-
 
     for i in $( seq 0 $maxwait ); do
         if [ -n "$( session_check server )" ]; then
@@ -529,7 +589,12 @@ server_status()
 server_stop()
 {
     message "Status" "Stopping"
-    screen -S "$server-$name" -X "quit"
+    local length=$( jq ".[$index].servers.$server.stop | length - 1" $serverjson )
+
+    for i in $( seq 0 $length ); do
+        local tmp="$( jq -r ".[$index].servers.$server.stop[$i]" $serverjson )"
+        screen -S "$name-$server" -X "stuff" "$tmp $(echo -ne '\r')"
+    done
 
     for i in $( seq 0 $maxwait ); do
         if [ -z "$( session_check server )" ]; then
@@ -538,6 +603,7 @@ server_stop()
         elif [ $i == 10 ]; then
             message "Error" "Stop failed"
             error+="\"$server\" "
+            server_kill
             break
         fi
 
@@ -677,6 +743,22 @@ command_restore()
     fi
 }
 
+command_send()
+{
+    server_check
+    info
+
+    if [ ! -d "$gamedir/$name" ]; then
+        message "Error" "App is not installed"
+        error+="\"$name\" "
+    elif [ -n "$( session_check server )" ]; then
+        server_send $1
+    else
+        message "Error" "Server is not Running"
+        error+="\"$server\" "
+    fi
+}
+
 command_start()
 {
     server_check
@@ -791,6 +873,7 @@ command_setup()
 
 requirment_check
 root_check
+args=()
 
 for i in $@; do
     if [[ "$i" =~ ^-.* ]]; then
@@ -798,14 +881,14 @@ for i in $@; do
     elif [ -z "$command" ]; then
         command="$i"
     else
-        apps+="$i "
+        args+=($i)
     fi
 done
 
 case "$command" in
     backup)
         argument_check
-        for i in $apps; do
+        for i in $args; do
             game_info $i
             command_backup
         done
@@ -818,12 +901,19 @@ case "$command" in
         ;;
     console)
         argument_check
-        server_info $apps
+        server_info $args
         command_console
+        ;;
+    edit)
+        if [ $args == "config" ]; then
+            sensible-editor $ssmdir/ssm.sh
+        elif [ $args == "servers" ]; then
+            sensible-editor $serverjson
+        fi
         ;;
     install)
         argument_check
-        for i in $apps; do
+        for i in $args; do
             game_info $i
             command_install
         done
@@ -837,10 +927,14 @@ case "$command" in
         done
         ;;
     list)
-        for i in $( ls $gamedir ); do
-            game_info $i
-            fname=$( jq -r ".[$index].fname" $appjson )
+        if [ -z $args ]; then
+            for i in $( ls $gamedir ); do
+                args+=($i)
+            done
+        fi
 
+        for i in $args; do
+            game_info $i
             message "------"
             message "F-Name" "$fname"
             message "Name" "$name"
@@ -862,18 +956,18 @@ case "$command" in
         done
         ;;
     monitor)
-        if [ -z "$apps" ]; then
+        if [ -z "$args" ]; then
             for i in $( ls $gamedir ); do
-                apps+="$i "
+                args+=($i)
             done
-            server_monitor "$apps"
+            server_monitor ${args[@]}
         else
-            server_monitor "$apps"
+            server_monitor ${args[@]}
         fi
         ;;
     remove)
         argument_check
-        for i in $apps; do
+        for i in $args; do
             game_info $i
             command_remove
         done
@@ -886,20 +980,20 @@ case "$command" in
         done
         ;;
     restart)
-        for i in $apps; do
+        for i in $args; do
             server_info $i
             command_stop
             command_start
         done
         ;;
     restart-all)
-        if [ -z "$apps" ]; then
+        if [ -z "$args" ]; then
             for i in $( ls $gamedir ); do
                 server_info $i
                 server_all command_stop command_start
             done
         else
-            for i in $apps; do
+            for i in $args; do
                 server_info $i
                 server_all command_stop command_start
             done
@@ -907,7 +1001,7 @@ case "$command" in
         ;;
     restore)
         argument_check
-        for i in $apps; do
+        for i in $args; do
             game_info $i
             command_restore
         done
@@ -919,37 +1013,56 @@ case "$command" in
             command_restore
         done
         ;;
+    send)
+        for i in ${args[@]:1}; do
+            server_info $i
+            command_send ${args[0]}
+        done
+        ;;
+    send-all)
+        if [ -z ${args[1]} ]; then
+            for i in $( ls $gamedir ); do
+                server_info $i
+                server_all "command_send ${args[0]}"
+            done
+        else
+            for i in ${args[@]:1}; do
+                server_info $i
+                server_all "command_send ${args[0]}"
+            done
+        fi
+        ;;
     setup)
         command_setup
         ;;
     start)
         argument_check
-        for i in $apps; do
+        for i in $args; do
             server_info $i
             command_start
         done
         ;;
     start-all)
-        if [ -z "$apps" ]; then
+        if [ -z "$args" ]; then
             for i in $( ls $gamedir ); do
                 server_info $i
                 server_all command_start
             done
         else
-            for i in $apps; do
+            for i in $args; do
                 server_info $i
                 server_all command_start
             done
         fi
         ;;
     status)
-        if [ -z "$apps" ]; then
+        if [ -z "$args" ]; then
             for i in $( ls $gamedir ); do
                 server_info $i
                 server_status
             done
         else
-            for i in $apps; do
+            for i in $args; do
                 server_info $i
                 server_status
             done
@@ -957,19 +1070,19 @@ case "$command" in
         ;;
     stop)
         argument_check
-        for i in $apps; do
+        for i in $args; do
             server_info $i
             command_stop
         done
         ;;
     stop-all)
-        if [ -z "$apps" ]; then
+        if [ -z "$args" ]; then
             for i in $( ls $gamedir ); do
                 server_info $i
                 server_all command_stop
             done
         else
-            for i in $apps; do
+            for i in $args; do
                 server_info $i
                 server_all command_stop
             done
@@ -977,7 +1090,7 @@ case "$command" in
         ;;
     update)
         argument_check
-        for i in $apps; do
+        for i in $args; do
             game_info $i
             command_update
         done
@@ -990,7 +1103,7 @@ case "$command" in
         ;;
     validate)
         argument_check
-        for i in $apps; do
+        for i in $args; do
             game_info $i
             command_validate
         done

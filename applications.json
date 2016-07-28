@@ -2,25 +2,29 @@
     {
         "fname" : "Counter Strike",
         "name" : "cstrike",
-        "appid" : "90 +app_set_config 90 mod cstrike",
+        "appid" : "90",
+        "config" : "+app_set_config 90 mod cstrike",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Counter Strike: Condition Zero",
         "name" : "czero",
-        "appid" : "90 +app_set_config 90 mod czero",
+        "appid" : "90",
+        "config" : "+app_set_config 90 mod czero",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Day of Defeat",
         "name" : "dod",
-        "appid" : "90 +app_set_config 90 mod dod",
+        "appid" : "90",
+        "config" : "+app_set_config 90 mod dod",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Deathmatch Classic",
         "name" : "dmc",
-        "appid" : "90 +app_set_config 90 mod dmc",
+        "appid" : "90",
+        "config" : "+app_set_config 90 mod dmc",
         "exec" : "hlds_run"
     },
     {
@@ -32,19 +36,22 @@
     {
         "fname" : "Half-Life: Opposing Force",
         "name" : "hlof",
-        "appid" : "90 +app_set_config 90 mod gearbox",
+        "appid" : "90",
+        "config" : "+app_set_config 90 mod gearbox",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Ricochet",
         "name" : "ricochet",
-        "appid" : "90 +app_set_config 90 mod ricochet",
+        "appid" : "90",
+        "config" : "+app_set_config 90 mod ricochet",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Team Fortress Classic",
         "name" : "tfc",
-        "appid" : "90 +app_set_config 90 mod tfc",
+        "appid" : "90",
+        "config" : "90 +app_set_config 90 mod tfc",
         "exec" : "hlds_run"
     },
     {

@@ -6,7 +6,7 @@ A command line script used to managing SteamCMD servers.
 
 - Backup / Restore
 - Install / Update / Validate
-- Start / Stop / Restart
+- Start / Stop / Restart / Kill
 - Monitor running servers
 - Multiple server support
 - and much more
