@@ -2,270 +2,270 @@
     {
         "fname" : "Counter Strike",
         "name" : "cstrike",
-        "appid" : "90",
+        "appid" : 90,
         "config" : "mod cstrike",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Counter Strike: Condition Zero",
         "name" : "czero",
-        "appid" : "90",
+        "appid" : 90,
         "config" : "mod czero",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Day of Defeat",
         "name" : "dod",
-        "appid" : "90",
+        "appid" : 90,
         "config" : "mod dod",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Deathmatch Classic",
         "name" : "dmc",
-        "appid" : "90",
+        "appid" : 90,
         "config" : "mod dmc",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Half-Life",
         "name" : "hl",
-        "appid" : "90",
+        "appid" : 90,
         "exec" : "hlds_run"
     },
     {
         "fname" : "Half-Life: Opposing Force",
         "name" : "hlof",
-        "appid" : "90",
+        "appid" : 90,
         "config" : "mod gearbox",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Ricochet",
         "name" : "ricochet",
-        "appid" : "90",
+        "appid" : 90,
         "config" : "mod ricochet",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Team Fortress Classic",
         "name" : "tfc",
-        "appid" : "90",
+        "appid" : 90,
         "config" : "90 mod tfc",
         "exec" : "hlds_run"
     },
     {
         "fname" : "Source SDK Base 2007",
         "name" : "source2007",
-        "appid" : "310",
+        "appid" : 310,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Counter Strike: Global Offensive",
         "name" : "csgo",
-        "appid" : "740",
+        "appid" : 740,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Garrysmod",
         "name" : "gmod",
-        "appid" : "4020",
+        "appid" : 4020,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Natural Selection 2",
         "name" : "ns2",
-        "appid" : "4940",
+        "appid" : 4940,
         "exec" : "server_linux32"
     },
     {
         "fname" : "Zombie Panic: Source",
         "name" : "zombiepanic",
-        "appid" : "17505",
+        "appid" : 17505,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Age of Chivalry",
         "name" : "aoc",
-        "appid" : "17515",
+        "appid" : 17515,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Pirates, Vikings, and Knights II",
         "name" : "pvkii",
-        "appid" : "17575",
+        "appid" : 17575,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Serious Sam 3 BFE",
         "name" : "serioussam3",
-        "appid" : "41080",
+        "appid" : 41080,
         "exec" : "Bin/runSam3_DedicatedServer.sh"
     },
     {
         "fname" : "Project Zomboid",
         "name" : "zomboid",
-        "appid" : "108600",
+        "appid" : 108600,
         "exec" : "projectzomboid-dedi-server.sh"
     },
     {
         "fname" : "Nuclear Dawn",
         "name" : "nd",
-        "appid" : "111710",
+        "appid" : 111710,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Starbound",
         "name" : "starbound",
-        "appid" : "211820",
+        "appid" : 211820,
         "dir" : "linux64",
         "exec" : "starbound_server"
     },
     {
         "fname" : "Killing Floor",
         "name" : "killingfloor",
-        "appid" : "215360",
+        "appid" : 215360,
         "dir" : "System",
         "exec" : "ucc-bin"
     },
     {
         "fname" : "Left 4 Dead",
         "name" : "left4dead",
-        "appid" : "222840",
+        "appid" : 222840,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Left 4 Dead 2",
         "name" : "left4dead2",
-        "appid" : "222860",
+        "appid" : 222860,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Red Orchestra",
         "name" : "redorch",
-        "appid" : "223250",
+        "appid" : 223250,
         "dir" : "system",
         "exec" : "ucc-bin"
     },
     {
         "fname" : "Blade Symphony",
         "name" : "bladesymphony",
-        "appid" : "228780",
+        "appid" : 228780,
         "exec" : "srcds_run.sh"
     },
     {
         "fname" : "Team Fortress 2",
         "name" : "tf2",
-        "appid" : "232250",
+        "appid" : 232250,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Day of Defeat: Source",
         "name" : "dods",
-        "appid" : "232290",
+        "appid" : 232290,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Counter Strike: Source",
         "name" : "css",
-        "appid" : "232330",
+        "appid" : 232330,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Half-Life 2: Deathmatch",
         "name" : "hl2dm",
-        "appid" : "232370",
+        "appid" : 232370,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Arma 3",
         "name" : "arma3",
-        "appid" : "233780",
+        "appid" : 233780,
         "exec" : "arma3server"
     },
     {
         "fname" : "Insurgency",
         "name" : "insurgency",
-        "appid" : "237410",
+        "appid" : 237410,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Source SDK Base 2013",
         "name" : "source2013",
-        "appid" : "244310",
+        "appid" : 244310,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Half-Life Deathmatch: Source",
         "name" : "hldms",
-        "appid" : "255470",
+        "appid" : 255470,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Just Cause 2",
         "name" : "justcause2",
-        "appid" : "261140",
+        "appid" : 261140,
         "exec" : "Jcmp-Server"
     },
     {
         "fname" : "7 Days to Die",
         "name" : "sdtd",
-        "appid" : "294420",
+        "appid" : 294420,
         "exec" : "7DaysToDie.sh"
     },
     {
         "fname" : "Fistful of Frags",
         "name" : "fof",
-        "appid" : "295230",
+        "appid" : 295230,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Dark Horizons: Mechanized Corps",
         "name" : "dhmc",
-        "appid" : "312070",
+        "appid" : 312070,
         "exec" : "DHMCDed"
     },
     {
         "fname" : "NS2: Combat",
         "name" : "ns2c",
-        "appid" : "313900",
+        "appid" : 313900,
         "exec" : "server_linux32"
     },
     {
         "fname" : "No More Room in Hell",
         "name" : "nmrih",
-        "appid" : "317670",
+        "appid" : 317670,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Double Action: Boogaloo",
         "name" : "dab",
-        "appid" : "317800",
+        "appid" : 317800,
         "exec" : "srcds_run"
     },
     {
         "fname" : "Project CARS",
         "name" : "pcars",
-        "appid" : "332670",
+        "appid" : 332670,
         "exec" : "DedicatedServerCmd"
     },
     {
         "fname" : "BlazeRush",
         "name" : "blazerush",
-        "appid" : "332850",
+        "appid" : 332850,
         "exec" : "example"
     },
     {
         "fname" : "BOMB",
         "name" : "bomb",
-        "appid" : "338440",
+        "appid" : 338440,
         "dir" : "bin/release",
         "exec" : "server.sh"
     },
     {
         "fname" : "Dont Starve Together",
         "name" : "dst",
-        "appid" : "343050",
+        "appid" : 343050,
         "dir" : "bin",
         "exec" : "dontstarve_dedicated_server_nullrenderer"
     }

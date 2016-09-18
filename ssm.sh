@@ -92,11 +92,11 @@ game_info()
     fi
 
     fname=$( jq -r ".[$index].fname" $appjson )
-	config=$( jq -r ".[$index].config" $appjson )
+    config=$( jq -r ".[$index].config" $appjson )
 
-	if [ "$config" == "null" ]; then
-		unset config
-	fi
+    if [ "$config" == "null" ]; then
+        unset config
+    fi
 }
 
 info()
@@ -369,17 +369,17 @@ game_restore()
 
 game_update_check()
 {
-	local buildid_steam=$( $steamcmddir/./steamcmd.sh +login anonymous +app_info_update 1 \
-		+app_info_print $appid +quit | grep -m 1 "buildid" | cut -d '"' -f 4 )
+    local buildid_steam=$( $steamcmddir/./steamcmd.sh +login anonymous +app_info_update 1 \
+        +app_info_print $appid +quit | grep -m 1 "buildid" | cut -d '"' -f 4 )
 
-	local buildid_local=$( cat "$gamedir/$name/steamapps/appmanifest_$appid.acf" | \
-		grep -m 1 "buildid" | cut -d '"' -f 4 )
+    local buildid_local=$( cat "$gamedir/$name/steamapps/appmanifest_$appid.acf" | \
+        grep -m 1 "buildid" | cut -d '"' -f 4 )
 
-	if [ $buildid_local == buildid_steam ]; then
-		return 0
-	else
-		return 1
-	fi
+    if [ $buildid_local == buildid_steam ]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 game_update()
